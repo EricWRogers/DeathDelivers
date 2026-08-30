@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9db762b60ec5c264aa0a75e1c7acd92f, type: 3}
   m_Name: NormTheDog
   m_EditorClassIdentifier: Assembly-CSharp::DogBase
-  speed: 23
-  turnSpeed: 23
-  soulConsump: 12
+  speed: 0.3
+  turnSpeed: 45
+  soulConsump: 0.1
   scytheTurnSpeed: 31
+  startBoost: 10

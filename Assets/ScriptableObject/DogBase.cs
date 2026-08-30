@@ -8,4 +8,5 @@ public class DogBase : ScriptableObject
     public float turnSpeed = 0.5f; 
     public float soulConsump = 0.5f;
     public float scytheTurnSpeed = 0.5f;
+    public float startBoost = 10f;
 }
