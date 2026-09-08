@@ -26,6 +26,14 @@ public float cameraSmoothness = 8f;
 public float quickTurnDuration = 0.25f;
 public float quickTurnMultiplier = 1f;
 
+[Header("FireWorks")]
+private int fireworks = 0;
+private bool hasFireWork = false;
+public float fireworkJump = 5f;
+public float fireworkDuration = 1f;
+private float fireworkTimeRemaining = 0f; 
+
+
 public Transform AnchorL;
 public Transform AnchorR;
 
@@ -83,6 +91,14 @@ void Update()
     soulCount = Mathf.Max(soulCount,0f);
 
     speed = soulCount * dogBase.speed;
+    if(Keyboard.current.fKey.wasPressedThisFrame){
+        UseFireWork();
+    }
+    if(fireworkTimeRemaining > 0f){
+        fireworkTimeRemaining -= Time.deltaTime;
+        fireworkJump++;
+        transform.Translate(Vector3.up * fireworkJump * Time.deltaTime, Space.World);
+    }
 
     // quick turn input
     if (!quickTurning)
@@ -332,6 +348,20 @@ void LateUpdate()
         targetCameraPosition,
         cameraSmoothness * Time.deltaTime
     );
+}
+public void AddFirework(){// firework change
+    fireworks++;
+    hasFireWork = true;
+        
+    
+}
+public void UseFireWork(){ //firework change
+    if(fireworks >= 1){
+        fireworks--;
+        hasFireWork = fireworks > 0;
+        fireworkTimeRemaining = fireworkDuration;
+        
+    }
 }
 
 void UpdateNormalCamera()
