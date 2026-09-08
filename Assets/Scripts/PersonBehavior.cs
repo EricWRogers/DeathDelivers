@@ -71,6 +71,7 @@ public class PersonBehavior : MonoBehaviour
         {
             DogMovement dM = collision.gameObject.GetComponent<DogMovement>();
             dM.soulCount += soulValue;
+            dM.totalSoulCount += soulValue;
             Destroy(gameObject);
         }
 

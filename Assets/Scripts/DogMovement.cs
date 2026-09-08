@@ -7,6 +7,7 @@ public DogBase dogBase;
 
 [Header("Soul & Speed")]
 public float soulCount;
+public int totalSoulCount;
 public float speed;
 
 [Header("Turning")]
@@ -53,6 +54,7 @@ void Start()
 {
     speed = dogBase.startBoost;
     soulCount = 30f;
+    totalSoulCount += 30;
 
     dogOriginalLocalScale = transform.localScale;
     
