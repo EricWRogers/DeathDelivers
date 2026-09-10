@@ -36,9 +36,7 @@ public class DogCameraMovement : MonoBehaviour
 
         Transform dog = dogMovement.transform;
 
-        // --------------------------------
-        // POSITION
-        // --------------------------------
+        // posnation
 
         Vector3 targetPosition = dog.position + positionOffset;
 
@@ -48,9 +46,7 @@ public class DogCameraMovement : MonoBehaviour
             positionSmoothness * Time.deltaTime
         );
 
-        // --------------------------------
-        // ROTATION
-        // --------------------------------
+        // rotnation
 
         float dogX = NormalizeAngle(
             dog.localEulerAngles.x
@@ -118,10 +114,6 @@ public class DogCameraMovement : MonoBehaviour
             cameraSmoothness * Time.deltaTime
         );
 
-        // --------------------------------
-        // SIDE SHIFT
-        // --------------------------------
-
         float targetX =
             cameraBasePosition.x +
             turnAmount * cameraSideShift;
@@ -131,9 +123,6 @@ public class DogCameraMovement : MonoBehaviour
             cameraBasePosition.y,
             cameraBasePosition.z
         );
-
-        // If you want XYZ to follow the dog,
-        // don't overwrite the position here.
     }
 
     float NormalizeAngle(float angle)

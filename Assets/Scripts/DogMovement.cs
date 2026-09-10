@@ -22,16 +22,16 @@ public class DogMovement : MonoBehaviour
     public float groundCheckDistance = 0.2f;
     public LayerMask groundLayer;
 
-    [Header("FireWorks")]
-    private int fireworks = 0;
-    private bool hasFireWork = false;
-    public float fireworkJump = 5f;
-    public float fireworkDuration = 1f;
-    private float fireworkTimeRemaining = 0f;
-
     public Transform AnchorL;
     public Transform AnchorR;
 
+    
+    [Header("Fireworks")]
+    public float fireworkJump = 5f;
+    public float fireworkDuration = 1f;
+    private float fireworkTimeRemaining = 0f;
+    private int fireworks = 0;
+    private bool hasFireWork = false;
     private float targetTurn;
 
     private bool quickTurning = false;
@@ -272,7 +272,7 @@ public class DogMovement : MonoBehaviour
         fireworks++;
         hasFireWork = true;
 
-        
+
     }
 
     public void UseFireWork()
