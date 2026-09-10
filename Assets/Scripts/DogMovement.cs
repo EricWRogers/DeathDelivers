@@ -32,6 +32,13 @@ public class DogMovement : MonoBehaviour
     private float fireworkTimeRemaining = 0f;
     private int fireworks = 0;
     private bool hasFireWork = false;
+
+    [Header("Pepper")]
+    public float PepperDash = 5f;
+    public float PepperDuration = 1f;
+    private float PepperTimeRemaining = 0f;
+    private int Peppers = 0;
+    private bool hasPepper = false;
     private float targetTurn;
 
     private bool quickTurning = false;
@@ -58,7 +65,7 @@ public class DogMovement : MonoBehaviour
 
         speed = soulCount * dogBase.speed;
 
-        if (Keyboard.current.fKey.wasPressedThisFrame){
+        if (hasFireWork != false){
             UseFireWork();
         }
 
@@ -67,6 +74,17 @@ public class DogMovement : MonoBehaviour
             fireworkJump++;
             transform.Translate(Vector3.up * fireworkJump * Time.deltaTime, Space.World);
         }
+
+        if (hasPepper != false)
+        {
+            UsePepper();
+        }
+        if (PepperTimeRemaining > 0f){
+            PepperTimeRemaining -= Time.deltaTime;
+            speed = PepperDash * 10f;
+            
+        }
+
 
         // Quick turn input
         if (!quickTurning)
@@ -282,8 +300,27 @@ public class DogMovement : MonoBehaviour
             fireworks--;
             hasFireWork = fireworks > 0;
             fireworkTimeRemaining = fireworkDuration;
+            hasFireWork = false;
         }
     }
+        public void AddPepper()
+    {
+        Peppers++;
+        hasPepper = true;
+
+
+    }
+
+    public void UsePepper()
+    {
+        if (Peppers >= 1)
+        {
+            Peppers--;
+            hasPepper = Peppers > 0;
+            PepperTimeRemaining = PepperDuration;
+        }
+    }
+
 
     void OnCollisionEnter(Collision collision)
     {
