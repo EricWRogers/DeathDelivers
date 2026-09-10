@@ -29,6 +29,8 @@ public class PersonBehavior : MonoBehaviour
     [Header("References")]
     public Camera camera;
     public Transform body;
+    public GameObject partical;
+    public GameObject parentBox;
 
     [Header("Joy / Bobbing")] // jumping with joy
     public float bobHeight = 0.2f;
@@ -72,13 +74,19 @@ public class PersonBehavior : MonoBehaviour
             DogMovement dM = collision.gameObject.GetComponent<DogMovement>();
             dM.soulCount += soulValue;
             dM.totalSoulCount += soulValue;
-            Destroy(gameObject);
+            parentBox.GetComponent<BoxCollider>().enabled = false;
+            partical.transform.position = transform.position;
+            partical.SetActive(true);
+            gameObject.SetActive(false);
         }
 
         // Explode/delete if the car hits a wall.
         if (collision.gameObject.CompareTag("Car"))
         {
-            Destroy(gameObject);
+            parentBox.GetComponent<BoxCollider>().enabled = false;
+            partical.transform.position = transform.position;
+            partical.SetActive(true);
+            gameObject.SetActive(false);
         }
     }
     void Roam()
