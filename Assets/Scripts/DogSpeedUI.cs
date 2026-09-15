@@ -14,6 +14,6 @@ public class DogSpeedUI : MonoBehaviour
             return;
         }
 
-        speedText.text = "Speed: " + dogMovement.speed.ToString("0");
+       speedText.text = "Speed: " + dogMovement.speed.ToString("0") + " Mph";
     }
 }
