@@ -1,11 +1,11 @@
 using UnityEngine;
 
-public class FireworkSpawner : MonoBehaviour
+public class PepperSpawner : MonoBehaviour
 {
-    public GameObject FireworkPrefab;
+    public GameObject pepperPrefab;
     public float respawnDelay = 3f;
 
-   private GameObject Firework;
+   private GameObject pepper;
    private float timer = 0f;
    void Start(){
     timer = respawnDelay;
@@ -13,21 +13,21 @@ public class FireworkSpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Firework != null)
+        if(pepper != null)
             return;
         timer -= Time.deltaTime;
         if(timer <= 0f){
-            SpawnFirework();
+            Spawnpepper();
             timer = respawnDelay;
         }
         }
-       public void FireworkGrabbed()
+       public void PepperGrabbed()
     {
-        Firework = null;
+        pepper = null;
         timer = respawnDelay;
     }
-    void SpawnFirework(){
-        Firework = Instantiate(FireworkPrefab, transform.position, Quaternion.identity);
+    void Spawnpepper(){
+        pepper = Instantiate(pepperPrefab, transform.position, Quaternion.identity);
     }
 }
 
