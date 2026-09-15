@@ -8,10 +8,12 @@ public class FireWork : MonoBehaviour
     public float bobbingSpeed = 0.5f;
     public float bobbingHeight = 0.25f;
     public float startY;
+    private FireworkSpawner spawner;
    //Start is called once before the first execution of Update after the MonoBehaviour is created
    private void Start()
     {
        startY = transform.position.y; 
+       spawner = GetComponentInParent<FireworkSpawner>();
     }
 
      //Update is called once per frame
@@ -23,9 +25,12 @@ public class FireWork : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other){
+        
         DogMovement dog = other.GetComponentInParent<DogMovement>();
         if(dog != null){
             dog.AddFirework();
+            if(spawner != null)
+                spawner.FireworkGrabbed();
             Destroy(gameObject);
         }
     }

@@ -8,12 +8,14 @@ public class Pepper : MonoBehaviour
     public float bobbingSpeed = 0.5f;
     public float bobbingHeight = 0.25f;
     public float startY;
+    private PepperSpawner spawner;
    //Start is called once before the first execution of Update after the MonoBehaviour is created
    private void Start()
     {
-       startY = transform.position.y; 
-    }
+       startY = transform.position.y;  
+       spawner = GetComponentInParent<PepperSpawner>();
 
+    }      
      //Update is called once per frame
     private void Update()
     {
@@ -26,6 +28,8 @@ public class Pepper : MonoBehaviour
         DogMovement dog = other.GetComponentInParent<DogMovement>();
         if(dog != null){
             dog.AddPepper();
+            if(spawner != null)
+                spawner.PepperGrabbed();
             Destroy(gameObject);
         }
     }
