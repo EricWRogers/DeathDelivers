@@ -16,7 +16,7 @@ public class SpeedometerUI : MonoBehaviour
     {
         if (boneNeedle != null && tickAngles.Length > 0)
         {
-            // Instantly snap to the exact 0 mph angle layout on boot
+            
             boneNeedle.localEulerAngles = new Vector3(0, 0, tickAngles[0]);
         }
     }
@@ -58,7 +58,7 @@ public class SpeedometerUI : MonoBehaviour
        
         if (lowerIndex == upperIndex) t = 0f; 
 
-        // 4. Smoothly blend the angle between those two exact visual coordinates
+        
         return Mathf.Lerp(tickAngles[lowerIndex], tickAngles[upperIndex], t);
     }
 }
