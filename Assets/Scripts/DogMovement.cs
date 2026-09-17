@@ -25,10 +25,16 @@ public class DogMovement : MonoBehaviour
     public Transform AnchorL;
     public Transform AnchorR;
 
-    
+    [Header("Wall Collision")]
+    public string wallTag = "Wall";
+    public float wallSkin = 0.03f;
+    public float wallCheckDistance = 0.1f;
+    public int wallSlideIterations = 3;
+
     [Header("Fireworks")]
     public float fireworkJump = 5f;
     public float fireworkDuration = 1f;
+
     private float fireworkTimeRemaining = 0f;
     private int fireworks = 0;
     private bool hasFireWork = false;
@@ -36,23 +42,26 @@ public class DogMovement : MonoBehaviour
     [Header("Pepper")]
     public float PepperDash = 5f;
     public float PepperDuration = 1f;
+
     private float PepperTimeRemaining = 0f;
     private int Peppers = 0;
     private bool hasPepper = false;
+
     private float targetTurn;
 
     private bool quickTurning = false;
     private float quickTurnDirection = 0f;
 
     private Transform activeAnchor;
-
     private Vector3 activeAnchorLockedPosition;
     private Vector3 dogPositionRelativeToAnchor;
 
-    private bool touchingWall = false;
+    private Collider dogCollider;
 
     void Start()
     {
+        dogCollider = GetComponent<Collider>();
+
         speed = dogBase.startBoost;
         soulCount = 30f;
         totalSoulCount += 30;
@@ -60,33 +69,39 @@ public class DogMovement : MonoBehaviour
 
     void Update()
     {
-        soulCount -= dogBase.soulConsump * Time.deltaTime;
+        float dt = Time.deltaTime;
+
+        soulCount -= dogBase.soulConsump * dt;
         soulCount = Mathf.Max(soulCount, 0f);
 
         speed = soulCount * dogBase.speed;
 
-        if (hasFireWork != false){
+        if (hasFireWork)
+        {
             UseFireWork();
         }
 
-        if (fireworkTimeRemaining > 0f){
-            fireworkTimeRemaining -= Time.deltaTime;
+        if (fireworkTimeRemaining > 0f)
+        {
+            fireworkTimeRemaining -= dt;
             fireworkJump++;
-            transform.Translate(Vector3.up * fireworkJump * Time.deltaTime, Space.World);
+
+            MoveWithWallCollision(
+                Vector3.up * fireworkJump * dt
+            );
         }
 
-        if (hasPepper != false)
+        if (hasPepper)
         {
             UsePepper();
         }
-        if (PepperTimeRemaining > 0f){
-            PepperTimeRemaining -= Time.deltaTime;
+
+        if (PepperTimeRemaining > 0f)
+        {
+            PepperTimeRemaining -= dt;
             speed = PepperDash * 10f;
-            
         }
 
-
-        // Quick turn input
         if (!quickTurning)
         {
             if (Keyboard.current.dKey.isPressed &&
@@ -110,21 +125,27 @@ public class DogMovement : MonoBehaviour
                 DoQuickTurn();
                 return;
             }
-            else
-            {
-                EndQuickTurn();
-            }
+
+            EndQuickTurn();
         }
 
-        // Move forward
-        if (!touchingWall)
-        {
-            transform.Translate(
-                Vector3.forward * speed * Time.deltaTime
-            );
-        }
+        MoveForward(dt);
+        HandleTurning(dt);
+        KeepDogUpright();
+    }
 
-        // Turn input
+    void MoveForward(float dt)
+    {
+        Vector3 movement =
+            transform.forward *
+            speed *
+            dt;
+
+        MoveWithWallCollision(movement);
+    }
+
+    void HandleTurning(float dt)
+    {
         targetTurn = 0f;
 
         if (Keyboard.current.aKey.isPressed)
@@ -137,18 +158,18 @@ public class DogMovement : MonoBehaviour
             targetTurn = dogBase.turnSpeed;
         }
 
-        // Normal turn
         turn = Mathf.Lerp(
             turn,
             targetTurn,
-            turnSmoothness * Time.deltaTime
+            turnSmoothness * dt
         );
 
         transform.Rotate(
-            Vector3.up * turn * Time.deltaTime
+            Vector3.up *
+            turn *
+            dt,
+            Space.Self
         );
-
-        KeepDogUpright();
     }
 
     void StartQuickTurn(float direction)
@@ -157,14 +178,10 @@ public class DogMovement : MonoBehaviour
         quickTurnDirection = direction;
         turn = 0f;
 
-        if (direction > 0f)
-        {
-            activeAnchor = AnchorR;
-        }
-        else
-        {
-            activeAnchor = AnchorL;
-        }
+        activeAnchor =
+            direction > 0f
+                ? AnchorR
+                : AnchorL;
 
         if (activeAnchor == null)
         {
@@ -172,10 +189,12 @@ public class DogMovement : MonoBehaviour
             return;
         }
 
-        activeAnchorLockedPosition = activeAnchor.position;
+        activeAnchorLockedPosition =
+            activeAnchor.position;
 
         dogPositionRelativeToAnchor =
-            transform.position - activeAnchorLockedPosition;
+            transform.position -
+            activeAnchorLockedPosition;
     }
 
     void DoQuickTurn()
@@ -194,17 +213,36 @@ public class DogMovement : MonoBehaviour
             Time.deltaTime;
 
         Quaternion rotation =
-            Quaternion.Euler(0f, rotationAmount, 0f);
+            Quaternion.Euler(
+                0f,
+                rotationAmount,
+                0f
+            );
 
-        dogPositionRelativeToAnchor =
-            rotation * dogPositionRelativeToAnchor;
-
-        transform.position =
-            activeAnchorLockedPosition +
+        Vector3 targetRelativePosition =
+            rotation *
             dogPositionRelativeToAnchor;
 
-        transform.rotation =
-            rotation * transform.rotation;
+        Vector3 targetPosition =
+            activeAnchorLockedPosition +
+            targetRelativePosition;
+
+        Vector3 movement =
+            targetPosition -
+            transform.position;
+
+        MoveWithWallCollision(movement);
+
+        dogPositionRelativeToAnchor =
+            transform.position -
+            activeAnchorLockedPosition;
+
+        if (movement.sqrMagnitude > 0.000001f)
+        {
+            transform.rotation =
+                rotation *
+                transform.rotation;
+        }
 
         KeepDogUpright();
     }
@@ -212,70 +250,314 @@ public class DogMovement : MonoBehaviour
     void EndQuickTurn()
     {
         quickTurning = false;
-
         activeAnchor = null;
-
         turn = 0f;
 
         KeepDogUpright();
     }
 
+    void MoveWithWallCollision(Vector3 movement)
+    {
+        if (movement.sqrMagnitude <= 0.000001f)
+            return;
+
+        if (dogCollider == null)
+        {
+            transform.position += movement;
+            return;
+        }
+
+        ResolveWallOverlap();
+
+        Vector3 remaining = movement;
+
+        for (int i = 0; i < wallSlideIterations; i++)
+        {
+            if (remaining.sqrMagnitude <= 0.000001f)
+                break;
+
+            Vector3 direction =
+                remaining.normalized;
+
+            float distance =
+                remaining.magnitude;
+
+            if (!CheckWall(
+                direction,
+                distance + wallCheckDistance,
+                out RaycastHit hit))
+            {
+                transform.position += remaining;
+                break;
+            }
+
+            float safeDistance =
+                Mathf.Max(
+                    0f,
+                    hit.distance - wallSkin
+                );
+
+            if (safeDistance > 0f)
+            {
+                transform.position +=
+                    direction * safeDistance;
+            }
+
+            Vector3 usedMovement =
+                direction * safeDistance;
+
+            Vector3 leftover =
+                remaining -
+                usedMovement;
+
+            Vector3 slide =
+                Vector3.ProjectOnPlane(
+                    leftover,
+                    hit.normal
+                );
+
+            remaining = slide;
+        }
+
+        ResolveWallOverlap();
+    }
+
+    bool CheckWall(
+        Vector3 direction,
+        float distance,
+        out RaycastHit closestHit)
+    {
+        closestHit = default;
+
+        Bounds bounds =
+            dogCollider.bounds;
+
+        Vector3 center =
+            bounds.center;
+
+        float radius =
+            Mathf.Min(
+                bounds.extents.x,
+                bounds.extents.z
+            );
+
+        float height =
+            bounds.size.y;
+
+        RaycastHit[] hits;
+
+        if (height > radius * 2f)
+        {
+            Vector3 bottom =
+                center +
+                Vector3.down *
+                (height * 0.5f - radius);
+
+            Vector3 top =
+                center +
+                Vector3.up *
+                (height * 0.5f - radius);
+
+            hits =
+                Physics.CapsuleCastAll(
+                    bottom,
+                    top,
+                    radius,
+                    direction,
+                    distance,
+                    Physics.AllLayers,
+                    QueryTriggerInteraction.Ignore
+                );
+        }
+        else
+        {
+            hits =
+                Physics.SphereCastAll(
+                    center,
+                    radius,
+                    direction,
+                    distance,
+                    Physics.AllLayers,
+                    QueryTriggerInteraction.Ignore
+                );
+        }
+
+        return GetClosestWallHit(
+            hits,
+            out closestHit
+        );
+    }
+
+    bool GetClosestWallHit(
+        RaycastHit[] hits,
+        out RaycastHit closestHit)
+    {
+        closestHit = default;
+
+        float closestDistance =
+            float.MaxValue;
+
+        bool found = false;
+
+        for (int i = 0; i < hits.Length; i++)
+        {
+            Collider hitCollider =
+                hits[i].collider;
+
+            if (hitCollider == null)
+                continue;
+
+            if (hitCollider == dogCollider)
+                continue;
+
+            if (hitCollider.transform == transform)
+                continue;
+
+            if (hitCollider.transform.IsChildOf(transform))
+                continue;
+
+            if (!hitCollider.CompareTag(wallTag) &&
+                !hitCollider.transform.root.CompareTag(wallTag))
+                continue;
+
+            if (hits[i].distance < closestDistance)
+            {
+                closestDistance =
+                    hits[i].distance;
+
+                closestHit =
+                    hits[i];
+
+                found = true;
+            }
+        }
+
+        return found;
+    }
+
+    void ResolveWallOverlap()
+    {
+        if (dogCollider == null)
+            return;
+
+        Collider[] overlaps =
+            Physics.OverlapBox(
+                dogCollider.bounds.center,
+                dogCollider.bounds.extents +
+                Vector3.one * wallSkin,
+                Quaternion.identity,
+                Physics.AllLayers,
+                QueryTriggerInteraction.Ignore
+            );
+
+        for (int i = 0; i < overlaps.Length; i++)
+        {
+            Collider wall =
+                overlaps[i];
+
+            if (wall == null)
+                continue;
+
+            if (wall == dogCollider)
+                continue;
+
+            if (wall.transform == transform)
+                continue;
+
+            if (wall.transform.IsChildOf(transform))
+                continue;
+
+            if (!wall.CompareTag(wallTag) &&
+                !wall.transform.root.CompareTag(wallTag))
+                continue;
+
+            bool penetrating =
+                Physics.ComputePenetration(
+                    dogCollider,
+                    transform.position,
+                    transform.rotation,
+                    wall,
+                    wall.transform.position,
+                    wall.transform.rotation,
+                    out Vector3 direction,
+                    out float distance
+                );
+
+            if (penetrating)
+            {
+                transform.position +=
+                    direction *
+                    (distance + wallSkin);
+            }
+        }
+    }
+
     bool IsGrounded()
     {
-        Collider col = GetComponent<Collider>();
-
-        if (col == null)
+        if (dogCollider == null)
             return false;
 
-        Vector3 origin = col.bounds.center;
-        origin.y = col.bounds.min.y + 0.05f;
+        Vector3 origin =
+            dogCollider.bounds.center;
+
+        origin.y =
+            dogCollider.bounds.min.y +
+            0.05f;
 
         return Physics.Raycast(
             origin,
             Vector3.down,
             groundCheckDistance + 0.05f,
-            groundLayer
+            groundLayer,
+            QueryTriggerInteraction.Ignore
         );
     }
 
     void KeepDogUpright()
     {
-        Vector3 currentEuler = transform.rotation.eulerAngles;
+        Vector3 currentEuler =
+            transform.rotation.eulerAngles;
 
-        float xAngle = NormalizeAngle(currentEuler.x);
-        float zAngle = NormalizeAngle(currentEuler.z);
+        float xAngle =
+            NormalizeAngle(currentEuler.x);
 
-        xAngle = Mathf.Clamp(
-            xAngle,
-            -maxTiltAngle,
-            maxTiltAngle
-        );
+        float zAngle =
+            NormalizeAngle(currentEuler.z);
 
-        zAngle = Mathf.Clamp(
-            zAngle,
-            -maxTiltAngle,
-            maxTiltAngle
-        );
+        xAngle =
+            Mathf.Clamp(
+                xAngle,
+                -maxTiltAngle,
+                maxTiltAngle
+            );
 
-        Quaternion targetRotation = Quaternion.Euler(
-            xAngle,
-            currentEuler.y,
-            zAngle
-        );
+        zAngle =
+            Mathf.Clamp(
+                zAngle,
+                -maxTiltAngle,
+                maxTiltAngle
+            );
 
-        transform.rotation = Quaternion.Slerp(
-            transform.rotation,
-            targetRotation,
-            uprightSmoothness * Time.deltaTime
-        );
+        Quaternion targetRotation =
+            Quaternion.Euler(
+                xAngle,
+                currentEuler.y,
+                zAngle
+            );
+
+        transform.rotation =
+            Quaternion.Slerp(
+                transform.rotation,
+                targetRotation,
+                uprightSmoothness *
+                Time.deltaTime
+            );
     }
 
     float NormalizeAngle(float angle)
     {
         if (angle > 180f)
-        {
             angle -= 360f;
-        }
 
         return angle;
     }
@@ -289,8 +571,6 @@ public class DogMovement : MonoBehaviour
     {
         fireworks++;
         hasFireWork = true;
-
-
     }
 
     public void UseFireWork()
@@ -298,17 +578,21 @@ public class DogMovement : MonoBehaviour
         if (fireworks >= 1)
         {
             fireworks--;
-            hasFireWork = fireworks > 0;
-            fireworkTimeRemaining = fireworkDuration;
+
+            hasFireWork =
+                fireworks > 0;
+
+            fireworkTimeRemaining =
+                fireworkDuration;
+
             hasFireWork = false;
         }
     }
-        public void AddPepper()
+
+    public void AddPepper()
     {
         Peppers++;
         hasPepper = true;
-
-
     }
 
     public void UsePepper()
@@ -316,33 +600,12 @@ public class DogMovement : MonoBehaviour
         if (Peppers >= 1)
         {
             Peppers--;
-            hasPepper = Peppers > 0;
-            PepperTimeRemaining = PepperDuration;
-        }
-    }
 
+            hasPepper =
+                Peppers > 0;
 
-    void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.name == "Wall")
-        {
-            touchingWall = true;
-        }
-    }
-
-    void OnCollisionStay(Collision collision)
-    {
-        if (collision.gameObject.name == "Wall")
-        {
-            touchingWall = true;
-        }
-    }
-
-    void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.name == "Wall")
-        {
-            touchingWall = false;
+            PepperTimeRemaining =
+                PepperDuration;
         }
     }
 }
