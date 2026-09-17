@@ -1,64 +1,64 @@
 using UnityEngine;
 
-public class Speedometer : MonoBehaviour
+public class SpeedometerUI : MonoBehaviour
 {
-    private const float MAX_SPEED_ANGLE = -20f;
-    private const float ZERO_SPEED_ANGLE = 210f;
+    [Header("UI Reference")]
+    public RectTransform boneNeedle; 
 
-    private Transform needleTransform;
+    [Header("Dog Script Reference")]
+    public DogMovement dogScript; 
 
-    [Header("Dog Movement")]
-    public DogMovement dogMovement;
+    [Header("Precise Angle Mapping")]
+    [Tooltip("Enter the exact Z rotation for each 10 mph step.\n[0] = 0 mph, [1] = 10 mph, [2] = 20 mph, etc.")]
+    public float[] tickAngles = new float[11]; // Stores angles for 0, 10, 20... up to 100 mph
 
-    [Header("Speed Settings")]
-    public float speedMax = 100f;
-
-    private void Awake()
+    void Start()
     {
-        needleTransform = transform.Find("needle");
-
-        if (needleTransform == null)
+        if (boneNeedle != null && tickAngles.Length > 0)
         {
-            Debug.LogError("Could not find 'needle' as a child of the Speedometer!");
-        }
-
-        if (dogMovement == null)
-        {
-            Debug.LogError("DogMovement has not been assigned to the Speedometer!");
+            
+            boneNeedle.localEulerAngles = new Vector3(0, 0, tickAngles[0]);
         }
     }
 
-    private void Update()
+    void Update()
     {
-        if (needleTransform == null || dogMovement == null)
+        float currentSpeed = 0f;
+
+        if (dogScript != null)
         {
-            return;
+            currentSpeed = dogScript.speed;
         }
 
-        // Get the current speed from DogMovement
-        float speed = dogMovement.speed;
-
-        // Calculate the needle rotation
-        float speedRotation = GetSpeedRotation(speed);
-
-        // Rotate the needle
-        needleTransform.eulerAngles = new Vector3(
-            0f,
-            0f,
-            speedRotation
-        );
+        if (boneNeedle != null && tickAngles.Length >= 2)
+        {
+            float targetAngle = GetAngleFromSpeed(currentSpeed);
+            boneNeedle.localEulerAngles = new Vector3(0, 0, targetAngle);
+        }
     }
 
-    private float GetSpeedRotation(float speed)
+    float GetAngleFromSpeed(float speed)
     {
-        float totalAngleSize = ZERO_SPEED_ANGLE - MAX_SPEED_ANGLE;
+        
+        float maxSupportedSpeed = (tickAngles.Length - 1) * 10f;
+        speed = Mathf.Clamp(speed, 0f, maxSupportedSpeed);
 
-        // Convert speed into a value between 0 and 1
-        float speedNormalized = speed / speedMax;
+        
+        int lowerIndex = Mathf.FloorToInt(speed / 10f);
+        int upperIndex = Mathf.CeilToInt(speed / 10f);
 
-        // Prevent the needle from going past the speedometer
-        speedNormalized = Mathf.Clamp01(speedNormalized);
+        
+        if (upperIndex >= tickAngles.Length) upperIndex = tickAngles.Length - 1;
+        if (lowerIndex >= tickAngles.Length) lowerIndex = tickAngles.Length - 1;
 
-        return ZERO_SPEED_ANGLE - speedNormalized * totalAngleSize;
+       
+        float remainderSpeed = speed % 10f;
+        float t = remainderSpeed / 10f;
+
+       
+        if (lowerIndex == upperIndex) t = 0f; 
+
+        
+        return Mathf.Lerp(tickAngles[lowerIndex], tickAngles[upperIndex], t);
     }
 }

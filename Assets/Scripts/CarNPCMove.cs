@@ -12,7 +12,7 @@ public class CarNPCMove : MonoBehaviour
     private float chaosTimer = 0f;
 
     public float chaosTurningAmount = 0.9f;
-    public float carValue = 2f;
+    public int carValue = 2;
 
     private float scaredTimer = 0f;
     private float dT;
@@ -99,6 +99,7 @@ public class CarNPCMove : MonoBehaviour
         {
             DogMovement dM = collision.gameObject.GetComponent<DogMovement>();
             dM.soulCount += carValue;
+            dM.totalSoulCount += carValue;
             Destroy(gameObject);
         }
 

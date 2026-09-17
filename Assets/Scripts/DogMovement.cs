@@ -3,361 +3,609 @@ using UnityEngine.InputSystem;
 
 public class DogMovement : MonoBehaviour
 {
-public DogBase dogBase;
+    public DogBase dogBase;
 
-[Header("Soul & Speed")]
-public float soulCount;
-public float speed;
+    [Header("Soul & Speed")]
+    public float soulCount;
+    public int totalSoulCount;
+    public float speed;
 
-[Header("Turning")]
-public float turn;
-public float turnSmoothness = 8f;
-public float maxTiltAngle = 15f;
-public float uprightSmoothness = 8f;
+    [Header("Turning")]
+    public float turn;
+    public float turnSmoothness = 8f;
+    public float maxTiltAngle = 15f;
+    public float uprightSmoothness = 8f;
 
-[Header("Camera")]
-public Transform cameraConnect;
-public float cameraTurnAmount = 5f;
-public float cameraSideShift = 0.5f;
-public float cameraSmoothness = 8f;
+    [Header("Quick Turn")]
+    public float quickTurnDuration = 0.25f;
+    public float quickTurnMultiplier = 1f;
+    public float groundCheckDistance = 0.2f;
+    public LayerMask groundLayer;
 
-[Header("Quick Turn")]
-public float quickTurnDuration = 0.25f;
-public float quickTurnMultiplier = 1f;
+    public Transform AnchorL;
+    public Transform AnchorR;
 
-public Transform AnchorL;
-public Transform AnchorR;
+    [Header("Wall Collision")]
+    public string wallTag = "Wall";
+    public float wallSkin = 0.03f;
+    public float wallCheckDistance = 0.1f;
+    public int wallSlideIterations = 3;
 
-private float targetTurn;
+    [Header("Fireworks")]
+    public float fireworkJump = 5f;
+    public float fireworkDuration = 1f;
 
-private Quaternion cameraBaseRotation;
-private Vector3 cameraBasePosition;
+    private float fireworkTimeRemaining = 0f;
+    private int fireworks = 0;
+    private bool hasFireWork = false;
 
-private bool quickTurning = false;
-private float quickTurnDirection = 0f;
+    [Header("Pepper")]
+    public float PepperDash = 5f;
+    public float PepperDuration = 1f;
 
-private Transform activeAnchor;
-private Transform originalParent;
+    private float PepperTimeRemaining = 0f;
+    private int Peppers = 0;
+    private bool hasPepper = false;
 
-private Vector3 activeAnchorLockedPosition;
-private Vector3 activeAnchorOriginalLocalScale;
-private Vector3 dogOriginalLocalScale;
+    private float targetTurn;
 
-private bool touchingWall = false;
+    private bool quickTurning = false;
+    private float quickTurnDirection = 0f;
 
-private Vector3 quickTurnCameraLocalPosition;
-private Quaternion quickTurnCameraLocalRotation;
-private Transform quickTurnCameraParent;
+    private Transform activeAnchor;
+    private Vector3 activeAnchorLockedPosition;
+    private Vector3 dogPositionRelativeToAnchor;
 
-void Start()
-{
-    speed = dogBase.startBoost;
-    soulCount = 30f;
+    private Collider dogCollider;
 
-    dogOriginalLocalScale = transform.localScale;
-    
-    if (AnchorL != null)
+    void Start()
     {
-        AnchorL.localScale = AnchorL.localScale;
+        dogCollider = GetComponent<Collider>();
+
+        speed = dogBase.startBoost;
+        soulCount = 30f;
+        totalSoulCount += 30;
     }
 
-    if (AnchorR != null)
+    void Update()
     {
-        AnchorR.localScale = AnchorR.localScale;
-    }
-    
-    if (cameraConnect != null)
-    {
-        cameraBaseRotation = cameraConnect.localRotation;
-        cameraBasePosition = cameraConnect.localPosition;
+        float dt = Time.deltaTime;
 
-        quickTurnCameraParent = cameraConnect.parent;
-    }
-}
+        soulCount -= dogBase.soulConsump * dt;
+        soulCount = Mathf.Max(soulCount, 0f);
 
-void Update()
-{
-    soulCount -= dogBase.soulConsump * Time.deltaTime;
-    soulCount = Mathf.Max(soulCount,0f);
+        speed = soulCount * dogBase.speed;
 
-    speed = soulCount * dogBase.speed;
-
-    // quick turn input
-    if (!quickTurning)
-    {
-        if (Keyboard.current.dKey.isPressed &&
-            Keyboard.current.spaceKey.isPressed)
+        if (hasFireWork)
         {
-            StartQuickTurn(1f);
+            UseFireWork();
         }
-        else if (Keyboard.current.aKey.isPressed &&
-                 Keyboard.current.spaceKey.isPressed)
+
+        if (fireworkTimeRemaining > 0f)
         {
-            StartQuickTurn(-1f);
+            fireworkTimeRemaining -= dt;
+            fireworkJump++;
+
+            MoveWithWallCollision(
+                Vector3.up * fireworkJump * dt
+            );
         }
+
+        if (hasPepper)
+        {
+            UsePepper();
+        }
+
+        if (PepperTimeRemaining > 0f)
+        {
+            PepperTimeRemaining -= dt;
+            speed = PepperDash * 10f;
+        }
+
+        if (!quickTurning)
+        {
+            if (Keyboard.current.dKey.isPressed &&
+                Keyboard.current.spaceKey.isPressed &&
+                IsGrounded())
+            {
+                StartQuickTurn(1f);
+            }
+            else if (Keyboard.current.aKey.isPressed &&
+                     Keyboard.current.spaceKey.isPressed &&
+                     IsGrounded())
+            {
+                StartQuickTurn(-1f);
+            }
+        }
+
+        if (quickTurning)
+        {
+            if (Keyboard.current.spaceKey.isPressed)
+            {
+                DoQuickTurn();
+                return;
+            }
+
+            EndQuickTurn();
+        }
+
+        MoveForward(dt);
+        HandleTurning(dt);
+        KeepDogUpright();
     }
 
-    if (quickTurning)
+    void MoveForward(float dt)
     {
-        if (Keyboard.current.spaceKey.isPressed)
+        Vector3 movement =
+            transform.forward *
+            speed *
+            dt;
+
+        MoveWithWallCollision(movement);
+    }
+
+    void HandleTurning(float dt)
+    {
+        targetTurn = 0f;
+
+        if (Keyboard.current.aKey.isPressed)
         {
-            DoQuickTurn();
+            targetTurn = -dogBase.turnSpeed;
+        }
+
+        if (Keyboard.current.dKey.isPressed)
+        {
+            targetTurn = dogBase.turnSpeed;
+        }
+
+        turn = Mathf.Lerp(
+            turn,
+            targetTurn,
+            turnSmoothness * dt
+        );
+
+        transform.Rotate(
+            Vector3.up *
+            turn *
+            dt,
+            Space.Self
+        );
+    }
+
+    void StartQuickTurn(float direction)
+    {
+        quickTurning = true;
+        quickTurnDirection = direction;
+        turn = 0f;
+
+        activeAnchor =
+            direction > 0f
+                ? AnchorR
+                : AnchorL;
+
+        if (activeAnchor == null)
+        {
+            quickTurning = false;
             return;
+        }
+
+        activeAnchorLockedPosition =
+            activeAnchor.position;
+
+        dogPositionRelativeToAnchor =
+            transform.position -
+            activeAnchorLockedPosition;
+    }
+
+    void DoQuickTurn()
+    {
+        if (activeAnchor == null)
+            return;
+
+        float quickTurnSpeed =
+            speed *
+            dogBase.turnSpeed *
+            quickTurnMultiplier;
+
+        float rotationAmount =
+            quickTurnDirection *
+            quickTurnSpeed *
+            Time.deltaTime;
+
+        Quaternion rotation =
+            Quaternion.Euler(
+                0f,
+                rotationAmount,
+                0f
+            );
+
+        Vector3 targetRelativePosition =
+            rotation *
+            dogPositionRelativeToAnchor;
+
+        Vector3 targetPosition =
+            activeAnchorLockedPosition +
+            targetRelativePosition;
+
+        Vector3 movement =
+            targetPosition -
+            transform.position;
+
+        MoveWithWallCollision(movement);
+
+        dogPositionRelativeToAnchor =
+            transform.position -
+            activeAnchorLockedPosition;
+
+        if (movement.sqrMagnitude > 0.000001f)
+        {
+            transform.rotation =
+                rotation *
+                transform.rotation;
+        }
+
+        KeepDogUpright();
+    }
+
+    void EndQuickTurn()
+    {
+        quickTurning = false;
+        activeAnchor = null;
+        turn = 0f;
+
+        KeepDogUpright();
+    }
+
+    void MoveWithWallCollision(Vector3 movement)
+    {
+        if (movement.sqrMagnitude <= 0.000001f)
+            return;
+
+        if (dogCollider == null)
+        {
+            transform.position += movement;
+            return;
+        }
+
+        ResolveWallOverlap();
+
+        Vector3 remaining = movement;
+
+        for (int i = 0; i < wallSlideIterations; i++)
+        {
+            if (remaining.sqrMagnitude <= 0.000001f)
+                break;
+
+            Vector3 direction =
+                remaining.normalized;
+
+            float distance =
+                remaining.magnitude;
+
+            if (!CheckWall(
+                direction,
+                distance + wallCheckDistance,
+                out RaycastHit hit))
+            {
+                transform.position += remaining;
+                break;
+            }
+
+            float safeDistance =
+                Mathf.Max(
+                    0f,
+                    hit.distance - wallSkin
+                );
+
+            if (safeDistance > 0f)
+            {
+                transform.position +=
+                    direction * safeDistance;
+            }
+
+            Vector3 usedMovement =
+                direction * safeDistance;
+
+            Vector3 leftover =
+                remaining -
+                usedMovement;
+
+            Vector3 slide =
+                Vector3.ProjectOnPlane(
+                    leftover,
+                    hit.normal
+                );
+
+            remaining = slide;
+        }
+
+        ResolveWallOverlap();
+    }
+
+    bool CheckWall(
+        Vector3 direction,
+        float distance,
+        out RaycastHit closestHit)
+    {
+        closestHit = default;
+
+        Bounds bounds =
+            dogCollider.bounds;
+
+        Vector3 center =
+            bounds.center;
+
+        float radius =
+            Mathf.Min(
+                bounds.extents.x,
+                bounds.extents.z
+            );
+
+        float height =
+            bounds.size.y;
+
+        RaycastHit[] hits;
+
+        if (height > radius * 2f)
+        {
+            Vector3 bottom =
+                center +
+                Vector3.down *
+                (height * 0.5f - radius);
+
+            Vector3 top =
+                center +
+                Vector3.up *
+                (height * 0.5f - radius);
+
+            hits =
+                Physics.CapsuleCastAll(
+                    bottom,
+                    top,
+                    radius,
+                    direction,
+                    distance,
+                    Physics.AllLayers,
+                    QueryTriggerInteraction.Ignore
+                );
         }
         else
         {
-            EndQuickTurn();
+            hits =
+                Physics.SphereCastAll(
+                    center,
+                    radius,
+                    direction,
+                    distance,
+                    Physics.AllLayers,
+                    QueryTriggerInteraction.Ignore
+                );
+        }
+
+        return GetClosestWallHit(
+            hits,
+            out closestHit
+        );
+    }
+
+    bool GetClosestWallHit(
+        RaycastHit[] hits,
+        out RaycastHit closestHit)
+    {
+        closestHit = default;
+
+        float closestDistance =
+            float.MaxValue;
+
+        bool found = false;
+
+        for (int i = 0; i < hits.Length; i++)
+        {
+            Collider hitCollider =
+                hits[i].collider;
+
+            if (hitCollider == null)
+                continue;
+
+            if (hitCollider == dogCollider)
+                continue;
+
+            if (hitCollider.transform == transform)
+                continue;
+
+            if (hitCollider.transform.IsChildOf(transform))
+                continue;
+
+            if (!hitCollider.CompareTag(wallTag) &&
+                !hitCollider.transform.root.CompareTag(wallTag))
+                continue;
+
+            if (hits[i].distance < closestDistance)
+            {
+                closestDistance =
+                    hits[i].distance;
+
+                closestHit =
+                    hits[i];
+
+                found = true;
+            }
+        }
+
+        return found;
+    }
+
+    void ResolveWallOverlap()
+    {
+        if (dogCollider == null)
+            return;
+
+        Collider[] overlaps =
+            Physics.OverlapBox(
+                dogCollider.bounds.center,
+                dogCollider.bounds.extents +
+                Vector3.one * wallSkin,
+                Quaternion.identity,
+                Physics.AllLayers,
+                QueryTriggerInteraction.Ignore
+            );
+
+        for (int i = 0; i < overlaps.Length; i++)
+        {
+            Collider wall =
+                overlaps[i];
+
+            if (wall == null)
+                continue;
+
+            if (wall == dogCollider)
+                continue;
+
+            if (wall.transform == transform)
+                continue;
+
+            if (wall.transform.IsChildOf(transform))
+                continue;
+
+            if (!wall.CompareTag(wallTag) &&
+                !wall.transform.root.CompareTag(wallTag))
+                continue;
+
+            bool penetrating =
+                Physics.ComputePenetration(
+                    dogCollider,
+                    transform.position,
+                    transform.rotation,
+                    wall,
+                    wall.transform.position,
+                    wall.transform.rotation,
+                    out Vector3 direction,
+                    out float distance
+                );
+
+            if (penetrating)
+            {
+                transform.position +=
+                    direction *
+                    (distance + wallSkin);
+            }
         }
     }
 
-    // move forward
-    if (!touchingWall)
+    bool IsGrounded()
     {
-        transform.Translate(Vector3.forward * speed * Time.deltaTime);
+        if (dogCollider == null)
+            return false;
+
+        Vector3 origin =
+            dogCollider.bounds.center;
+
+        origin.y =
+            dogCollider.bounds.min.y +
+            0.05f;
+
+        return Physics.Raycast(
+            origin,
+            Vector3.down,
+            groundCheckDistance + 0.05f,
+            groundLayer,
+            QueryTriggerInteraction.Ignore
+        );
     }
 
-    // turn input
-    targetTurn = 0f;
-
-    if (Keyboard.current.aKey.isPressed)
+    void KeepDogUpright()
     {
-        targetTurn = -dogBase.turnSpeed;
+        Vector3 currentEuler =
+            transform.rotation.eulerAngles;
+
+        float xAngle =
+            NormalizeAngle(currentEuler.x);
+
+        float zAngle =
+            NormalizeAngle(currentEuler.z);
+
+        xAngle =
+            Mathf.Clamp(
+                xAngle,
+                -maxTiltAngle,
+                maxTiltAngle
+            );
+
+        zAngle =
+            Mathf.Clamp(
+                zAngle,
+                -maxTiltAngle,
+                maxTiltAngle
+            );
+
+        Quaternion targetRotation =
+            Quaternion.Euler(
+                xAngle,
+                currentEuler.y,
+                zAngle
+            );
+
+        transform.rotation =
+            Quaternion.Slerp(
+                transform.rotation,
+                targetRotation,
+                uprightSmoothness *
+                Time.deltaTime
+            );
     }
 
-    if (Keyboard.current.dKey.isPressed)
+    float NormalizeAngle(float angle)
     {
-        targetTurn = dogBase.turnSpeed;
+        if (angle > 180f)
+            angle -= 360f;
+
+        return angle;
     }
 
-    // norm turn
-    turn = Mathf.Lerp(turn,targetTurn,turnSmoothness * Time.deltaTime);
-
-    transform.Rotate(Vector3.up * turn * Time.deltaTime);
-
-    KeepDogUpright();
-
-    UpdateNormalCamera();
-}
-
-void StartQuickTurn(float direction)
-{
-    quickTurning = true;
-
-    quickTurnDirection = direction;
-
-    turn = 0f;
-
-    if (direction > 0f)
+    public bool IsQuickTurning()
     {
-        activeAnchor = AnchorR;
-    }
-    else
-    {
-        activeAnchor = AnchorL;
+        return quickTurning;
     }
 
-    if (activeAnchor == null)
+    public void AddFirework()
     {
-        quickTurning = false;
-        return;
+        fireworks++;
+        hasFireWork = true;
     }
 
-    originalParent = transform.parent;
-
-    // Save exact original scales
-    dogOriginalLocalScale = transform.localScale;
-    activeAnchorOriginalLocalScale = activeAnchor.localScale;
-
-    // Save anchor exact world position
-    activeAnchorLockedPosition = activeAnchor.position;
-
-    // Remove anchor from the Dog
-    activeAnchor.SetParent(null,true);
-
-    // Restore exact anchor scale
-    activeAnchor.localScale = activeAnchorOriginalLocalScale;
-
-    // Make Dog a child of anchor
-    transform.SetParent(activeAnchor,true);
-
-    // Restore exact Dog scale
-    transform.localScale = dogOriginalLocalScale;
-
-    // Save camera transform
-    if (cameraConnect != null)
+    public void UseFireWork()
     {
-        quickTurnCameraLocalPosition = cameraConnect.localPosition;
-        quickTurnCameraLocalRotation = cameraConnect.localRotation;
-    }
-}
+        if (fireworks >= 1)
+        {
+            fireworks--;
 
-void DoQuickTurn()
-{
-    // Keep anchor locked
-    activeAnchor.position = activeAnchorLockedPosition;
+            hasFireWork =
+                fireworks > 0;
 
-    // Keep anchor scale unchanged
-    activeAnchor.localScale = activeAnchorOriginalLocalScale;
+            fireworkTimeRemaining =
+                fireworkDuration;
 
-    // quick turn speed
-    float quickTurnSpeed = speed * dogBase.turnSpeed * quickTurnMultiplier;
-
-    float rotationAmount = quickTurnDirection * quickTurnSpeed * Time.deltaTime;
-
-    activeAnchor.Rotate(0f,rotationAmount,0f);
-
-    KeepDogUpright();
-
-    if (cameraConnect != null)
-    {
-        cameraConnect.localPosition = quickTurnCameraLocalPosition;
-        cameraConnect.localRotation = quickTurnCameraLocalRotation;
-    }
-}
-
-void EndQuickTurn()
-{
-    quickTurning = false;
-
-    transform.SetParent(originalParent,true);
-
-    transform.localScale = dogOriginalLocalScale;
-
-    activeAnchor.SetParent(transform,true);
-
-    activeAnchor.localScale = activeAnchorOriginalLocalScale;
-
-    // Restore came original local transform
-    if (cameraConnect != null)
-    {
-        cameraConnect.SetParent(quickTurnCameraParent,true);
-
-        cameraConnect.localPosition = quickTurnCameraLocalPosition;
-        cameraConnect.localRotation = quickTurnCameraLocalRotation;
+            hasFireWork = false;
+        }
     }
 
-    activeAnchor = null;
-    originalParent = null;
-
-    turn = 0f;
-
-    KeepDogUpright();
-}
-
-void KeepDogUpright()
-{
-    Vector3 currentEuler = transform.rotation.eulerAngles;
-
-    float xAngle = NormalizeAngle(currentEuler.x);
-    float zAngle = NormalizeAngle(currentEuler.z);
-
-    xAngle = Mathf.Clamp(xAngle,-maxTiltAngle,maxTiltAngle);
-    zAngle = Mathf.Clamp(zAngle,-maxTiltAngle,maxTiltAngle);
-
-    Quaternion targetRotation = Quaternion.Euler(
-        xAngle,
-        currentEuler.y,
-        zAngle
-    );
-
-    transform.rotation = Quaternion.Slerp(
-        transform.rotation,
-        targetRotation,
-        uprightSmoothness * Time.deltaTime
-    );
-}
-
-float NormalizeAngle(float angle)
-{
-    if (angle > 180f)
+    public void AddPepper()
     {
-        angle -= 360f;
+        Peppers++;
+        hasPepper = true;
     }
 
-    return angle;
-}
-
-void LateUpdate()
-{
-    if (cameraConnect == null)
+    public void UsePepper()
     {
-        return;
+        if (Peppers >= 1)
+        {
+            Peppers--;
+
+            hasPepper =
+                Peppers > 0;
+
+            PepperTimeRemaining =
+                PepperDuration;
+        }
     }
-
-    if (quickTurning)
-    {
-        // Keep camera stable during quick turn.
-        cameraConnect.localPosition = quickTurnCameraLocalPosition;
-        cameraConnect.localRotation = quickTurnCameraLocalRotation;
-
-        return;
-    }
-
-    // Get the dog's local tilt
-    float dogX = NormalizeAngle(transform.localEulerAngles.x);
-    float dogZ = NormalizeAngle(transform.localEulerAngles.z);
-
-    // Counter the dog's X and Z tilt.
-    Quaternion tiltCorrection = Quaternion.Euler(-dogX,0f,-dogZ);
-
-    float turnAmount = 0f;
-
-    if (dogBase.turnSpeed != 0f)
-    {
-        turnAmount = turn / dogBase.turnSpeed;
-        turnAmount = Mathf.Clamp(turnAmount,-1f,1f);
-    }
-
-    float cameraAngle = -turnAmount * cameraTurnAmount;
-
-    Quaternion targetRotation = cameraBaseRotation * tiltCorrection;
-
-    targetRotation *= Quaternion.Euler(0f,0f,cameraAngle);
-
-    cameraConnect.localRotation = Quaternion.Slerp(
-        cameraConnect.localRotation,
-        targetRotation,
-        cameraSmoothness * Time.deltaTime
-    );
-
-    // cam x pos shift
-    float targetX = cameraBasePosition.x + (turnAmount * cameraSideShift);
-
-    Vector3 targetCameraPosition = new Vector3(targetX,cameraBasePosition.y,cameraBasePosition.z);
-
-    cameraConnect.localPosition = Vector3.Lerp(
-        cameraConnect.localPosition,
-        targetCameraPosition,
-        cameraSmoothness * Time.deltaTime
-    );
-}
-
-void UpdateNormalCamera()
-{
-    // Camera is updated in LateUpdate.
-}
-
-void OnCollisionEnter(Collision collision)
-{
-    if (collision.gameObject.name == "Wall")
-    {
-        touchingWall = true;
-    }
-}
-
-void OnCollisionStay(Collision collision)
-{
-    if (collision.gameObject.name == "Wall")
-    {
-        touchingWall = true;
-    }
-}
-
-void OnCollisionExit(Collision collision)
-{
-    if (collision.gameObject.name == "Wall")
-    {
-        touchingWall = false;
-    }
-}
 }
