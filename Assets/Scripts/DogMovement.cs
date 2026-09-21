@@ -30,23 +30,12 @@ public class DogMovement : MonoBehaviour
     public float wallSkin = 0.03f;
     public float wallCheckDistance = 0.1f;
     public int wallSlideIterations = 3;
-
-    [Header("Fireworks")]
-    public float fireworkJump = 5f;
-    public float fireworkDuration = 1f;
-
-    private float fireworkTimeRemaining = 0f;
-    private int fireworks = 0;
-    private bool hasFireWork = false;
-
-    [Header("Pepper")]
-    public float PepperDash = 5f;
-    public float PepperDuration = 1f;
-
-    private float PepperTimeRemaining = 0f;
-    private int Peppers = 0;
-    private bool hasPepper = false;
-
+    
+    [Header("Firework/Pepper")]
+    private float fireworkTimer;
+    private float fireworkjump;
+    private float pepperTimer;
+    private float pepperMult;
     private float targetTurn;
 
     private bool quickTurning = false;
@@ -75,33 +64,19 @@ public class DogMovement : MonoBehaviour
         soulCount = Mathf.Max(soulCount, 0f);
 
         speed = soulCount * dogBase.speed;
-
-        if (hasFireWork)
+        if(fireworkTimer > 0f)
         {
-            UseFireWork();
+            fireworkTimer -= Time.deltaTime;
+            float upward = fireworkjump * Time.deltaTime;
+            MoveWithWallCollision(Vector3.up * upward);
         }
 
-        if (fireworkTimeRemaining > 0f)
+        if(pepperTimer > 0f)
         {
-            fireworkTimeRemaining -= dt;
-            fireworkJump++;
+            pepperTimer -= Time.deltaTime;
+            speed *= pepperMult;
 
-            MoveWithWallCollision(
-                Vector3.up * fireworkJump * dt
-            );
         }
-
-        if (hasPepper)
-        {
-            UsePepper();
-        }
-
-        if (PepperTimeRemaining > 0f)
-        {
-            PepperTimeRemaining -= dt;
-            speed = PepperDash * 10f;
-        }
-
         if (!quickTurning)
         {
             if (Keyboard.current.dKey.isPressed &&
@@ -566,46 +541,16 @@ public class DogMovement : MonoBehaviour
     {
         return quickTurning;
     }
-
-    public void AddFirework()
+    public void ApplyFireWork(float duration, float jumpStrength)
     {
-        fireworks++;
-        hasFireWork = true;
+        fireworkTimer = duration;
+        fireworkjump = jumpStrength;
+
     }
-
-    public void UseFireWork()
+    public void ApplyPepper(float duration, float multi)
     {
-        if (fireworks >= 1)
-        {
-            fireworks--;
+        pepperTimer = duration;
+        pepperMult = multi;
 
-            hasFireWork =
-                fireworks > 0;
-
-            fireworkTimeRemaining =
-                fireworkDuration;
-
-            hasFireWork = false;
-        }
-    }
-
-    public void AddPepper()
-    {
-        Peppers++;
-        hasPepper = true;
-    }
-
-    public void UsePepper()
-    {
-        if (Peppers >= 1)
-        {
-            Peppers--;
-
-            hasPepper =
-                Peppers > 0;
-
-            PepperTimeRemaining =
-                PepperDuration;
-        }
     }
 }

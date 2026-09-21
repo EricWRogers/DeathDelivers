@@ -27,7 +27,7 @@ public class Pepper : MonoBehaviour
     private void OnTriggerEnter(Collider other){
         DogMovement dog = other.GetComponentInParent<DogMovement>();
         if(dog != null){
-            dog.AddPepper();
+            dog.ApplyPepper(duration: 3f, multi: 5f);
             if(spawner != null)
                 spawner.PepperGrabbed();
             Destroy(gameObject);

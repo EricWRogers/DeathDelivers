@@ -28,7 +28,7 @@ public class FireWork : MonoBehaviour
         
         DogMovement dog = other.GetComponentInParent<DogMovement>();
         if(dog != null){
-            dog.AddFirework();
+            dog.ApplyFireWork(duration: 1f, jumpStrength: 30f);
             if(spawner != null)
                 spawner.FireworkGrabbed();
             Destroy(gameObject);
