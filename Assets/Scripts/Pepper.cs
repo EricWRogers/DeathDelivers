@@ -21,7 +21,7 @@ public class Pepper : MonoBehaviour
     {
         transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime, Space.World);
         float newY = startY + Mathf.Sin(Time.time * bobbingSpeed) * bobbingHeight;
-        transform.position = new Vector3(transform.position.x, (newY*0.5f), transform.position.z);
+        transform.position = new Vector3(transform.position.x, newY*0.5f, transform.position.z);
     }
 
     private void OnTriggerEnter(Collider other){

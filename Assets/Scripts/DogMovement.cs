@@ -31,11 +31,13 @@ public class DogMovement : MonoBehaviour
     public float wallCheckDistance = 0.1f;
     public int wallSlideIterations = 3;
     
-    [Header("Firework/Pepper")]
+    [Header("Firework & Pepper & Bone")]
     private float fireworkTimer;
     private float fireworkjump;
     private float pepperTimer;
     private float pepperMult;
+    private float boneTimer;
+    private float boneScale;
     private float targetTurn;
 
     private bool quickTurning = false;
@@ -76,6 +78,17 @@ public class DogMovement : MonoBehaviour
             pepperTimer -= Time.deltaTime;
             speed *= pepperMult;
 
+        }
+        if(boneTimer > 0f)
+        {
+            boneTimer -= Time.deltaTime;
+
+            float target = boneScale;
+            transform.localScale = Vector3.Lerp(transform.localScale, Vector3.one * target, Time.deltaTime * 5f);
+        }
+        else
+        {
+            transform.localScale = Vector3.Lerp(transform.localScale, Vector3.one, Time.deltaTime * 5f);
         }
         if (!quickTurning)
         {
@@ -551,6 +564,12 @@ public class DogMovement : MonoBehaviour
     {
         pepperTimer = duration;
         pepperMult = multi;
+
+    }
+        public void ApplyBone(float duration, float scale)
+    {
+        boneTimer = duration;
+        boneScale = scale;
 
     }
 }
