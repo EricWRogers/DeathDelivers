@@ -1792,14 +1792,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1035527011542895347, guid: 9534e02e4b2ef23408d39008c062a4cf, type: 3}
-      propertyPath: speed
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1035527011542895347, guid: 9534e02e4b2ef23408d39008c062a4cf, type: 3}
-      propertyPath: scaredSpeed
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 1559940735240559196, guid: 9534e02e4b2ef23408d39008c062a4cf, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.22
@@ -1840,21 +1832,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3834390277278876238, guid: 9534e02e4b2ef23408d39008c062a4cf, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 8600517029015614737, guid: 9534e02e4b2ef23408d39008c062a4cf, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
     - target: {fileID: 8777974727055593324, guid: 9534e02e4b2ef23408d39008c062a4cf, type: 3}
       propertyPath: m_Name
       value: Person
-      objectReference: {fileID: 0}
-    - target: {fileID: 8777974727055593324, guid: 9534e02e4b2ef23408d39008c062a4cf, type: 3}
-      propertyPath: m_Layer
-      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1872,50 +1852,6 @@ PrefabInstance:
     - target: {fileID: 517454585812169874, guid: 6306e216bf17a354389e7dfc49734311, type: 3}
       propertyPath: m_Name
       value: CarBasePrefab
-      objectReference: {fileID: 0}
-    - target: {fileID: 517454585812169874, guid: 6306e216bf17a354389e7dfc49734311, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 1982230416969977289, guid: 6306e216bf17a354389e7dfc49734311, type: 3}
-      propertyPath: speed
-      value: 22
-      objectReference: {fileID: 0}
-    - target: {fileID: 1982230416969977289, guid: 6306e216bf17a354389e7dfc49734311, type: 3}
-      propertyPath: warnedDist
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 1982230416969977289, guid: 6306e216bf17a354389e7dfc49734311, type: 3}
-      propertyPath: scaredTurnAmount
-      value: 99
-      objectReference: {fileID: 0}
-    - target: {fileID: 1982230416969977289, guid: 6306e216bf17a354389e7dfc49734311, type: 3}
-      propertyPath: chaosTurningAmount
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2047701169873224783, guid: 6306e216bf17a354389e7dfc49734311, type: 3}
-      propertyPath: nextNode
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3422271694360050317, guid: 6306e216bf17a354389e7dfc49734311, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -5.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3422271694360050317, guid: 6306e216bf17a354389e7dfc49734311, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 26.38
-      objectReference: {fileID: 0}
-    - target: {fileID: 7268240955010230732, guid: 6306e216bf17a354389e7dfc49734311, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 8184220706630042714, guid: 6306e216bf17a354389e7dfc49734311, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 8457829408563165611, guid: 6306e216bf17a354389e7dfc49734311, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -6.86
       objectReference: {fileID: 0}
     - target: {fileID: 9004872181401653267, guid: 6306e216bf17a354389e7dfc49734311, type: 3}
       propertyPath: m_LocalPosition.x

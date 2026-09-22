@@ -49,6 +49,7 @@ public class DogMovement : MonoBehaviour
 
     private Collider dogCollider;
     private Vector3 startScale;
+    private RaycastHit hit;
 
     void Start()
     {
@@ -492,14 +493,23 @@ public class DogMovement : MonoBehaviour
         origin.y =
             dogCollider.bounds.min.y +
             0.05f;
-
-        return Physics.Raycast(
+        
+        
+        bool isGrounded = Physics.Raycast(
             origin,
             Vector3.down,
-            groundCheckDistance + 0.05f,
+            out hit,
+            groundCheckDistance + 0.5f,
             groundLayer,
             QueryTriggerInteraction.Ignore
         );
+
+        if (isGrounded)
+        {
+            transform.up = hit.normal;
+        }
+
+        return isGrounded;
     }
 
     void KeepDogUpright()
