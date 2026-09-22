@@ -48,11 +48,12 @@ public class DogMovement : MonoBehaviour
     private Vector3 dogPositionRelativeToAnchor;
 
     private Collider dogCollider;
+    private Vector3 startScale;
 
     void Start()
     {
         dogCollider = GetComponent<Collider>();
-
+        startScale = transform.localScale;
         speed = dogBase.startBoost;
         soulCount = 30f;
         totalSoulCount += 30;
@@ -88,7 +89,7 @@ public class DogMovement : MonoBehaviour
         }
         else
         {
-            transform.localScale = Vector3.Lerp(transform.localScale, Vector3.one, Time.deltaTime * 5f);
+            transform.localScale = Vector3.Lerp(startScale, Vector3.one, Time.deltaTime * 5f);
         }
         if (!quickTurning)
         {
