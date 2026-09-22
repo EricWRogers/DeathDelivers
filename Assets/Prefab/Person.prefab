@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2922855258174099465}
   - component: {fileID: 1694502290811018583}
   - component: {fileID: 2509261172974725686}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Blood Explosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4918,7 +4918,7 @@ GameObject:
   - component: {fileID: 1035527011542895347}
   - component: {fileID: 3527684980961849522}
   - component: {fileID: 1905991468964223415}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5081,7 +5081,7 @@ GameObject:
   - component: {fileID: 469957800292279730}
   - component: {fileID: 357267549749973001}
   - component: {fileID: 4300988856685504930}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Person
   m_TagString: Untagged
   m_Icon: {fileID: 0}

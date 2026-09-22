@@ -1547,6 +1547,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0.56831
       objectReference: {fileID: 0}
+    - target: {fileID: 1080410812803115276, guid: 261139e581d272c4eb1548fecc11e25b, type: 3}
+      propertyPath: positionSmoothness
+      value: 99
+      objectReference: {fileID: 0}
     - target: {fileID: 1202569380718555690, guid: 261139e581d272c4eb1548fecc11e25b, type: 3}
       propertyPath: dogVisual
       value: 
@@ -1641,7 +1645,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1202569380718555690, guid: 261139e581d272c4eb1548fecc11e25b, type: 3}
       propertyPath: uprightSmoothness
-      value: 12
+      value: 22
       objectReference: {fileID: 0}
     - target: {fileID: 1202569380718555690, guid: 261139e581d272c4eb1548fecc11e25b, type: 3}
       propertyPath: quickTurnMultiplier
@@ -1698,6 +1702,10 @@ PrefabInstance:
     - target: {fileID: 3122885275574185897, guid: 261139e581d272c4eb1548fecc11e25b, type: 3}
       propertyPath: m_Name
       value: DogV2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6069684094582717448, guid: 261139e581d272c4eb1548fecc11e25b, type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 8381807798030997059, guid: 261139e581d272c4eb1548fecc11e25b, type: 3}
       propertyPath: m_Enabled
@@ -1832,9 +1840,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3834390277278876238, guid: 9534e02e4b2ef23408d39008c062a4cf, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8600517029015614737, guid: 9534e02e4b2ef23408d39008c062a4cf, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 8777974727055593324, guid: 9534e02e4b2ef23408d39008c062a4cf, type: 3}
       propertyPath: m_Name
       value: Person
+      objectReference: {fileID: 0}
+    - target: {fileID: 8777974727055593324, guid: 9534e02e4b2ef23408d39008c062a4cf, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1852,6 +1872,10 @@ PrefabInstance:
     - target: {fileID: 517454585812169874, guid: 6306e216bf17a354389e7dfc49734311, type: 3}
       propertyPath: m_Name
       value: CarBasePrefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 517454585812169874, guid: 6306e216bf17a354389e7dfc49734311, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 1982230416969977289, guid: 6306e216bf17a354389e7dfc49734311, type: 3}
       propertyPath: speed
@@ -1880,6 +1904,14 @@ PrefabInstance:
     - target: {fileID: 3422271694360050317, guid: 6306e216bf17a354389e7dfc49734311, type: 3}
       propertyPath: m_LocalPosition.z
       value: 26.38
+      objectReference: {fileID: 0}
+    - target: {fileID: 7268240955010230732, guid: 6306e216bf17a354389e7dfc49734311, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8184220706630042714, guid: 6306e216bf17a354389e7dfc49734311, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8457829408563165611, guid: 6306e216bf17a354389e7dfc49734311, type: 3}
       propertyPath: m_LocalPosition.x
