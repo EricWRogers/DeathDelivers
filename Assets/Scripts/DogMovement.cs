@@ -13,14 +13,17 @@ public class DogMovement : MonoBehaviour
     [Header("Turning")]
     public float turn;
     public float turnSmoothness = 8f;
-    public float maxTiltAngle = 15f;
-    public float uprightSmoothness = 8f;
+    public float uprightSmoothness = 10f;
+
+    [Header("Ground")]
+    public float groundCheckDistance = 0.35f;
+    public float groundRayHeight = 0.5f;
+    public float groundRaySpread = 0.4f;
+    public LayerMask groundLayer;
 
     [Header("Quick Turn")]
     public float quickTurnDuration = 0.25f;
     public float quickTurnMultiplier = 1f;
-    public float groundCheckDistance = 0.2f;
-    public LayerMask groundLayer;
 
     public Transform AnchorL;
     public Transform AnchorR;
@@ -30,7 +33,7 @@ public class DogMovement : MonoBehaviour
     public float wallSkin = 0.03f;
     public float wallCheckDistance = 0.1f;
     public int wallSlideIterations = 3;
-    
+
     [Header("Firework & Pepper & Bone")]
     private float fireworkTimer;
     private float fireworkjump;
@@ -49,13 +52,17 @@ public class DogMovement : MonoBehaviour
 
     private Collider dogCollider;
     private Vector3 startScale;
-    private RaycastHit hit;
+
+    private Vector3 groundNormal = Vector3.up;
+    private bool grounded;
 
     void Start()
     {
         dogCollider = GetComponent<Collider>();
         startScale = transform.localScale;
+
         speed = dogBase.startBoost;
+
         soulCount = 30f;
         totalSoulCount += 30;
     }
@@ -67,31 +74,52 @@ public class DogMovement : MonoBehaviour
         soulCount -= dogBase.soulConsump * dt;
         soulCount = Mathf.Max(soulCount, 0f);
 
+        UpdateGrounded();
+
         speed = soulCount * dogBase.speed;
-        if(fireworkTimer > 0f)
+
+        if (fireworkTimer > 0f)
         {
             fireworkTimer -= Time.deltaTime;
-            float upward = fireworkjump * Time.deltaTime;
-            MoveWithWallCollision(Vector3.up * upward);
+
+            float upward =
+                fireworkjump *
+                Time.deltaTime;
+
+            MoveWithWallCollision(
+                Vector3.up * upward
+            );
         }
 
-        if(pepperTimer > 0f)
+        if (pepperTimer > 0f)
         {
             pepperTimer -= Time.deltaTime;
             speed *= pepperMult;
-
         }
-        if(boneTimer > 0f)
+
+        if (boneTimer > 0f)
         {
             boneTimer -= Time.deltaTime;
 
             float target = boneScale;
-            transform.localScale = Vector3.Lerp(transform.localScale, Vector3.one * target, Time.deltaTime * 5f);
+
+            transform.localScale =
+                Vector3.Lerp(
+                    transform.localScale,
+                    Vector3.one * target,
+                    Time.deltaTime * 5f
+                );
         }
         else
         {
-            transform.localScale = Vector3.Lerp(startScale, Vector3.one, Time.deltaTime * 5f);
+            transform.localScale =
+                Vector3.Lerp(
+                    startScale,
+                    Vector3.one,
+                    Time.deltaTime * 5f
+                );
         }
+
         if (!quickTurning)
         {
             if (Keyboard.current.dKey.isPressed &&
@@ -126,8 +154,22 @@ public class DogMovement : MonoBehaviour
 
     void MoveForward(float dt)
     {
+        Vector3 movementDirection = transform.forward;
+
+        if (grounded)
+        {
+            movementDirection =
+                Vector3.ProjectOnPlane(
+                    movementDirection,
+                    groundNormal
+                ).normalized;
+        }
+
+        if (movementDirection.sqrMagnitude < 0.001f)
+            return;
+
         Vector3 movement =
-            transform.forward *
+            movementDirection *
             speed *
             dt;
 
@@ -154,12 +196,24 @@ public class DogMovement : MonoBehaviour
             turnSmoothness * dt
         );
 
-        transform.Rotate(
-            Vector3.up *
-            turn *
-            dt,
-            Space.Self
-        );
+        if (grounded)
+        {
+            transform.Rotate(
+                groundNormal *
+                turn *
+                dt,
+                Space.World
+            );
+        }
+        else
+        {
+            transform.Rotate(
+                Vector3.up *
+                turn *
+                dt,
+                Space.World
+            );
+        }
     }
 
     void StartQuickTurn(float direction)
@@ -203,10 +257,11 @@ public class DogMovement : MonoBehaviour
             Time.deltaTime;
 
         Quaternion rotation =
-            Quaternion.Euler(
-                0f,
+            Quaternion.AngleAxis(
                 rotationAmount,
-                0f
+                grounded
+                    ? groundNormal
+                    : Vector3.up
             );
 
         Vector3 targetRelativePosition =
@@ -482,66 +537,126 @@ public class DogMovement : MonoBehaviour
         }
     }
 
-    bool IsGrounded()
+    void UpdateGrounded()
     {
         if (dogCollider == null)
-            return false;
-
-        Vector3 origin =
-            dogCollider.bounds.center;
-
-        origin.y =
-            dogCollider.bounds.min.y +
-            0.05f;
-        
-        
-        bool isGrounded = Physics.Raycast(
-            origin,
-            Vector3.down,
-            out hit,
-            groundCheckDistance + 0.5f,
-            groundLayer,
-            QueryTriggerInteraction.Ignore
-        );
-
-        if (isGrounded)
         {
-            transform.up = hit.normal;
+            grounded = false;
+            groundNormal = Vector3.up;
+            return;
         }
 
-        return isGrounded;
+        Bounds bounds =
+            dogCollider.bounds;
+
+        Vector3 center =
+            bounds.center;
+
+        float bottom =
+            bounds.min.y;
+
+        Vector3[] rayPositions =
+        {
+            new Vector3(center.x, bottom + groundRayHeight, center.z),
+
+            new Vector3(
+                center.x + groundRaySpread,
+                bottom + groundRayHeight,
+                center.z
+            ),
+
+            new Vector3(
+                center.x - groundRaySpread,
+                bottom + groundRayHeight,
+                center.z
+            ),
+
+            new Vector3(
+                center.x,
+                bottom + groundRayHeight,
+                center.z + groundRaySpread
+            ),
+
+            new Vector3(
+                center.x,
+                bottom + groundRayHeight,
+                center.z - groundRaySpread
+            )
+        };
+
+        Vector3 normalSum = Vector3.zero;
+        int hitCount = 0;
+
+        float rayDistance =
+            groundRayHeight +
+            groundCheckDistance;
+
+        for (int i = 0; i < rayPositions.Length; i++)
+        {
+            if (Physics.Raycast(
+                rayPositions[i],
+                Vector3.down,
+                out RaycastHit hit,
+                rayDistance,
+                groundLayer,
+                QueryTriggerInteraction.Ignore))
+            {
+                normalSum += hit.normal;
+                hitCount++;
+            }
+        }
+
+        if (hitCount == 0)
+        {
+            grounded = false;
+            groundNormal = Vector3.up;
+            return;
+        }
+
+        grounded = true;
+
+        Vector3 newNormal =
+            normalSum.normalized;
+
+        groundNormal =
+            Vector3.Slerp(
+                groundNormal,
+                newNormal,
+                15f * Time.deltaTime
+            ).normalized;
+    }
+
+    bool IsGrounded()
+    {
+        return grounded;
     }
 
     void KeepDogUpright()
     {
-        Vector3 currentEuler =
-            transform.rotation.eulerAngles;
+        if (!grounded)
+            return;
 
-        float xAngle =
-            NormalizeAngle(currentEuler.x);
-
-        float zAngle =
-            NormalizeAngle(currentEuler.z);
-
-        xAngle =
-            Mathf.Clamp(
-                xAngle,
-                -maxTiltAngle,
-                maxTiltAngle
+        Vector3 forward =
+            Vector3.ProjectOnPlane(
+                transform.forward,
+                groundNormal
             );
 
-        zAngle =
-            Mathf.Clamp(
-                zAngle,
-                -maxTiltAngle,
-                maxTiltAngle
-            );
+        if (forward.sqrMagnitude < 0.001f)
+        {
+            forward =
+                Vector3.ProjectOnPlane(
+                    transform.right,
+                    groundNormal
+                );
+        }
+
+        forward.Normalize();
 
         Quaternion targetRotation =
-            Quaternion.Euler(
-                xAngle,
-                currentEuler.y,
-                zAngle
+            Quaternion.LookRotation(
+                forward,
+                groundNormal
             );
 
         transform.rotation =
@@ -553,34 +668,32 @@ public class DogMovement : MonoBehaviour
             );
     }
 
-    float NormalizeAngle(float angle)
-    {
-        if (angle > 180f)
-            angle -= 360f;
-
-        return angle;
-    }
-
     public bool IsQuickTurning()
     {
         return quickTurning;
     }
-    public void ApplyFireWork(float duration, float jumpStrength)
+
+    public void ApplyFireWork(
+        float duration,
+        float jumpStrength)
     {
         fireworkTimer = duration;
         fireworkjump = jumpStrength;
-
     }
-    public void ApplyPepper(float duration, float multi)
+
+    public void ApplyPepper(
+        float duration,
+        float multi)
     {
         pepperTimer = duration;
         pepperMult = multi;
-
     }
-        public void ApplyBone(float duration, float scale)
+
+    public void ApplyBone(
+        float duration,
+        float scale)
     {
         boneTimer = duration;
         boneScale = scale;
-
     }
 }
