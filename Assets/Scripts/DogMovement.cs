@@ -30,23 +30,14 @@ public class DogMovement : MonoBehaviour
     public float wallSkin = 0.03f;
     public float wallCheckDistance = 0.1f;
     public int wallSlideIterations = 3;
-
-    [Header("Fireworks")]
-    public float fireworkJump = 5f;
-    public float fireworkDuration = 1f;
-
-    private float fireworkTimeRemaining = 0f;
-    private int fireworks = 0;
-    private bool hasFireWork = false;
-
-    [Header("Pepper")]
-    public float PepperDash = 5f;
-    public float PepperDuration = 1f;
-
-    private float PepperTimeRemaining = 0f;
-    private int Peppers = 0;
-    private bool hasPepper = false;
-
+    
+    [Header("Firework & Pepper & Bone")]
+    private float fireworkTimer;
+    private float fireworkjump;
+    private float pepperTimer;
+    private float pepperMult;
+    private float boneTimer;
+    private float boneScale;
     private float targetTurn;
 
     private bool quickTurning = false;
@@ -57,11 +48,13 @@ public class DogMovement : MonoBehaviour
     private Vector3 dogPositionRelativeToAnchor;
 
     private Collider dogCollider;
+    private Vector3 startScale;
+    private RaycastHit hit;
 
     void Start()
     {
         dogCollider = GetComponent<Collider>();
-
+        startScale = transform.localScale;
         speed = dogBase.startBoost;
         soulCount = 30f;
         totalSoulCount += 30;
@@ -75,33 +68,30 @@ public class DogMovement : MonoBehaviour
         soulCount = Mathf.Max(soulCount, 0f);
 
         speed = soulCount * dogBase.speed;
-
-        if (hasFireWork)
+        if(fireworkTimer > 0f)
         {
-            UseFireWork();
+            fireworkTimer -= Time.deltaTime;
+            float upward = fireworkjump * Time.deltaTime;
+            MoveWithWallCollision(Vector3.up * upward);
         }
 
-        if (fireworkTimeRemaining > 0f)
+        if(pepperTimer > 0f)
         {
-            fireworkTimeRemaining -= dt;
-            fireworkJump++;
+            pepperTimer -= Time.deltaTime;
+            speed *= pepperMult;
 
-            MoveWithWallCollision(
-                Vector3.up * fireworkJump * dt
-            );
         }
-
-        if (hasPepper)
+        if(boneTimer > 0f)
         {
-            UsePepper();
-        }
+            boneTimer -= Time.deltaTime;
 
-        if (PepperTimeRemaining > 0f)
+            float target = boneScale;
+            transform.localScale = Vector3.Lerp(transform.localScale, Vector3.one * target, Time.deltaTime * 5f);
+        }
+        else
         {
-            PepperTimeRemaining -= dt;
-            speed = PepperDash * 10f;
+            transform.localScale = Vector3.Lerp(startScale, Vector3.one, Time.deltaTime * 5f);
         }
-
         if (!quickTurning)
         {
             if (Keyboard.current.dKey.isPressed &&
@@ -503,14 +493,23 @@ public class DogMovement : MonoBehaviour
         origin.y =
             dogCollider.bounds.min.y +
             0.05f;
-
-        return Physics.Raycast(
+        
+        
+        bool isGrounded = Physics.Raycast(
             origin,
             Vector3.down,
-            groundCheckDistance + 0.05f,
+            out hit,
+            groundCheckDistance + 0.5f,
             groundLayer,
             QueryTriggerInteraction.Ignore
         );
+
+        if (isGrounded)
+        {
+            transform.up = hit.normal;
+        }
+
+        return isGrounded;
     }
 
     void KeepDogUpright()
@@ -566,46 +565,22 @@ public class DogMovement : MonoBehaviour
     {
         return quickTurning;
     }
-
-    public void AddFirework()
+    public void ApplyFireWork(float duration, float jumpStrength)
     {
-        fireworks++;
-        hasFireWork = true;
+        fireworkTimer = duration;
+        fireworkjump = jumpStrength;
+
     }
-
-    public void UseFireWork()
+    public void ApplyPepper(float duration, float multi)
     {
-        if (fireworks >= 1)
-        {
-            fireworks--;
+        pepperTimer = duration;
+        pepperMult = multi;
 
-            hasFireWork =
-                fireworks > 0;
-
-            fireworkTimeRemaining =
-                fireworkDuration;
-
-            hasFireWork = false;
-        }
     }
-
-    public void AddPepper()
+        public void ApplyBone(float duration, float scale)
     {
-        Peppers++;
-        hasPepper = true;
-    }
+        boneTimer = duration;
+        boneScale = scale;
 
-    public void UsePepper()
-    {
-        if (Peppers >= 1)
-        {
-            Peppers--;
-
-            hasPepper =
-                Peppers > 0;
-
-            PepperTimeRemaining =
-                PepperDuration;
-        }
     }
 }
