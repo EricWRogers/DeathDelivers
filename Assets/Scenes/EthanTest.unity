@@ -10892,6 +10892,46 @@ PrefabInstance:
       propertyPath: boneNeedle
       value: 
       objectReference: {fileID: 2127586206}
+    - target: {fileID: 1117325994132440694, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+      propertyPath: 'tickAngles.Array.data[0]'
+      value: 134.353
+      objectReference: {fileID: 0}
+    - target: {fileID: 1117325994132440694, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+      propertyPath: 'tickAngles.Array.data[1]'
+      value: 124.069
+      objectReference: {fileID: 0}
+    - target: {fileID: 1117325994132440694, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+      propertyPath: 'tickAngles.Array.data[2]'
+      value: 92.82
+      objectReference: {fileID: 0}
+    - target: {fileID: 1117325994132440694, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+      propertyPath: 'tickAngles.Array.data[3]'
+      value: 64.061
+      objectReference: {fileID: 0}
+    - target: {fileID: 1117325994132440694, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+      propertyPath: 'tickAngles.Array.data[4]'
+      value: 32.37
+      objectReference: {fileID: 0}
+    - target: {fileID: 1117325994132440694, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+      propertyPath: 'tickAngles.Array.data[6]'
+      value: -32.851
+      objectReference: {fileID: 0}
+    - target: {fileID: 1117325994132440694, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+      propertyPath: 'tickAngles.Array.data[7]'
+      value: -61.996
+      objectReference: {fileID: 0}
+    - target: {fileID: 1117325994132440694, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+      propertyPath: 'tickAngles.Array.data[8]'
+      value: -91.151
+      objectReference: {fileID: 0}
+    - target: {fileID: 1117325994132440694, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+      propertyPath: 'tickAngles.Array.data[9]'
+      value: -122.395
+      objectReference: {fileID: 0}
+    - target: {fileID: 1117325994132440694, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+      propertyPath: 'tickAngles.Array.data[10]'
+      value: -138.736
+      objectReference: {fileID: 0}
     - target: {fileID: 2489625876198022081, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
       propertyPath: m_Pivot.x
       value: 0
