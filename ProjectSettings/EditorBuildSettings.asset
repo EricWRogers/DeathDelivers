@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/JamesonTest.unity
     guid: e4afc8e2f062ea8488b43415123f99ac
   - enabled: 1
