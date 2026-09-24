@@ -36,6 +36,9 @@ public class SplinineSampler : MonoBehaviour
     public float revolveSpeed = .1f;
     
     public int m_width;
+
+    public SplineVertHandler vertHandler;
+    
     private void Update()
     {
         m_time += revolveSpeed * Time.deltaTime;
@@ -47,20 +50,30 @@ public class SplinineSampler : MonoBehaviour
         float3 right = Vector3.Cross(tangent, upVector).normalized;
         p1 = position + (right * m_width);
         p2 = position + (-right * m_width);
+
     }
 
-    //private void SampleSplineWidth(t,out Vector3 p1, out Vector3 p2)
-    //{
-       //This method is intended to return information about p1 and p2
-       // such as the m_time for position on the spline and the positions the pointsaway from the spline 
-      // float t = m_time;
+    public void SampleSplineWidth(int index, float t, out Vector3 p1, out Vector3 p2)
+    {
+        //given the t time, it will give the position of p1 and p2
+        
 
-    //}
+        m_splineContainer.Evaluate(index, t, out position, out tangent, out upVector);
+        float3 right = Vector3.Cross(tangent, upVector).normalized;
+        p1 = position + (right * m_width);
+        p2 = position + (-right * m_width);
+
+
+    }
+
+    public int NumSplines()
+    {
+        int numberSplines = m_splineContainer.Splines.Count();
+        return numberSplines;
+    }
 
     private void OnDrawGizmos()
     {
-        Debug.Log("Hello world");
-
         Handles.SphereHandleCap(0, p1 , Quaternion.identity , 1f , EventType.Repaint);
         Handles.SphereHandleCap(0, p2 , Quaternion.identity , 1f , EventType.Repaint);
         Gizmos.DrawLine(p1,p2);
