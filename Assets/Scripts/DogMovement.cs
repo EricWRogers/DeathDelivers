@@ -10,23 +10,38 @@ public class DogMovement : MonoBehaviour
     public int totalSoulCount;
     public float speed;
 
+    [Header("Movement")]
+    public float acceleration = 18f;
+    public float naturalDeceleration = 7f;
+    public float braking = 28f;
+    public float reverseSpeedMultiplier = 0.55f;
+    public float reverseAcceleration = 14f;
+    public float reverseDeceleration = 10f;
+    public float stopThreshold = 0.05f;
+
     [Header("Turning")]
     public float turn;
-    public float turnSmoothness = 8f;
-    public float uprightSmoothness = 10f;
+    public float turnSmoothness = 10f;
+    public float uprightSmoothness = 18f;
+    public float lowSpeedTurnMultiplier = 0.45f;
 
     [Header("Ground")]
     public float groundCheckDistance = 0.35f;
     public float groundRayHeight = 0.5f;
-    public float groundRaySpread = 0.4f;
+    public float groundRayInset = 0.05f;
     public LayerMask groundLayer;
+    public float groundAngleLerpSpeed = 15f;
 
     [Header("Quick Turn")]
     public float quickTurnDuration = 0.25f;
     public float quickTurnMultiplier = 1f;
-
     public Transform AnchorL;
     public Transform AnchorR;
+
+    [Header("Air Turning")]
+    public float maxAirTurnAngle = 90f;
+    public float airTurnSmoothness = 10f;
+    public float airUprightSmoothness = 25f;
 
     [Header("Wall Collision")]
     public string wallTag = "Wall";
@@ -34,279 +49,571 @@ public class DogMovement : MonoBehaviour
     public float wallCheckDistance = 0.1f;
     public int wallSlideIterations = 3;
 
-    [Header("Firework & Pepper & Bone")]
-    private float fireworkTimer;
-    private float fireworkjump;
-    private float pepperTimer;
-    private float pepperMult;
-    private float boneTimer;
-    private float boneScale;
-    private float targetTurn;
+    private float fireworkTimer, fireworkJump;
+    private float pepperTimer, pepperMult;
+    private float boneTimer, boneScale;
 
-    private bool quickTurning = false;
-    private float quickTurnDirection = 0f;
+    private float currentSpeed;
+    private float targetTurn;
+    private float airTurnAngle;
+    private float airTurnInput;
+
+    private bool grounded, wasGrounded, quickTurning;
+    private float quickTurnDirection;
+
+    private Vector3 groundNormal = Vector3.up;
+    private Vector3 airForward;
 
     private Transform activeAnchor;
-    private Vector3 activeAnchorLockedPosition;
-    private Vector3 dogPositionRelativeToAnchor;
+    private Vector3 anchorPosition;
+    private Vector3 anchorOffset;
 
     private Collider dogCollider;
     private Vector3 startScale;
 
-    private Vector3 groundNormal = Vector3.up;
-    private bool grounded;
 
     void Start()
     {
         dogCollider = GetComponent<Collider>();
         startScale = transform.localScale;
 
-        speed = dogBase.startBoost;
-
         soulCount = 30f;
         totalSoulCount += 30;
+
+        speed = soulCount * dogBase.speed;
+        currentSpeed = 0f;
+
+        airForward = HorizontalForward();
     }
+
 
     void Update()
     {
         float dt = Time.deltaTime;
 
-        soulCount -= dogBase.soulConsump * dt;
-        soulCount = Mathf.Max(soulCount, 0f);
-
-        UpdateGrounded();
+        soulCount = Mathf.Max(
+            0f,
+            soulCount - dogBase.soulConsump * dt
+        );
 
         speed = soulCount * dogBase.speed;
 
-        if (fireworkTimer > 0f)
-        {
-            fireworkTimer -= Time.deltaTime;
+        UpdateGround();
+        GroundStateChange();
 
-            float upward =
-                fireworkjump *
-                Time.deltaTime;
-
-            MoveWithWallCollision(
-                Vector3.up * upward
-            );
-        }
-
-        if (pepperTimer > 0f)
-        {
-            pepperTimer -= Time.deltaTime;
-            speed *= pepperMult;
-        }
-
-        if (boneTimer > 0f)
-        {
-            boneTimer -= Time.deltaTime;
-
-            float target = boneScale;
-
-            transform.localScale =
-                Vector3.Lerp(
-                    transform.localScale,
-                    Vector3.one * target,
-                    Time.deltaTime * 5f
-                );
-        }
-        else
-        {
-            transform.localScale =
-                Vector3.Lerp(
-                    startScale,
-                    Vector3.one,
-                    Time.deltaTime * 5f
-                );
-        }
-
-        if (!quickTurning)
-        {
-            if (Keyboard.current.dKey.isPressed &&
-                Keyboard.current.spaceKey.isPressed &&
-                IsGrounded())
-            {
-                StartQuickTurn(1f);
-            }
-            else if (Keyboard.current.aKey.isPressed &&
-                     Keyboard.current.spaceKey.isPressed &&
-                     IsGrounded())
-            {
-                StartQuickTurn(-1f);
-            }
-        }
+        UpdatePowerups(dt);
+        HandleQuickTurn();
 
         if (quickTurning)
         {
-            if (Keyboard.current.spaceKey.isPressed)
+            if (!grounded)
+                EndQuickTurn();
+            else if (Keyboard.current.spaceKey.isPressed)
             {
                 DoQuickTurn();
                 return;
             }
-
-            EndQuickTurn();
+            else
+                EndQuickTurn();
         }
 
-        MoveForward(dt);
-        HandleTurning(dt);
-        KeepDogUpright();
-    }
-
-    void MoveForward(float dt)
-    {
-        Vector3 movementDirection = transform.forward;
+        Move(dt);
+        Turn(dt);
 
         if (grounded)
-        {
-            movementDirection =
-                Vector3.ProjectOnPlane(
-                    movementDirection,
-                    groundNormal
-                ).normalized;
-        }
-
-        if (movementDirection.sqrMagnitude < 0.001f)
-            return;
-
-        Vector3 movement =
-            movementDirection *
-            speed *
-            dt;
-
-        MoveWithWallCollision(movement);
+            GroundUpright(dt);
+        else
+            AirUpright(dt);
     }
 
-    void HandleTurning(float dt)
+
+    Vector3 HorizontalForward()
     {
+        Vector3 f = Vector3.ProjectOnPlane(transform.forward, Vector3.up);
+
+        if (f.sqrMagnitude < 0.001f)
+            f = Vector3.ProjectOnPlane(transform.right, Vector3.up);
+
+        return f.sqrMagnitude > 0.001f ? f.normalized : Vector3.forward;
+    }
+
+
+    void Move(float dt)
+    {
+        if (Keyboard.current == null)
+            return;
+
+        bool w = Keyboard.current.wKey.isPressed;
+        bool s = Keyboard.current.sKey.isPressed;
+
+        float target = 0f;
+
+        if (w && !s)
+            target = speed;
+        else if (s && !w)
+            target = -speed * reverseSpeedMultiplier;
+
+        float accel;
+
+        if (w && !s)
+        {
+            accel = currentSpeed < 0f ? braking : acceleration;
+        }
+        else if (s && !w)
+        {
+            accel = currentSpeed > 0f ? braking : reverseAcceleration;
+        }
+        else
+        {
+            accel = currentSpeed >= 0f
+                ? naturalDeceleration
+                : reverseDeceleration;
+        }
+
+        currentSpeed = Mathf.MoveTowards(
+            currentSpeed,
+            target,
+            accel * dt
+        );
+
+        currentSpeed = Mathf.Clamp(
+            currentSpeed,
+            -speed * reverseSpeedMultiplier,
+            speed
+        );
+
+        if (Mathf.Abs(currentSpeed) < stopThreshold)
+            currentSpeed = 0f;
+
+        if (currentSpeed == 0f)
+            return;
+
+        Vector3 direction = grounded
+            ? Vector3.ProjectOnPlane(transform.forward, groundNormal).normalized
+            : airForward;
+
+        MoveWithWalls(direction * currentSpeed * dt);
+    }
+
+
+    void Turn(float dt)
+    {
+        if (Keyboard.current == null)
+            return;
+
         targetTurn = 0f;
 
         if (Keyboard.current.aKey.isPressed)
-        {
             targetTurn = -dogBase.turnSpeed;
-        }
 
         if (Keyboard.current.dKey.isPressed)
-        {
             targetTurn = dogBase.turnSpeed;
-        }
 
         turn = Mathf.Lerp(
             turn,
             targetTurn,
-            turnSmoothness * dt
+            1f - Mathf.Exp(-turnSmoothness * dt)
         );
 
         if (grounded)
-        {
-            transform.Rotate(
-                groundNormal *
-                turn *
-                dt,
-                Space.World
-            );
-        }
+            GroundTurn(dt);
         else
-        {
-            transform.Rotate(
-                Vector3.up *
-                turn *
-                dt,
-                Space.World
-            );
-        }
+            AirTurn(dt);
     }
+
+
+    void GroundTurn(float dt)
+    {
+        if (Mathf.Abs(turn) < 0.001f)
+            return;
+
+        float speedRatio = speed > 0.01f
+            ? Mathf.Clamp01(Mathf.Abs(currentSpeed) / speed)
+            : 0f;
+
+        float strength = Mathf.Lerp(
+            lowSpeedTurnMultiplier,
+            1f,
+            speedRatio
+        );
+
+        float direction = currentSpeed < 0f ? -1f : 1f;
+
+        transform.Rotate(
+            groundNormal,
+            turn * strength * direction * dt,
+            Space.World
+        );
+    }
+
+
+    void AirTurn(float dt)
+    {
+        float input = 0f;
+
+        if (Keyboard.current.aKey.isPressed)
+            input = -1f;
+
+        if (Keyboard.current.dKey.isPressed)
+            input = 1f;
+
+        airTurnInput = Mathf.Lerp(
+            airTurnInput,
+            input,
+            1f - Mathf.Exp(-airTurnSmoothness * dt)
+        );
+
+        if (Mathf.Abs(airTurnInput) < 0.001f)
+            return;
+
+        float requested =
+            airTurnInput * dogBase.turnSpeed * dt;
+
+        float remaining =
+            maxAirTurnAngle - Mathf.Abs(airTurnAngle);
+
+        if (remaining <= 0f)
+            return;
+
+        float rotation =
+            Mathf.Clamp(requested, -remaining, remaining);
+
+        airForward =
+            Quaternion.AngleAxis(rotation, Vector3.up) *
+            airForward;
+
+        airForward =
+            Vector3.ProjectOnPlane(airForward, Vector3.up).normalized;
+
+        airTurnAngle =
+            Mathf.Clamp(
+                airTurnAngle + rotation,
+                -maxAirTurnAngle,
+                maxAirTurnAngle
+            );
+    }
+
+
+    void UpdateGround()
+    {
+        if (!dogCollider)
+        {
+            grounded = false;
+            return;
+        }
+
+        Bounds b = dogCollider.bounds;
+        Vector3 c = b.center;
+
+        float x = Mathf.Max(0.01f, b.extents.x - groundRayInset);
+        float z = Mathf.Max(0.01f, b.extents.z - groundRayInset);
+        float y = b.min.y + groundRayHeight;
+        float distance = groundRayHeight + groundCheckDistance;
+
+        Vector3[] points =
+        {
+            new(c.x - x, y, c.z + z),
+            new(c.x + x, y, c.z + z),
+            new(c.x - x, y, c.z - z),
+            new(c.x + x, y, c.z - z)
+        };
+
+        Vector3 normal = Vector3.zero;
+        int hits = 0;
+
+        foreach (Vector3 point in points)
+        {
+            if (Physics.Raycast(
+                point,
+                Vector3.down,
+                out RaycastHit hit,
+                distance,
+                groundLayer,
+                QueryTriggerInteraction.Ignore))
+            {
+                normal += hit.normal;
+                hits++;
+            }
+        }
+
+        bool centerHit = Physics.Raycast(
+            new Vector3(c.x, y, c.z),
+            Vector3.down,
+            out RaycastHit center,
+            distance,
+            groundLayer,
+            QueryTriggerInteraction.Ignore
+        );
+
+        if (!centerHit)
+        {
+            grounded = false;
+            return;
+        }
+
+        grounded = true;
+
+        Vector3 targetNormal =
+            hits > 0 ? (normal / hits).normalized : center.normal;
+
+        float lerp =
+            1f - Mathf.Exp(-groundAngleLerpSpeed * Time.deltaTime);
+
+        groundNormal =
+            Vector3.Slerp(
+                groundNormal,
+                targetNormal,
+                lerp
+            ).normalized;
+
+        if (Vector3.Dot(groundNormal, Vector3.up) < 0f)
+            groundNormal = -groundNormal;
+    }
+
+
+    void GroundStateChange()
+    {
+        if (grounded && !wasGrounded)
+        {
+            airTurnAngle = 0f;
+            airTurnInput = 0f;
+
+            Vector3 forward =
+                Vector3.ProjectOnPlane(
+                    transform.forward,
+                    groundNormal
+                );
+
+            if (forward.sqrMagnitude > 0.001f)
+                transform.rotation =
+                    Quaternion.LookRotation(
+                        forward.normalized,
+                        groundNormal
+                    );
+        }
+
+        if (!grounded && wasGrounded)
+        {
+            airTurnAngle = 0f;
+            airTurnInput = 0f;
+            airForward = HorizontalForward();
+
+            ForceAirUpright();
+
+            if (quickTurning)
+                EndQuickTurn();
+        }
+
+        wasGrounded = grounded;
+    }
+
+
+    void GroundUpright(float dt)
+    {
+        Vector3 forward =
+            Vector3.ProjectOnPlane(
+                transform.forward,
+                groundNormal
+            );
+
+        if (forward.sqrMagnitude < 0.001f)
+            return;
+
+        Quaternion target =
+            Quaternion.LookRotation(
+                forward.normalized,
+                groundNormal
+            );
+
+        float t =
+            1f - Mathf.Exp(-uprightSmoothness * dt);
+
+        transform.rotation =
+            Quaternion.Slerp(
+                transform.rotation,
+                target,
+                t
+            );
+    }
+
+
+    void AirUpright(float dt)
+    {
+        Vector3 forward =
+            Vector3.ProjectOnPlane(
+                airForward,
+                Vector3.up
+            );
+
+        if (forward.sqrMagnitude < 0.001f)
+            return;
+
+        Quaternion target =
+            Quaternion.LookRotation(
+                forward.normalized,
+                Vector3.up
+            );
+
+        float t =
+            1f - Mathf.Exp(-airUprightSmoothness * dt);
+
+        transform.rotation =
+            Quaternion.Slerp(
+                transform.rotation,
+                target,
+                t
+            );
+    }
+
+
+    void ForceAirUpright()
+    {
+        Vector3 forward =
+            Vector3.ProjectOnPlane(
+                airForward,
+                Vector3.up
+            );
+
+        if (forward.sqrMagnitude < 0.001f)
+            forward = Vector3.forward;
+
+        transform.rotation =
+            Quaternion.LookRotation(
+                forward.normalized,
+                Vector3.up
+            );
+    }
+
+
+    void HandleQuickTurn()
+    {
+        if (Keyboard.current == null)
+            return;
+
+        if (quickTurning && !grounded)
+        {
+            EndQuickTurn();
+            return;
+        }
+
+        if (quickTurning)
+            return;
+
+        if (!grounded || !Keyboard.current.spaceKey.isPressed)
+            return;
+
+        if (Keyboard.current.dKey.isPressed)
+            StartQuickTurn(1f);
+        else if (Keyboard.current.aKey.isPressed)
+            StartQuickTurn(-1f);
+    }
+
 
     void StartQuickTurn(float direction)
     {
+        activeAnchor =
+            direction > 0f ? AnchorR : AnchorL;
+
+        if (!activeAnchor)
+            return;
+
         quickTurning = true;
         quickTurnDirection = direction;
         turn = 0f;
 
-        activeAnchor =
-            direction > 0f
-                ? AnchorR
-                : AnchorL;
-
-        if (activeAnchor == null)
-        {
-            quickTurning = false;
-            return;
-        }
-
-        activeAnchorLockedPosition =
-            activeAnchor.position;
-
-        dogPositionRelativeToAnchor =
-            transform.position -
-            activeAnchorLockedPosition;
+        anchorPosition = activeAnchor.position;
+        anchorOffset = transform.position - anchorPosition;
     }
+
 
     void DoQuickTurn()
     {
-        if (activeAnchor == null)
+        if (!grounded || !activeAnchor)
+        {
+            EndQuickTurn();
             return;
-
-        float quickTurnSpeed =
-            speed *
-            dogBase.turnSpeed *
-            quickTurnMultiplier;
+        }
 
         float rotationAmount =
             quickTurnDirection *
-            quickTurnSpeed *
+            speed *
+            dogBase.turnSpeed *
+            quickTurnMultiplier *
             Time.deltaTime;
 
         Quaternion rotation =
             Quaternion.AngleAxis(
                 rotationAmount,
-                grounded
-                    ? groundNormal
-                    : Vector3.up
+                groundNormal
             );
 
-        Vector3 targetRelativePosition =
-            rotation *
-            dogPositionRelativeToAnchor;
-
-        Vector3 targetPosition =
-            activeAnchorLockedPosition +
-            targetRelativePosition;
+        Vector3 target =
+            anchorPosition +
+            rotation * anchorOffset;
 
         Vector3 movement =
-            targetPosition -
-            transform.position;
+            target - transform.position;
 
-        MoveWithWallCollision(movement);
+        MoveWithWalls(movement);
 
-        dogPositionRelativeToAnchor =
-            transform.position -
-            activeAnchorLockedPosition;
+        anchorOffset =
+            transform.position - anchorPosition;
 
         if (movement.sqrMagnitude > 0.000001f)
-        {
             transform.rotation =
-                rotation *
-                transform.rotation;
-        }
+                rotation * transform.rotation;
 
-        KeepDogUpright();
+        GroundUpright(Time.deltaTime);
     }
+
 
     void EndQuickTurn()
     {
         quickTurning = false;
         activeAnchor = null;
         turn = 0f;
-
-        KeepDogUpright();
     }
 
-    void MoveWithWallCollision(Vector3 movement)
+
+    void UpdatePowerups(float dt)
     {
-        if (movement.sqrMagnitude <= 0.000001f)
+        if (fireworkTimer > 0f)
+        {
+            fireworkTimer -= dt;
+            MoveWithWalls(Vector3.up * fireworkJump * dt);
+        }
+
+        if (pepperTimer > 0f)
+        {
+            pepperTimer -= dt;
+            speed *= pepperMult;
+
+            currentSpeed = Mathf.Clamp(
+                currentSpeed,
+                -speed * reverseSpeedMultiplier,
+                speed
+            );
+        }
+
+        if (boneTimer > 0f)
+        {
+            boneTimer -= dt;
+
+            transform.localScale = Vector3.Lerp(transform.localScale, Vector3.one * boneScale, dt * 5f);
+        }
+        else
+        {
+            if (transform.localScale != startScale)
+            transform.localScale = Vector3.Lerp(startScale, Vector3.one, dt * 5f);
+        }
+    }
+
+    void MoveWithWalls(Vector3 movement)
+    {
+        if (movement.sqrMagnitude < 0.000001f)
             return;
 
-        if (dogCollider == null)
+        if (!dogCollider)
         {
             transform.position += movement;
             return;
@@ -318,14 +625,11 @@ public class DogMovement : MonoBehaviour
 
         for (int i = 0; i < wallSlideIterations; i++)
         {
-            if (remaining.sqrMagnitude <= 0.000001f)
+            if (remaining.sqrMagnitude < 0.000001f)
                 break;
 
-            Vector3 direction =
-                remaining.normalized;
-
-            float distance =
-                remaining.magnitude;
+            Vector3 direction = remaining.normalized;
+            float distance = remaining.magnitude;
 
             if (!CheckWall(
                 direction,
@@ -336,143 +640,89 @@ public class DogMovement : MonoBehaviour
                 break;
             }
 
-            float safeDistance =
-                Mathf.Max(
-                    0f,
-                    hit.distance - wallSkin
-                );
+            float safe =
+                Mathf.Max(0f, hit.distance - wallSkin);
 
-            if (safeDistance > 0f)
-            {
-                transform.position +=
-                    direction * safeDistance;
-            }
+            transform.position += direction * safe;
 
-            Vector3 usedMovement =
-                direction * safeDistance;
-
-            Vector3 leftover =
-                remaining -
-                usedMovement;
-
-            Vector3 slide =
+            remaining =
                 Vector3.ProjectOnPlane(
-                    leftover,
+                    remaining - direction * safe,
                     hit.normal
                 );
-
-            remaining = slide;
         }
 
         ResolveWallOverlap();
     }
 
+
     bool CheckWall(
         Vector3 direction,
         float distance,
-        out RaycastHit closestHit)
+        out RaycastHit closest)
     {
-        closestHit = default;
-
-        Bounds bounds =
-            dogCollider.bounds;
-
-        Vector3 center =
-            bounds.center;
+        Bounds b = dogCollider.bounds;
+        Vector3 center = b.center;
 
         float radius =
-            Mathf.Min(
-                bounds.extents.x,
-                bounds.extents.z
-            );
-
-        float height =
-            bounds.size.y;
+            Mathf.Min(b.extents.x, b.extents.z);
 
         RaycastHit[] hits;
 
-        if (height > radius * 2f)
+        if (b.size.y > radius * 2f)
         {
             Vector3 bottom =
-                center +
-                Vector3.down *
-                (height * 0.5f - radius);
+                center + Vector3.down *
+                (b.size.y * 0.5f - radius);
 
             Vector3 top =
-                center +
-                Vector3.up *
-                (height * 0.5f - radius);
+                center + Vector3.up *
+                (b.size.y * 0.5f - radius);
 
-            hits =
-                Physics.CapsuleCastAll(
-                    bottom,
-                    top,
-                    radius,
-                    direction,
-                    distance,
-                    Physics.AllLayers,
-                    QueryTriggerInteraction.Ignore
-                );
+            hits = Physics.CapsuleCastAll(
+                bottom,
+                top,
+                radius,
+                direction,
+                distance,
+                Physics.AllLayers,
+                QueryTriggerInteraction.Ignore
+            );
         }
         else
         {
-            hits =
-                Physics.SphereCastAll(
-                    center,
-                    radius,
-                    direction,
-                    distance,
-                    Physics.AllLayers,
-                    QueryTriggerInteraction.Ignore
-                );
+            hits = Physics.SphereCastAll(
+                center,
+                radius,
+                direction,
+                distance,
+                Physics.AllLayers,
+                QueryTriggerInteraction.Ignore
+            );
         }
 
-        return GetClosestWallHit(
-            hits,
-            out closestHit
-        );
-    }
-
-    bool GetClosestWallHit(
-        RaycastHit[] hits,
-        out RaycastHit closestHit)
-    {
-        closestHit = default;
-
-        float closestDistance =
-            float.MaxValue;
-
+        closest = default;
+        float closestDistance = float.MaxValue;
         bool found = false;
 
-        for (int i = 0; i < hits.Length; i++)
+        foreach (RaycastHit hit in hits)
         {
-            Collider hitCollider =
-                hits[i].collider;
+            Collider c = hit.collider;
 
-            if (hitCollider == null)
+            if (!c ||
+                c == dogCollider ||
+                c.transform == transform ||
+                c.transform.IsChildOf(transform))
                 continue;
 
-            if (hitCollider == dogCollider)
+            if (!c.CompareTag(wallTag) &&
+                !c.transform.root.CompareTag(wallTag))
                 continue;
 
-            if (hitCollider.transform == transform)
-                continue;
-
-            if (hitCollider.transform.IsChildOf(transform))
-                continue;
-
-            if (!hitCollider.CompareTag(wallTag) &&
-                !hitCollider.transform.root.CompareTag(wallTag))
-                continue;
-
-            if (hits[i].distance < closestDistance)
+            if (hit.distance < closestDistance)
             {
-                closestDistance =
-                    hits[i].distance;
-
-                closestHit =
-                    hits[i];
-
+                closestDistance = hit.distance;
+                closest = hit;
                 found = true;
             }
         }
@@ -480,206 +730,103 @@ public class DogMovement : MonoBehaviour
         return found;
     }
 
+
     void ResolveWallOverlap()
     {
-        if (dogCollider == null)
+        if (!dogCollider)
             return;
 
-        Collider[] overlaps =
-            Physics.OverlapBox(
-                dogCollider.bounds.center,
-                dogCollider.bounds.extents +
-                Vector3.one * wallSkin,
-                Quaternion.identity,
-                Physics.AllLayers,
-                QueryTriggerInteraction.Ignore
-            );
+        Collider[] overlaps = Physics.OverlapBox(
+            dogCollider.bounds.center,
+            dogCollider.bounds.extents + Vector3.one * wallSkin,
+            Quaternion.identity,
+            Physics.AllLayers,
+            QueryTriggerInteraction.Ignore
+        );
 
-        for (int i = 0; i < overlaps.Length; i++)
+        foreach (Collider wall in overlaps)
         {
-            Collider wall =
-                overlaps[i];
-
-            if (wall == null)
-                continue;
-
-            if (wall == dogCollider)
-                continue;
-
-            if (wall.transform == transform)
-                continue;
-
-            if (wall.transform.IsChildOf(transform))
+            if (!wall ||
+                wall == dogCollider ||
+                wall.transform == transform ||
+                wall.transform.IsChildOf(transform))
                 continue;
 
             if (!wall.CompareTag(wallTag) &&
                 !wall.transform.root.CompareTag(wallTag))
                 continue;
 
-            bool penetrating =
-                Physics.ComputePenetration(
-                    dogCollider,
-                    transform.position,
-                    transform.rotation,
-                    wall,
-                    wall.transform.position,
-                    wall.transform.rotation,
-                    out Vector3 direction,
-                    out float distance
-                );
-
-            if (penetrating)
+            if (Physics.ComputePenetration(
+                dogCollider,
+                transform.position,
+                transform.rotation,
+                wall,
+                wall.transform.position,
+                wall.transform.rotation,
+                out Vector3 direction,
+                out float distance))
             {
                 transform.position +=
-                    direction *
-                    (distance + wallSkin);
+                    direction * (distance + wallSkin);
             }
         }
     }
 
-    void UpdateGrounded()
+
+    public bool IsQuickTurning() => quickTurning;
+
+    public float GetCurrentSpeed() => currentSpeed;
+
+    public float GetMaxSpeed() => speed;
+
+    public float GetAirTurnAngle() => airTurnAngle;
+
+    public float GetGroundDistance()
     {
-        if (dogCollider == null)
-        {
-            grounded = false;
-            groundNormal = Vector3.up;
-            return;
-        }
+        if (!dogCollider)
+            return Mathf.Infinity;
 
-        Bounds bounds =
-            dogCollider.bounds;
-
-        Vector3 center =
-            bounds.center;
-
-        float bottom =
-            bounds.min.y;
-
-        Vector3[] rayPositions =
-        {
-            new Vector3(center.x, bottom + groundRayHeight, center.z),
-
-            new Vector3(
-                center.x + groundRaySpread,
-                bottom + groundRayHeight,
-                center.z
-            ),
-
-            new Vector3(
-                center.x - groundRaySpread,
-                bottom + groundRayHeight,
-                center.z
-            ),
-
-            new Vector3(
-                center.x,
-                bottom + groundRayHeight,
-                center.z + groundRaySpread
-            ),
-
-            new Vector3(
-                center.x,
-                bottom + groundRayHeight,
-                center.z - groundRaySpread
-            )
-        };
-
-        Vector3 normalSum = Vector3.zero;
-        int hitCount = 0;
-
-        float rayDistance =
-            groundRayHeight +
-            groundCheckDistance;
-
-        for (int i = 0; i < rayPositions.Length; i++)
-        {
-            if (Physics.Raycast(
-                rayPositions[i],
-                Vector3.down,
-                out RaycastHit hit,
-                rayDistance,
-                groundLayer,
-                QueryTriggerInteraction.Ignore))
-            {
-                normalSum += hit.normal;
-                hitCount++;
-            }
-        }
-
-        if (hitCount == 0)
-        {
-            grounded = false;
-            groundNormal = Vector3.up;
-            return;
-        }
-
-        grounded = true;
-
-        Vector3 newNormal =
-            normalSum.normalized;
-
-        groundNormal =
-            Vector3.Slerp(
-                groundNormal,
-                newNormal,
-                15f * Time.deltaTime
-            ).normalized;
+        return grounded ? GetGroundDistanceInternal() : Mathf.Infinity;
     }
 
-    bool IsGrounded()
-    {
-        return grounded;
-    }
 
-    void KeepDogUpright()
+    float GetGroundDistanceInternal()
     {
-        if (!grounded)
-            return;
+        Bounds b = dogCollider.bounds;
 
-        Vector3 forward =
-            Vector3.ProjectOnPlane(
-                transform.forward,
-                groundNormal
+        Vector3 origin =
+            new Vector3(
+                b.center.x,
+                b.min.y + groundRayHeight,
+                b.center.z
             );
 
-        if (forward.sqrMagnitude < 0.001f)
+        if (Physics.Raycast(
+            origin,
+            Vector3.down,
+            out RaycastHit hit,
+            groundRayHeight + groundCheckDistance,
+            groundLayer,
+            QueryTriggerInteraction.Ignore))
         {
-            forward =
-                Vector3.ProjectOnPlane(
-                    transform.right,
-                    groundNormal
-                );
+            return Mathf.Max(
+                0f,
+                hit.distance - groundRayHeight
+            );
         }
 
-        forward.Normalize();
-
-        Quaternion targetRotation =
-            Quaternion.LookRotation(
-                forward,
-                groundNormal
-            );
-
-        transform.rotation =
-            Quaternion.Slerp(
-                transform.rotation,
-                targetRotation,
-                uprightSmoothness *
-                Time.deltaTime
-            );
+        return Mathf.Infinity;
     }
 
-    public bool IsQuickTurning()
-    {
-        return quickTurning;
-    }
 
     public void ApplyFireWork(
         float duration,
         float jumpStrength)
     {
         fireworkTimer = duration;
-        fireworkjump = jumpStrength;
+        fireworkJump = jumpStrength;
     }
+
 
     public void ApplyPepper(
         float duration,
@@ -688,6 +835,7 @@ public class DogMovement : MonoBehaviour
         pepperTimer = duration;
         pepperMult = multi;
     }
+
 
     public void ApplyBone(
         float duration,
