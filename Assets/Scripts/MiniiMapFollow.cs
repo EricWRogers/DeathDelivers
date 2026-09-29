@@ -1,16 +1,20 @@
 using UnityEngine;
 
-public class MiniiMapFollow : MonoBehaviour
+public class MinimapFollow : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    public Transform player;
+    public float height = 10f;
 
-    // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
-        
+        if (player != null)
+        {
+            Vector3 newPosition = player.position;
+            newPosition.y += height;
+            transform.position = newPosition;
+            
+            // Keep camera fixed upright, ignoring player rotation
+            transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+        }
     }
 }
