@@ -31,6 +31,7 @@ public class PersonBehavior : MonoBehaviour
     public Transform body;
     public GameObject partical;
     public GameObject parentBox;
+    public GameObject miniIcon;
 
     [Header("Joy / Bobbing")] // jumping with joy
     public float bobHeight = 0.2f;
@@ -54,6 +55,7 @@ public class PersonBehavior : MonoBehaviour
     void Update()
     {
         Bob();
+        miniIcon.transform.position = new Vector3(transform.position.x, transform.position.y + 50f, transform.position.z);
 
         switch (state)
         {
@@ -78,6 +80,7 @@ public class PersonBehavior : MonoBehaviour
             partical.transform.position = transform.position;
             partical.SetActive(true);
             gameObject.SetActive(false);
+            miniIcon.SetActive(false);
         }
 
         // Explode/delete if the car hits a wall.
@@ -87,6 +90,7 @@ public class PersonBehavior : MonoBehaviour
             partical.transform.position = transform.position;
             partical.SetActive(true);
             gameObject.SetActive(false);
+            miniIcon.SetActive(false);
         }
     }
     void Roam()
