@@ -2100,6 +2100,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8a6e3597776636d428c345e925fa0977, type: 2}
   - {fileID: 11400000, guid: 412c0c64b1600624d964d52543591769, type: 2}
   - {fileID: 11400000, guid: bcde4a5e3e75afc4bb23d4238f757c19, type: 2}
+  - {fileID: 11400000, guid: 735427c6d5ebd194097ae292c90a6f97, type: 2}
   tileDropdown: {fileID: 590170677}
   selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   selectedCell: {fileID: 0}
