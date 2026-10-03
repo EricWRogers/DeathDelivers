@@ -24,9 +24,16 @@ public class MapGrid : MonoBehaviour
     public GameObject currentObject;
     public GameObject selectionObject;
 
+    public GameObject rotateButton;
+
+    [Header("Placed Tiles Parent")]
+    public GameObject placedTilesParent;
+
     public List<GridCell> cells = new();
 
     Camera mapCamera;
+
+    Dictionary<GameObject, GridCell> placedTiles = new();
 
     void Awake()
     {
@@ -43,6 +50,12 @@ public class MapGrid : MonoBehaviour
             Mouse.current.leftButton.wasPressedThisFrame)
         {
             ClickGrid();
+        }
+
+        if (Mouse.current != null &&
+            Mouse.current.rightButton.wasPressedThisFrame)
+        {
+            RightClickGrid();
         }
     }
 
@@ -92,6 +105,7 @@ public class MapGrid : MonoBehaviour
 
         cells.Add(cell);
     }
+
     void ClickGrid()
     {
         Ray ray =
@@ -110,10 +124,75 @@ public class MapGrid : MonoBehaviour
         GridCell cell =
             hit.collider.GetComponent<GridCell>();
 
+        if (cell != null)
+        {
+            SelectCell(cell);
+            return;
+        }
+
+        GridCell placedTileCell =
+            GetCellFromPlacedTile(hit.transform);
+
+        if (placedTileCell != null)
+        {
+            SelectCell(placedTileCell);
+        }
+    }
+
+    void RightClickGrid()
+    {
+        Ray ray =
+            mapCamera.ScreenPointToRay(
+                Mouse.current.position.ReadValue()
+            );
+
+        if (!Physics.Raycast(
+            ray,
+            out RaycastHit hit
+        ))
+        {
+            return;
+        }
+
+        GridCell cell =
+            hit.collider.GetComponent<GridCell>();
+
+        if (cell == null)
+        {
+            cell = GetCellFromPlacedTile(hit.transform);
+        }
+
         if (cell == null)
             return;
 
-        SelectCell(cell);
+        ResetTile(cell);
+    }
+
+    GridCell GetCellFromPlacedTile(
+        Transform hitTransform
+    )
+    {
+        Transform current =
+            hitTransform;
+
+        while (current != null)
+        {
+            GameObject objectHit =
+                current.gameObject;
+
+            if (placedTiles.TryGetValue(
+                objectHit,
+                out GridCell cell
+            ))
+            {
+                return cell;
+            }
+
+            current =
+                current.parent;
+        }
+
+        return null;
     }
 
     public void SelectCell(GridCell cell)
@@ -127,6 +206,39 @@ public class MapGrid : MonoBehaviour
             cell.transform.position +
             Vector3.up * 0.03f;
 
+        if (currentObject != null)
+        {
+            MapTile tile =
+                GetMapTileFromObject(currentObject);
+
+            if (tile != null)
+            {
+                int tileIndex =
+                    tiles.IndexOf(tile);
+
+                if (tileIndex >= 0)
+                {
+                    tileDropdown.SetValueWithoutNotify(
+                        tileIndex + 1
+                    );
+                }
+
+                rotateButton.SetActive(
+                    tile.canRotate
+                );
+            }
+            else
+            {
+                rotateButton.SetActive(false);
+            }
+        }
+        else
+        {
+            tileDropdown.SetValueWithoutNotify(0);
+
+            rotateButton.SetActive(false);
+        }
+
         Debug.Log(
             "Selected Cell: " +
             cell.gridPosition
@@ -137,6 +249,19 @@ public class MapGrid : MonoBehaviour
             currentObject
         );
     }
+
+    public void RotateTile()
+    {
+        if (currentObject == null)
+            return;
+
+        currentObject.transform.Rotate(
+            0,
+            90,
+            0
+        );
+    }
+
     void CreateTileDropdown()
     {
         if (tileDropdown == null)
@@ -146,12 +271,16 @@ public class MapGrid : MonoBehaviour
 
         List<string> options = new();
 
+        options.Add("None");
+
         foreach (MapTile tile in tiles)
         {
             options.Add(tile.tileName);
         }
 
         tileDropdown.AddOptions(options);
+
+        tileDropdown.SetValueWithoutNotify(0);
 
         tileDropdown.onValueChanged.AddListener(
             SelectTile
@@ -162,40 +291,136 @@ public class MapGrid : MonoBehaviour
     {
         if (selectedCell == null)
             return;
-    
-        if (index < 0 || index >= tiles.Count)
+
+        // None
+        if (index == 0)
+        {
+            ResetTile(selectedCell);
             return;
-    
-        MapTile tile = tiles[index];
-    
-        if (tile == null || tile.prefab == null)
+        }
+
+        int tileIndex =
+            index - 1;
+
+        if (tileIndex < 0 ||
+            tileIndex >= tiles.Count)
             return;
-    
+
+        MapTile tile =
+            tiles[tileIndex];
+
+        if (tile == null ||
+            tile.prefab == null)
+            return;
+
         // Remove old object
         if (selectedCell.currentObject != null)
         {
-            Destroy(selectedCell.currentObject);
+            GameObject oldObject =
+                selectedCell.currentObject;
+
+            placedTiles.Remove(oldObject);
+
+            Destroy(oldObject);
         }
-    
-        // Create new object
-        GameObject newObject = Instantiate(
-            tile.prefab,
-            GridToWorld(selectedCell.gridPosition),
-            Quaternion.identity
-        );
-    
+
+        // Create new prefab instance
+        GameObject newObject =
+            Instantiate(
+                tile.prefab,
+                GridToWorld(
+                    selectedCell.gridPosition
+                ),
+                Quaternion.identity
+            );
+
+        // Parent the prefab instance
+        if (placedTilesParent != null)
+        {
+            newObject.transform.SetParent(
+                placedTilesParent.transform,
+                true
+            );
+        }
+
         // Store the object in the cell
-        selectedCell.currentObject = newObject;
-    
+        selectedCell.currentObject =
+            newObject;
+
+        // Store the object so clicks on the
+        // prefab can find its GridCell
+        placedTiles[newObject] =
+            selectedCell;
+
         // Update currently selected object
-        currentObject = newObject;
-    
+        currentObject =
+            newObject;
+
+        rotateButton.SetActive(
+            tile.canRotate
+        );
+
         Debug.Log(
             "Placed " +
             tile.tileName +
             " on " +
             selectedCell.gridPosition
         );
+    }
+
+    void ResetTile(GridCell cell)
+    {
+        if (cell == null)
+            return;
+
+        if (cell.currentObject != null)
+        {
+            GameObject oldObject =
+                cell.currentObject;
+
+            placedTiles.Remove(oldObject);
+
+            Destroy(oldObject);
+        }
+
+        cell.currentObject = null;
+
+        if (selectedCell == cell)
+        {
+            currentObject = null;
+
+            tileDropdown.SetValueWithoutNotify(0);
+
+            rotateButton.SetActive(false);
+        }
+    }
+
+    MapTile GetMapTileFromObject(
+        GameObject objectToFind
+    )
+    {
+        foreach (MapTile tile in tiles)
+        {
+            if (tile == null ||
+                tile.prefab == null)
+                continue;
+
+            string prefabName =
+                tile.prefab.name;
+
+            string objectName =
+                objectToFind.name;
+
+            if (objectName == prefabName ||
+                objectName.StartsWith(
+                    prefabName + "(Clone)"
+                ))
+            {
+                return tile;
+            }
+        }
+
+        return null;
     }
 
     void CreateSelection()
