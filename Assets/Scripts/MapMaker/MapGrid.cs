@@ -57,6 +57,33 @@ public class MapGrid : MonoBehaviour
         {
             RightClickGrid();
         }
+
+        if (Keyboard.current != null)
+        {
+            if (Keyboard.current.rKey.wasPressedThisFrame)
+            {
+                if (currentObject != null)
+                {
+                    MapTile tile =
+                        GetMapTileFromObject(currentObject);
+
+                    if (tile != null &&
+                        tile.canRotate)
+                    {
+                        RotateTile();
+                    }
+                }
+            }
+
+            if (Keyboard.current.sKey.wasPressedThisFrame)
+            {
+                if (selectedCell != null &&
+                    tileDropdown != null)
+                {
+                    tileDropdown.value = 1;
+                }
+            }
+        }
     }
 
     void CreateGrid()
@@ -334,7 +361,6 @@ public class MapGrid : MonoBehaviour
                 Quaternion.identity
             );
 
-        // Parent the prefab instance
         if (placedTilesParent != null)
         {
             newObject.transform.SetParent(
@@ -343,28 +369,17 @@ public class MapGrid : MonoBehaviour
             );
         }
 
-        // Store the object in the cell
         selectedCell.currentObject =
             newObject;
 
-        // Store the object so clicks on the
-        // prefab can find its GridCell
         placedTiles[newObject] =
             selectedCell;
 
-        // Update currently selected object
         currentObject =
             newObject;
 
         rotateButton.SetActive(
             tile.canRotate
-        );
-
-        Debug.Log(
-            "Placed " +
-            tile.tileName +
-            " on " +
-            selectedCell.gridPosition
         );
     }
 

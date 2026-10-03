@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c1c8c4cf7a494ca47be77f348a44cdeb, type: 3}
-  m_Name: LTurn2
+  m_Name: Building1
   m_EditorClassIdentifier: Assembly-CSharp::MapTile
-  tileName: City-LTurn-2
-  prefab: {fileID: 5176092651193133831, guid: 2af0ecf14fd171441b4726fb71a16542, type: 3}
+  tileName: City-Building-1
+  prefab: {fileID: 3684062165659823471, guid: d91514509a7f88e49aa69f7654b13d88, type: 3}
   size: {x: 1, y: 1, z: 1}
-  canRotate: 1
+  canRotate: 0
   canStack: 0
