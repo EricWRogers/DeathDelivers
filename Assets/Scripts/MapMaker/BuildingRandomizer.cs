@@ -15,16 +15,35 @@ public class BuildingRandomizer : MonoBehaviour
     [Header("Colors")]
     public Color[] colors;
 
+    // Fail-safe color
+    private readonly Color failSafeRed = Color.red;
+
     void Awake()
     {
+        Renderer renderer = GetComponent<Renderer>();
+
+        // Always start with red
+        if (renderer != null)
+        {
+            renderer.material.color = failSafeRed;
+        }
+
+        // Run the normal randomizer
         RandomizeBuilding();
+
+        // Check if the material is still red
+        if (renderer != null &&
+            renderer.material.color == failSafeRed)
+        {
+            // Try the color randomizer again
+            RandomizeColor();
+        }
     }
 
     void RandomizeBuilding()
     {
         // Choose one of the 3 building variations
-        int variation =
-            Random.Range(0, 3);
+        int variation = Random.Range(0, 3);
 
         float randomY;
         float randomHeight;
@@ -48,38 +67,36 @@ public class BuildingRandomizer : MonoBehaviour
         }
 
         // Set local Y position
-        transform.localPosition =
-            new Vector3(
-                transform.localPosition.x,
-                randomY,
-                transform.localPosition.z
-            );
+        transform.localPosition = new Vector3(
+            transform.localPosition.x,
+            randomY,
+            transform.localPosition.z
+        );
 
         // Set local Y size
-        transform.localScale =
-            new Vector3(
-                transform.localScale.x,
-                randomHeight,
-                transform.localScale.z
-            );
+        transform.localScale = new Vector3(
+            transform.localScale.x,
+            randomHeight,
+            transform.localScale.z
+        );
 
-        // Random color
-        if (colors != null &&
-            colors.Length > 0)
-        {
-            Color randomColor =
-                colors[
-                    Random.Range(0, colors.Length)
-                ];
+        // Try to assign a random color
+        RandomizeColor();
+    }
 
-            Renderer renderer =
-                GetComponent<Renderer>();
+    void RandomizeColor()
+    {
+        Renderer renderer = GetComponent<Renderer>();
 
-            if (renderer != null)
-            {
-                renderer.material.color =
-                    randomColor;
-            }
-        }
+        if (renderer == null)
+            return;
+
+        if (colors == null || colors.Length == 0)
+            return;
+
+        Color randomColor =
+            colors[Random.Range(0, colors.Length)];
+
+        renderer.material.color = randomColor;
     }
 }

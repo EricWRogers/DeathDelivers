@@ -10,6 +10,7 @@ public class PersonBehavior : MonoBehaviour
 
     [Header("State")] // Just to keep track for bug testing
     public PersonState state = PersonState.Roaming;
+
     [Header("Soul Value")]
     public int soulValue = 1;
 
@@ -20,6 +21,11 @@ public class PersonBehavior : MonoBehaviour
     [Header("Roaming")] // roman settings
     public float directionChangeTime = 2.0f;
     public float sidewalkCheckDistance = 1.5f;
+
+    [Header("Wall Detection")]
+    public float wallCheckDistance = 1.0f;
+    public float wallCheckRadius = 0.35f;
+    public float wallCheckHeight = 1.0f;
 
     [Header("Detection")] // how good is its vision
     public float playerDetectionRadius = 5.0f;
@@ -49,13 +55,19 @@ public class PersonBehavior : MonoBehaviour
 
         if (body != null)
             bodyStartPosition = body.localPosition;
+
         ChooseRandomDirection();
     }
 
     void Update()
     {
         Bob();
-        miniIcon.transform.position = new Vector3(transform.position.x, transform.position.y + 50f, transform.position.z);
+
+        miniIcon.transform.position = new Vector3(
+            transform.position.x,
+            transform.position.y + 50f,
+            transform.position.z
+        );
 
         switch (state)
         {
@@ -68,17 +80,22 @@ public class PersonBehavior : MonoBehaviour
                 break;
         }
     }
+
     private void OnCollisionEnter(Collision collision)
     {
         // Explode/delete if the car hits the Player.
         if (collision.gameObject.CompareTag("Player"))
         {
             DogMovement dM = collision.gameObject.GetComponent<DogMovement>();
+
             dM.soulCount += soulValue;
             dM.totalSoulCount += soulValue;
+
             parentBox.GetComponent<BoxCollider>().enabled = false;
+
             partical.transform.position = transform.position;
             partical.SetActive(true);
+
             gameObject.SetActive(false);
             miniIcon.SetActive(false);
         }
@@ -87,12 +104,15 @@ public class PersonBehavior : MonoBehaviour
         if (collision.gameObject.CompareTag("Car"))
         {
             parentBox.GetComponent<BoxCollider>().enabled = false;
+
             partical.transform.position = transform.position;
             partical.SetActive(true);
+
             gameObject.SetActive(false);
             miniIcon.SetActive(false);
         }
     }
+
     void Roam()
     {
         // Look for Player
@@ -100,7 +120,10 @@ public class PersonBehavior : MonoBehaviour
 
         if (player != null)
         {
-            float distance = Vector3.Distance(transform.position,player.transform.position);
+            float distance = Vector3.Distance(
+                transform.position,
+                player.transform.position
+            );
 
             if (distance <= playerDetectionRadius)
             {
@@ -118,18 +141,23 @@ public class PersonBehavior : MonoBehaviour
 
         // Check if the direction we're trying to walk in
         // will still be on a sidewalk.
-        if (DirectionLeadsToSidewalk())
+        if (DirectionLeadsToSidewalk() && !DirectionBlocked(roamingDirection))
         {
             // Turn toward our random direction
             Quaternion targetRotation = Quaternion.LookRotation(roamingDirection);
 
-            transform.rotation = Quaternion.Slerp(transform.rotation,targetRotation,5f * Time.deltaTime);
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                targetRotation,
+                5f * Time.deltaTime
+            );
 
             // Move
             transform.position += roamingDirection * speed * Time.deltaTime;
         }
         else
         {
+            // Something is blocking us or we're leaving the sidewalk.
             ChooseRandomDirection();
         }
     }
@@ -145,22 +173,75 @@ public class PersonBehavior : MonoBehaviour
 
         roamingDirection.Normalize();
 
-        directionTimer = directionChangeTime;
+        // Stay in this direction for longer.
+        // This makes them prefer traveling a good distance
+        // instead of constantly changing direction.
+        directionTimer = directionChangeTime * Random.Range(2.5f, 5.0f);
     }
 
     bool DirectionLeadsToSidewalk()
     {
-        Vector3 checkPosition = transform.position + roamingDirection * sidewalkCheckDistance;
+        Vector3 checkPosition =
+            transform.position + roamingDirection * sidewalkCheckDistance;
 
         // Start the ray above the expected position
         Vector3 rayStart = checkPosition + Vector3.up * 2f;
 
         RaycastHit hit;
 
-        if (Physics.Raycast(rayStart, Vector3.down, out hit, 4f))
+        if (Physics.Raycast(
+            rayStart,
+            Vector3.down,
+            out hit,
+            4f
+        ))
         {
             return hit.collider.CompareTag("Sidewalk");
         }
+
+        return false;
+    }
+
+    bool DirectionBlocked(Vector3 direction)
+    {
+        // Make sure the direction is horizontal.
+        direction.y = 0f;
+
+        if (direction == Vector3.zero)
+            return true;
+
+        direction.Normalize();
+
+        // Start the check slightly above the ground.
+        Vector3 checkOrigin =
+            transform.position + Vector3.up * wallCheckHeight;
+
+        // SphereCast checks a volume instead of just a single line.
+        // This works even if the Plane itself has no collider.
+        RaycastHit hit;
+
+        if (Physics.SphereCast(
+            checkOrigin,
+            wallCheckRadius,
+            direction,
+            out hit,
+            wallCheckDistance
+        ))
+        {
+            // Ignore triggers.
+            if (hit.collider.isTrigger)
+                return false;
+
+            // Ignore our own objects.
+            if (hit.collider.transform == transform ||
+                hit.collider.transform.IsChildOf(transform))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         return false;
     }
 
@@ -175,9 +256,13 @@ public class PersonBehavior : MonoBehaviour
         // Check Player
         if (player != null)
         {
-            float distance = Vector3.Distance(transform.position,player.transform.position);
+            float distance = Vector3.Distance(
+                transform.position,
+                player.transform.position
+            );
 
-            if (distance < closestDistance && distance <= dangerDetectionRadius)
+            if (distance < closestDistance &&
+                distance <= dangerDetectionRadius)
             {
                 closestDistance = distance;
                 closestDanger = player.transform;
@@ -187,31 +272,68 @@ public class PersonBehavior : MonoBehaviour
         // Check Car
         if (car != null)
         {
-            float distance = Vector3.Distance(transform.position,car.transform.position);
+            float distance = Vector3.Distance(
+                transform.position,
+                car.transform.position
+            );
 
-            if (distance < closestDistance && distance <= dangerDetectionRadius)
+            if (distance < closestDistance &&
+                distance <= dangerDetectionRadius)
             {
                 closestDistance = distance;
                 closestDanger = car.transform;
             }
         }
+
         // Run away from scary cars and stuffs
         if (closestDanger != null)
         {
-            Vector3 awayDirection = transform.position - closestDanger.position;
+            Vector3 awayDirection =
+                transform.position - closestDanger.position;
+
             awayDirection.y = 0f;
 
             if (awayDirection != Vector3.zero)
             {
                 awayDirection.Normalize();
 
-                // Turn toward escape direction
-                Quaternion targetRotation = Quaternion.LookRotation(awayDirection);
+                // If there is a wall in the escape direction,
+                // pick a new direction instead of going through it.
+                if (DirectionBlocked(awayDirection))
+                {
+                    Vector3 leftDirection =
+                        Quaternion.Euler(0f, -90f, 0f) * awayDirection;
 
-                transform.rotation = Quaternion.Slerp(transform.rotation,targetRotation,8f * Time.deltaTime);
+                    Vector3 rightDirection =
+                        Quaternion.Euler(0f, 90f, 0f) * awayDirection;
+
+                    if (!DirectionBlocked(leftDirection))
+                    {
+                        awayDirection = leftDirection;
+                    }
+                    else if (!DirectionBlocked(rightDirection))
+                    {
+                        awayDirection = rightDirection;
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+
+                // Turn toward escape direction
+                Quaternion targetRotation =
+                    Quaternion.LookRotation(awayDirection);
+
+                transform.rotation = Quaternion.Slerp(
+                    transform.rotation,
+                    targetRotation,
+                    8f * Time.deltaTime
+                );
 
                 // Run / Movement from things
-                transform.position += awayDirection * scaredSpeed * Time.deltaTime;
+                transform.position +=
+                    awayDirection * scaredSpeed * Time.deltaTime;
             }
         }
         else
@@ -228,8 +350,10 @@ public class PersonBehavior : MonoBehaviour
 
         float bob = Mathf.Sin(Time.time * bobSpeed) * bobHeight;
 
-        body.localPosition = bodyStartPosition + Vector3.up * bob;
+        body.localPosition =
+            bodyStartPosition + Vector3.up * bob;
     }
+
     GameObject FindClosestObjectWithTag(string tag)
     {
         // this is simply to make earlier stuff easier
@@ -249,7 +373,10 @@ public class PersonBehavior : MonoBehaviour
 
         foreach (GameObject obj in objects)
         {
-            float distance = Vector3.Distance(transform.position,obj.transform.position);
+            float distance = Vector3.Distance(
+                transform.position,
+                obj.transform.position
+            );
 
             if (distance < closestDistance)
             {
@@ -257,8 +384,10 @@ public class PersonBehavior : MonoBehaviour
                 closest = obj;
             }
         }
+
         return closest;
     }
+
     void LateUpdate()
     {
         if (camera == null)

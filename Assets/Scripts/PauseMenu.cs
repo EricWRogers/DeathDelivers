@@ -43,7 +43,7 @@ public class PauseMenu : MonoBehaviour
         controlsPanel.SetActive(false);
         creditsPanel.SetActive(false);
 
-        Time.timeScale = 0f;
+        Time.timeScale = 0.1f;
     }
 
     // Closes the Pause Menu and resumes the game
