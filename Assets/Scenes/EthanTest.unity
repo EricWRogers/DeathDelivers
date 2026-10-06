@@ -7342,6 +7342,46 @@ PrefabInstance:
       propertyPath: m_RaycastTarget
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 616805514152661546, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+      propertyPath: m_Pivot.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 616805514152661546, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 616805514152661546, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 616805514152661546, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 616805514152661546, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 616805514152661546, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 616805514152661546, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 616805514152661546, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 616805514152661546, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 616805514152661546, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 625314350043573188, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
       propertyPath: m_Texture
       value: 
@@ -7509,6 +7549,46 @@ PrefabInstance:
     - target: {fileID: 6106435564387876270, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
       propertyPath: m_RaycastTarget
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225132543795514980, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225132543795514980, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.45
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225132543795514980, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225132543795514980, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225132543795514980, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225132543795514980, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225132543795514980, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225132543795514980, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225132543795514980, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 1.4999695
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225132543795514980, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -8.4
       objectReference: {fileID: 0}
     - target: {fileID: 8787020470726838059, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
       propertyPath: dogMovement
