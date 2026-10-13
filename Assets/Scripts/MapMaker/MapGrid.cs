@@ -410,8 +410,8 @@ public class MapGrid : MonoBehaviour
         }
     }
 
-    MapTile GetMapTileFromObject(
-        GameObject objectToFind
+    public MapTile GetMapTileFromObject(
+    GameObject objectToFind
     )
     {
         foreach (MapTile tile in tiles)

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8155107388631809964}
   - component: {fileID: 433941396350454101}
   - component: {fileID: 712152619022544647}
-  m_Layer: 7
+  m_Layer: 2
   m_Name: Plane (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28,8 +28,8 @@ Transform:
   m_GameObject: {fileID: 3311588384843017666}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 13.2500105, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0.6, z: 0}
+  m_LocalScale: {x: 0.30499157, y: 0.37775, z: 0.36580178}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1559940735240559196}
@@ -67,7 +67,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 86c81910c0945b546a3fc2c2136ff1e6, type: 2}
+  - {fileID: 2100000, guid: d1ef026f08325b248b6d072e62569796, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5128,6 +5128,9 @@ MonoBehaviour:
   scaredSpeed: 3
   directionChangeTime: 2
   sidewalkCheckDistance: 1.5
+  wallCheckDistance: 1
+  wallCheckRadius: 0.35
+  wallCheckHeight: 1
   playerDetectionRadius: 5
   dangerDetectionRadius: 8
   calmDownDistance: 12

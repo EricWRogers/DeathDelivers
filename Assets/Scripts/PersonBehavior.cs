@@ -65,7 +65,7 @@ public class PersonBehavior : MonoBehaviour
 
         miniIcon.transform.position = new Vector3(
             transform.position.x,
-            transform.position.y + 50f,
+            transform.position.y + 10f,
             transform.position.z
         );
 
