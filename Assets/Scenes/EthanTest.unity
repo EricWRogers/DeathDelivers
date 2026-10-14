@@ -742,6 +742,10 @@ PrefabInstance:
       value: ObjectSpawner (17)
       objectReference: {fileID: 0}
     - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
+      propertyPath: maxSpawns
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
       propertyPath: spawnThis
       value: 
       objectReference: {fileID: 343123675}
@@ -963,6 +967,10 @@ PrefabInstance:
     - target: {fileID: 540538708729760719, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
       propertyPath: m_Name
       value: ObjectSpawner (19)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
+      propertyPath: maxSpawns
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
       propertyPath: spawnThis
@@ -2219,6 +2227,10 @@ PrefabInstance:
     - target: {fileID: 540538708729760719, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
       propertyPath: m_Name
       value: ObjectSpawner
+      objectReference: {fileID: 0}
+    - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
+      propertyPath: maxSpawns
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
       propertyPath: spawnThis
@@ -4720,6 +4732,10 @@ PrefabInstance:
       value: ObjectSpawner (7)
       objectReference: {fileID: 0}
     - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
+      propertyPath: maxSpawns
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
       propertyPath: spawnThis
       value: 
       objectReference: {fileID: 343123675}
@@ -4926,6 +4942,10 @@ PrefabInstance:
       value: ObjectSpawner (22)
       objectReference: {fileID: 0}
     - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
+      propertyPath: maxSpawns
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
       propertyPath: spawnThis
       value: 
       objectReference: {fileID: 343123675}
@@ -5030,6 +5050,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ObjectSpawner
   spawnThis: {fileID: 1976096075}
   timeBetweenSpawns: 3
+  maxSpawns: 999
 --- !u!65 &503633543
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5791,6 +5812,10 @@ PrefabInstance:
     - target: {fileID: 540538708729760719, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
       propertyPath: m_Name
       value: ObjectSpawner (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
+      propertyPath: maxSpawns
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
       propertyPath: spawnThis
@@ -8024,6 +8049,10 @@ PrefabInstance:
       value: ObjectSpawner (13)
       objectReference: {fileID: 0}
     - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
+      propertyPath: maxSpawns
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
       propertyPath: spawnThis
       value: 
       objectReference: {fileID: 343123675}
@@ -9474,6 +9503,10 @@ PrefabInstance:
     - target: {fileID: 540538708729760719, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
       propertyPath: m_Name
       value: ObjectSpawner (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
+      propertyPath: maxSpawns
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
       propertyPath: spawnThis
@@ -12450,6 +12483,10 @@ PrefabInstance:
       value: ObjectSpawner (2)
       objectReference: {fileID: 0}
     - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
+      propertyPath: maxSpawns
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
       propertyPath: spawnThis
       value: 
       objectReference: {fileID: 343123675}
@@ -13003,6 +13040,10 @@ PrefabInstance:
       value: ObjectSpawner (1)
       objectReference: {fileID: 0}
     - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
+      propertyPath: maxSpawns
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
       propertyPath: spawnThis
       value: 
       objectReference: {fileID: 343123675}
@@ -13069,6 +13110,10 @@ PrefabInstance:
     - target: {fileID: 540538708729760719, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
       propertyPath: m_Name
       value: ObjectSpawner (15)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
+      propertyPath: maxSpawns
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
       propertyPath: spawnThis
@@ -13352,6 +13397,10 @@ PrefabInstance:
     - target: {fileID: 540538708729760719, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
       propertyPath: m_Name
       value: ObjectSpawner (12)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
+      propertyPath: maxSpawns
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
       propertyPath: spawnThis
@@ -14495,6 +14544,10 @@ PrefabInstance:
       value: ObjectSpawner (14)
       objectReference: {fileID: 0}
     - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
+      propertyPath: maxSpawns
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
       propertyPath: spawnThis
       value: 
       objectReference: {fileID: 343123675}
@@ -14561,6 +14614,10 @@ PrefabInstance:
     - target: {fileID: 540538708729760719, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
       propertyPath: m_Name
       value: ObjectSpawner (21)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
+      propertyPath: maxSpawns
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
       propertyPath: spawnThis
@@ -14667,6 +14724,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ObjectSpawner
   spawnThis: {fileID: 961529352}
   timeBetweenSpawns: 3
+  maxSpawns: 999
 --- !u!65 &1316925317
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14949,6 +15007,10 @@ PrefabInstance:
     - target: {fileID: 540538708729760719, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
       propertyPath: m_Name
       value: ObjectSpawner (18)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
+      propertyPath: maxSpawns
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
       propertyPath: spawnThis
@@ -15826,6 +15888,10 @@ PrefabInstance:
       value: ObjectSpawner (10)
       objectReference: {fileID: 0}
     - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
+      propertyPath: maxSpawns
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
       propertyPath: spawnThis
       value: 
       objectReference: {fileID: 343123675}
@@ -16491,6 +16557,10 @@ PrefabInstance:
       value: ObjectSpawner (23)
       objectReference: {fileID: 0}
     - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
+      propertyPath: maxSpawns
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
       propertyPath: spawnThis
       value: 
       objectReference: {fileID: 343123675}
@@ -16685,6 +16755,10 @@ PrefabInstance:
     - target: {fileID: 540538708729760719, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
       propertyPath: m_Name
       value: ObjectSpawner (11)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
+      propertyPath: maxSpawns
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
       propertyPath: spawnThis
@@ -17122,6 +17196,10 @@ PrefabInstance:
     - target: {fileID: 540538708729760719, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
       propertyPath: m_Name
       value: ObjectSpawner (20)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
+      propertyPath: maxSpawns
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
       propertyPath: spawnThis
@@ -18311,6 +18389,10 @@ PrefabInstance:
       value: ObjectSpawner (4)
       objectReference: {fileID: 0}
     - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
+      propertyPath: maxSpawns
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
       propertyPath: spawnThis
       value: 
       objectReference: {fileID: 343123675}
@@ -18382,6 +18464,10 @@ PrefabInstance:
     - target: {fileID: 540538708729760719, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
       propertyPath: m_Name
       value: ObjectSpawner (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
+      propertyPath: maxSpawns
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
       propertyPath: spawnThis
@@ -21436,6 +21522,10 @@ PrefabInstance:
       value: ObjectSpawner (6)
       objectReference: {fileID: 0}
     - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
+      propertyPath: maxSpawns
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
       propertyPath: spawnThis
       value: 
       objectReference: {fileID: 343123675}
@@ -21905,6 +21995,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2100000, guid: 185ddb8041a60c24e963a31c603567be, type: 2}
     - target: {fileID: 97016291974089409, guid: 7700cb6688592154daead32d366961c2, type: 3}
+      propertyPath: maxSpawns
+      value: 999
+      objectReference: {fileID: 0}
+    - target: {fileID: 97016291974089409, guid: 7700cb6688592154daead32d366961c2, type: 3}
       propertyPath: timeBetweenSpawns
       value: 3
       objectReference: {fileID: 0}
@@ -21944,6 +22038,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 185ddb8041a60c24e963a31c603567be, type: 2}
+    - target: {fileID: 1674629515556402139, guid: 7700cb6688592154daead32d366961c2, type: 3}
+      propertyPath: maxSpawns
+      value: 999
+      objectReference: {fileID: 0}
     - target: {fileID: 1674629515556402139, guid: 7700cb6688592154daead32d366961c2, type: 3}
       propertyPath: timeBetweenSpawns
       value: 3
@@ -23968,6 +24066,10 @@ PrefabInstance:
       value: ObjectSpawner (16)
       objectReference: {fileID: 0}
     - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
+      propertyPath: maxSpawns
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
       propertyPath: spawnThis
       value: 
       objectReference: {fileID: 343123675}
@@ -24274,6 +24376,10 @@ PrefabInstance:
     - target: {fileID: 540538708729760719, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
       propertyPath: m_Name
       value: ObjectSpawner (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
+      propertyPath: maxSpawns
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1265564340888970861, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
       propertyPath: spawnThis
