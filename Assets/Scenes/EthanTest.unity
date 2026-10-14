@@ -7542,6 +7542,10 @@ PrefabInstance:
       propertyPath: m_RaycastTarget
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5890019161864619643, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6053148125439782554, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
       propertyPath: m_RaycastTarget
       value: 0
@@ -7594,6 +7598,10 @@ PrefabInstance:
       propertyPath: dogMovement
       value: 
       objectReference: {fileID: 1399667635}
+    - target: {fileID: 8828159474600116918, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8993312665847218581, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
       propertyPath: dogMovement
       value: 
