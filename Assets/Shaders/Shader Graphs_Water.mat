@@ -56,11 +56,11 @@ Material:
     - _Density: 5
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Ripple: 0.9
+    - _Ripple: 1.71
     - _border_boldness: 3
     m_Colors:
     - _Water: {r: 0.5622641, g: 0.13487081, b: 0.058348097, a: 1}
-    - _ripColor: {r: 0.7735849, g: 0.3910974, b: 0.33716622, a: 1}
+    - _ripColor: {r: 0.3886792, g: 0.21974824, b: 0.19287287, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &1581048386733669683

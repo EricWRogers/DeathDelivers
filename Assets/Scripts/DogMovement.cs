@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -143,23 +144,26 @@ public class DogMovement : MonoBehaviour
         if (Keyboard.current == null)
             return;
 
-        bool w = Keyboard.current.wKey.isPressed;
-        bool s = Keyboard.current.sKey.isPressed;
+        bool wKey = Keyboard.current.wKey.isPressed;
+        bool forwardCon = Gamepad.current.yButton.isPressed;
+        
+        bool sKey = Keyboard.current.sKey.isPressed;
+        bool backCon = Gamepad.current.aButton.isPressed;
 
         float target = 0f;
 
-        if (w && !s)
+        if (wKey && !sKey || forwardCon && !backCon)
             target = speed;
-        else if (s && !w)
+        else if (sKey && !wKey || backCon && !forwardCon)
             target = -speed * reverseSpeedMultiplier;
 
         float accel;
 
-        if (w && !s)
+        if (wKey && !sKey || forwardCon && !backCon)
         {
             accel = currentSpeed < 0f ? braking : acceleration;
         }
-        else if (s && !w)
+        else if (sKey && !wKey || backCon && !forwardCon)
         {
             accel = currentSpeed > 0f ? braking : reverseAcceleration;
         }

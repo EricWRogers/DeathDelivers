@@ -1,6 +1,19 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-2633899274508556281
+--- !u!114 &-8172193251479702819
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 639247ca83abc874e893eb93af2b5e44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.ShaderGraph.Editor::UnityEditor.Rendering.BuiltIn.AssetVersion
+  version: 0
+--- !u!114 &-2597110392712517433
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,8 +33,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs_Inline
-  m_Shader: {fileID: -6465566751694194690, guid: 63edc6f1387370c45aa78b7c4e884f3d, type: 3}
+  m_Name: Shader Graphs_Water 1
+  m_Shader: {fileID: -6465566751694194690, guid: b42a68db9158cf04e90b41e44dd4de61, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -51,10 +64,15 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _BUILTIN_QueueControl: 0
+    - _BUILTIN_QueueOffset: 0
+    - _Density: 5.66
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Size: 0.97
+    - _Ripple: 0.67
+    - _border_boldness: 7.33
     m_Colors:
-    - _Color: {r: 0.41263786, g: 0.6528301, b: 0.6391599, a: 1}
+    - _Water: {r: 0.8415094, g: 0.5723798, b: 0.12543245, a: 1}
+    - _ripColor: {r: 0.8, g: 0.48235294, b: 0.013705931, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
