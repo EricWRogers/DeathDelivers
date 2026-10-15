@@ -160,6 +160,14 @@ public class DogMovement : MonoBehaviour
         {
             wKey = Gamepad.current.yButton.isPressed;
             sKey = Gamepad.current.aButton.isPressed;
+            if (wKey == false)
+            {
+                wKey = Keyboard.current.wKey.isPressed;
+            }
+            if (sKey == false)
+            {
+                sKey = Keyboard.current.sKey.isPressed;
+            }
         }
 
         float target = 0f;
