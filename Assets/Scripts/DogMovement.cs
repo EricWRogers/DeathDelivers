@@ -53,6 +53,7 @@ public class DogMovement : MonoBehaviour
     private float fireworkTimer, fireworkJump;
     private float pepperTimer, pepperMult;
     private float boneTimer, boneScale;
+    public bool hasPackage = false;
 
     private float currentSpeed;
     private float targetTurn;
@@ -847,5 +848,9 @@ public class DogMovement : MonoBehaviour
     {
         boneTimer = duration;
         boneScale = scale;
+    }
+    public void SetHasPackage(bool hasPackage)
+    {
+        this.hasPackage = hasPackage;
     }
 }
