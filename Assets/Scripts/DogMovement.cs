@@ -110,7 +110,7 @@ public class DogMovement : MonoBehaviour
         {
             if (!grounded)
                 EndQuickTurn();
-            else if (Keyboard.current.spaceKey.isPressed)
+            else if (Keyboard.current.spaceKey.isPressed || Gamepad.current.rightTrigger.isPressed || Gamepad.current.leftTrigger.isPressed)
             {
                 DoQuickTurn();
                 return;
@@ -209,10 +209,10 @@ public class DogMovement : MonoBehaviour
         if (Gamepad.current != null)
         {
             Vector2 leftStick = Gamepad.current.leftStick.ReadValue();
-            if (Keyboard.current.aKey.isPressed || (Gamepad.current != null && leftStick.x < -0.1f))
+            if (Keyboard.current.aKey.isPressed || (Gamepad.current != null && leftStick.x < -0.1f) )
             targetTurn = -dogBase.turnSpeed;
 
-            if (Keyboard.current.dKey.isPressed || (Gamepad.current != null && leftStick.x < -0.1f))
+            if (Keyboard.current.dKey.isPressed || (Gamepad.current != null && leftStick.x > 0.1f) )
                 targetTurn = dogBase.turnSpeed;
         }
 
@@ -496,7 +496,6 @@ public class DogMovement : MonoBehaviour
             );
     }
 
-
     void HandleQuickTurn()
     {
         if (Keyboard.current == null)
@@ -511,12 +510,14 @@ public class DogMovement : MonoBehaviour
         if (quickTurning)
             return;
 
-        if (!grounded || !Keyboard.current.spaceKey.isPressed)
+        if (!grounded || (!Keyboard.current.spaceKey.isPressed && !Gamepad.current.rightTrigger.isPressed && !Gamepad.current.leftTrigger.isPressed))
             return;
 
-        if (Keyboard.current.dKey.isPressed)
+        Vector2 leftStick = Gamepad.current.leftStick.ReadValue();
+        
+        if (Keyboard.current.dKey.isPressed || (Gamepad.current != null && leftStick.x > 0.1f))
             StartQuickTurn(1f);
-        else if (Keyboard.current.aKey.isPressed)
+        else if (Keyboard.current.aKey.isPressed || (Gamepad.current != null && leftStick.x < -0.1f))
             StartQuickTurn(-1f);
     }
 
