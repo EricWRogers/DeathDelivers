@@ -72,6 +72,7 @@ public class DogMovement : MonoBehaviour
 
     private Collider dogCollider;
     private Vector3 startScale;
+    private bool wKey, sKey;
 
 
     void Start()
@@ -115,6 +116,14 @@ public class DogMovement : MonoBehaviour
                 DoQuickTurn();
                 return;
             }
+            else if (Gamepad.current != null)
+            {
+                if (Keyboard.current.spaceKey.isPressed || Gamepad.current.rightTrigger.isPressed || Gamepad.current.leftTrigger.isPressed)
+                {
+                    DoQuickTurn();
+                    return;
+                }
+            }
             else
                 EndQuickTurn();
         }
@@ -146,25 +155,35 @@ public class DogMovement : MonoBehaviour
             return;
 
         bool wKey = Keyboard.current.wKey.isPressed;
-        bool forwardCon = Gamepad.current.yButton.isPressed;
-        
         bool sKey = Keyboard.current.sKey.isPressed;
-        bool backCon = Gamepad.current.aButton.isPressed;
+        if (Gamepad.current != null)
+        {
+            wKey = Gamepad.current.yButton.isPressed;
+            sKey = Gamepad.current.aButton.isPressed;
+            if (wKey == false)
+            {
+                wKey = Keyboard.current.wKey.isPressed;
+            }
+            if (sKey == false)
+            {
+                sKey = Keyboard.current.sKey.isPressed;
+            }
+        }
 
         float target = 0f;
 
-        if (wKey && !sKey || forwardCon && !backCon)
+        if (wKey && !sKey)
             target = speed;
-        else if (sKey && !wKey || backCon && !forwardCon)
+        else if (sKey && !wKey)
             target = -speed * reverseSpeedMultiplier;
 
         float accel;
 
-        if (wKey && !sKey || forwardCon && !backCon)
+        if (wKey && !sKey)
         {
             accel = currentSpeed < 0f ? braking : acceleration;
         }
-        else if (sKey && !wKey || backCon && !forwardCon)
+        else if (sKey && !wKey)
         {
             accel = currentSpeed > 0f ? braking : reverseAcceleration;
         }
@@ -209,10 +228,10 @@ public class DogMovement : MonoBehaviour
         if (Gamepad.current != null)
         {
             Vector2 leftStick = Gamepad.current.leftStick.ReadValue();
-            if (Keyboard.current.aKey.isPressed || (Gamepad.current != null && leftStick.x < -0.1f))
+            if (Keyboard.current.aKey.isPressed || (Gamepad.current != null && leftStick.x < -0.1f) )
             targetTurn = -dogBase.turnSpeed;
 
-            if (Keyboard.current.dKey.isPressed || (Gamepad.current != null && leftStick.x < -0.1f))
+            if (Keyboard.current.dKey.isPressed || (Gamepad.current != null && leftStick.x > 0.1f) )
                 targetTurn = dogBase.turnSpeed;
         }
 
@@ -496,7 +515,6 @@ public class DogMovement : MonoBehaviour
             );
     }
 
-
     void HandleQuickTurn()
     {
         if (Keyboard.current == null)
@@ -511,13 +529,27 @@ public class DogMovement : MonoBehaviour
         if (quickTurning)
             return;
 
-        if (!grounded || !Keyboard.current.spaceKey.isPressed)
+        if (Gamepad.current != null)
+        {
+            if (!grounded || (!Keyboard.current.spaceKey.isPressed && !Gamepad.current.rightTrigger.isPressed && !Gamepad.current.leftTrigger.isPressed))
             return;
+            Vector2 leftStick = Gamepad.current.leftStick.ReadValue();
+        
+            if (Keyboard.current.dKey.isPressed || (Gamepad.current != null && leftStick.x > 0.1f))
+                StartQuickTurn(1f);
+            else if (Keyboard.current.aKey.isPressed || (Gamepad.current != null && leftStick.x < -0.1f))
+                StartQuickTurn(-1f);
+        }
+        else
+        {
+            if (!grounded || !Keyboard.current.spaceKey.isPressed)
+                return;
 
-        if (Keyboard.current.dKey.isPressed)
-            StartQuickTurn(1f);
-        else if (Keyboard.current.aKey.isPressed)
-            StartQuickTurn(-1f);
+            if (Keyboard.current.dKey.isPressed)
+                StartQuickTurn(1f);
+            else if (Keyboard.current.aKey.isPressed)
+                StartQuickTurn(-1f);
+        }
     }
 
 
