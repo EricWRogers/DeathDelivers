@@ -200,13 +200,21 @@ public class DogMovement : MonoBehaviour
         MoveWithWalls(direction * currentSpeed * dt);
     }
 
-
     void Turn(float dt)
     {
         if (Keyboard.current == null)
             return;
 
         targetTurn = 0f;
+        if (Gamepad.current != null)
+        {
+            Vector2 leftStick = Gamepad.current.leftStick.ReadValue();
+            if (Keyboard.current.aKey.isPressed || (Gamepad.current != null && leftStick.x < -0.1f))
+            targetTurn = -dogBase.turnSpeed;
+
+            if (Keyboard.current.dKey.isPressed || (Gamepad.current != null && leftStick.x < -0.1f))
+                targetTurn = dogBase.turnSpeed;
+        }
 
         if (Keyboard.current.aKey.isPressed)
             targetTurn = -dogBase.turnSpeed;
@@ -225,7 +233,6 @@ public class DogMovement : MonoBehaviour
         else
             AirTurn(dt);
     }
-
 
     void GroundTurn(float dt)
     {
