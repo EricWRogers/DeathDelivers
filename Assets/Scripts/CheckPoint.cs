@@ -34,7 +34,7 @@ public class CheckPoint : MonoBehaviour
     public void DeliverPackage(Collider other)
     {
         DogMovement dog = other.GetComponentInParent<DogMovement>();
-        if(dog.hasPackage == true)
+        if(dog.hasPackage)
         {
             dog.SetHasPackage(false);
             TurningOnCheckPoint();
@@ -45,10 +45,17 @@ public class CheckPoint : MonoBehaviour
     }
     private void SelectRandCheckPoint()
     {
+        if (Checkpoint.Length <= 1)
+            return;
         if(currentIndex != -1)
         {
             Checkpoint[currentIndex].SetActive(false);
         }
+        int newIndex;
+        do{
+            newIndex = Random.Range(0, Checkpoint.Length);
+        }
+        while (newIndex == currentIndex);
         currentIndex = Random.Range(0, Checkpoint.Length);
         Checkpoint[currentIndex].SetActive(true);
     }
