@@ -83,6 +83,31 @@ public class MapGrid : MonoBehaviour
                     tileDropdown.value = 1;
                 }
             }
+
+            if (Keyboard.current.bKey.wasPressedThisFrame)
+            {
+                if (selectedCell != null &&
+                    tileDropdown != null)
+                {
+                    tileDropdown.value = 4;
+                }
+            }
+            if (Keyboard.current.dKey.wasPressedThisFrame)
+            {
+                if (selectedCell != null &&
+                    tileDropdown != null)
+                {
+                    tileDropdown.value = 3;
+                }
+            }
+            if (Keyboard.current.tKey.wasPressedThisFrame)
+            {
+                if (selectedCell != null &&
+                    tileDropdown != null)
+                {
+                    tileDropdown.value = 8;
+                }
+            }
         }
     }
 
