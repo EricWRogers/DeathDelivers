@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LargeRoadT1
   m_EditorClassIdentifier: Assembly-CSharp::MapTile
   tileName: City-LargeRoad-1
-  prefab: {fileID: 7231323218626872519, guid: bcadff3a3a22a8c45ae727f01cabed05, type: 3}
+  prefab: {fileID: 2756995544450515718, guid: c73ecf93ac2163c48b05c54e55d85034, type: 3}
   size: {x: 1, y: 1, z: 1}
   canRotate: 1
   canStack: 0
