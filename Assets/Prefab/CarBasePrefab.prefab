@@ -138,8 +138,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dec221cfd61fb449806509afd9119a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNPCMove
-  speed: 22
+  speed: 12
+  acceleration: 2.5
+  deceleration: 1.5
   targetPoint: {fileID: 3422271694360050317}
+  CurrentCarNode: {fileID: 0}
+  PrevCarNode: {fileID: 0}
+  turnRadius: 2.5
+  turnSpeed: 90
+  slowDownDistance: 3
+  cornerSpeedMultiplier: 0.55
   warnedDist: 20
   scaredTurnAmount: 99
   chaosTurningAmount: 0.3
@@ -247,7 +255,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c1dcc11e6168514fb635e8e05ac0310, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
-  nextNode: {fileID: 0}
+  connectedNodes: []
+  raycastDistance: 70
+  raycastHeight: 0.5
 --- !u!23 &4225941862122001183
 MeshRenderer:
   m_ObjectHideFlags: 0

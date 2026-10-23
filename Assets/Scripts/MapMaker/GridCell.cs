@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEngine;
 
 public class GridCell : MonoBehaviour
@@ -13,3 +14,4 @@ public class GridCell : MonoBehaviour
             map.SelectCell(this);
     }
 }
+#endif
