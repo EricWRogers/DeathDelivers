@@ -3,9 +3,9 @@ using UnityEngine;
 public class GlobalService : MonoBehaviour
 {
     [SerializeField] private Transform player;
-    [Tooltip("Assign a Seperate arrow Transform whose forawrd (+Z) axis points toaws")]
+   
     [SerializeField] private Transform directionArrow;
-    [SerializeField, Min(0.05f)] private float targetRefreshInterval = 0.25f;
+    [SerializeField] private float targetRefreshInterval = 0.25f;
 
     private DogMovement dog;
     private Transform currentTarget;
