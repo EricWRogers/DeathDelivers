@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -30,6 +31,7 @@ public class MapGrid : MonoBehaviour
     public GameObject placedTilesParent;
 
     public List<GridCell> cells = new();
+    public int lastPlaced;
 
     Camera mapCamera;
 
@@ -81,6 +83,42 @@ public class MapGrid : MonoBehaviour
                     tileDropdown != null)
                 {
                     tileDropdown.value = 1;
+                }
+            }
+
+            if (Keyboard.current.wKey.wasPressedThisFrame)
+            {
+                if (selectedCell != null &&
+                    tileDropdown != null)
+                {
+                    tileDropdown.value = lastPlaced;
+                }
+            }
+
+            if (Keyboard.current.bKey.wasPressedThisFrame)
+            {
+                if (selectedCell != null &&
+                    tileDropdown != null)
+                {
+                    tileDropdown.value = 4;
+                }
+            }
+
+            if (Keyboard.current.dKey.wasPressedThisFrame)
+            {
+                if (selectedCell != null &&
+                    tileDropdown != null)
+                {
+                    tileDropdown.value = 3;
+                }
+            }
+
+            if (Keyboard.current.tKey.wasPressedThisFrame)
+            {
+                if (selectedCell != null &&
+                    tileDropdown != null)
+                {
+                    tileDropdown.value = 8;
                 }
             }
         }
@@ -378,6 +416,8 @@ public class MapGrid : MonoBehaviour
         currentObject =
             newObject;
 
+        lastPlaced = index;
+
         rotateButton.SetActive(
             tile.canRotate
         );
@@ -411,7 +451,7 @@ public class MapGrid : MonoBehaviour
     }
 
     public MapTile GetMapTileFromObject(
-    GameObject objectToFind
+        GameObject objectToFind
     )
     {
         foreach (MapTile tile in tiles)
@@ -513,3 +553,4 @@ public class MapGrid : MonoBehaviour
         return null;
     }
 }
+#endif

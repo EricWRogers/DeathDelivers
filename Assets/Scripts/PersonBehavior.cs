@@ -38,7 +38,8 @@ public class PersonBehavior : MonoBehaviour
     public GameObject partical;
     public GameObject parentBox;
     public GameObject miniIcon;
-
+    public AudioSource audioSource;
+    public AudioClip[] ScreamSound;
     [Header("Joy / Bobbing")] // jumping with joy
     public float bobHeight = 0.2f;
     public float bobSpeed = 5.0f;
@@ -128,6 +129,7 @@ public class PersonBehavior : MonoBehaviour
             if (distance <= playerDetectionRadius)
             {
                 state = PersonState.Scared;
+                audioSource.PlayOneShot(ScreamSound[Random.Range(0, ScreamSound.Length)]);
                 return;
             }
         }
@@ -292,11 +294,10 @@ public class PersonBehavior : MonoBehaviour
                 transform.position - closestDanger.position;
 
             awayDirection.y = 0f;
-
+            
             if (awayDirection != Vector3.zero)
             {
                 awayDirection.Normalize();
-
                 // If there is a wall in the escape direction,
                 // pick a new direction instead of going through it.
                 if (DirectionBlocked(awayDirection))
