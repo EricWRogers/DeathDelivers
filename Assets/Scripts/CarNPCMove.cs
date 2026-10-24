@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class CarNPCMove : MonoBehaviour
 {
+    [Header("Explosion Effect")]
+    [SerializeField] private GameObject fvx_explosionsPrefab;
+
+
     [Header("Movement")]
     public float speed = 5f;
     public float acceleration = 2f;
@@ -262,6 +266,38 @@ public class CarNPCMove : MonoBehaviour
             }
         }
     }
+    private bool isDestroyed = false;
+    private void Explode()
+    {
+        if (isDestroyed)
+        return;
+
+        isDestroyed = true;
+
+        if (fvx_explosionsPrefab != null)
+        {
+            GameObject explosion = Instantiate(
+                fvx_explosionsPrefab,
+                transform.position,
+                Quaternion.identity
+            );
+            
+            
+             Debug.Log("Explosion prefab spawned!");
+            Destroy(explosion, 5f);
+
+        }
+
+        else
+         {
+        Debug.LogWarning("Explosion prefab is NOT assigned!");
+         }
+                
+    
+        Destroy(gameObject);
+    }
+
+
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -276,10 +312,11 @@ public class CarNPCMove : MonoBehaviour
                 dm.totalSoulCount += carValue;
             }
 
-            Destroy(gameObject);
+            Explode();
         }
 
-        if (collision.gameObject.CompareTag("Wall"))
-            Destroy(gameObject);
+       else if (collision.gameObject.CompareTag("Wall"))
+
+            Explode();
     }
 }
