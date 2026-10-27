@@ -478,8 +478,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 70
   raycastHeight: 0.5
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &1247646765
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -613,6 +618,10 @@ PrefabInstance:
     - target: {fileID: 7769942733895357, guid: 43e929c21448dac4482c68bd7d7001ce, type: 3}
       propertyPath: m_Name
       value: InterTunnel
+      objectReference: {fileID: 0}
+    - target: {fileID: 2152780616583282175, guid: 43e929c21448dac4482c68bd7d7001ce, type: 3}
+      propertyPath: targetPoint
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2962281576358398651, guid: 43e929c21448dac4482c68bd7d7001ce, type: 3}
       propertyPath: m_LocalPosition.x
