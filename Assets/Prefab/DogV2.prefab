@@ -413,6 +413,7 @@ GameObject:
   - component: {fileID: 1202569380718555690}
   - component: {fileID: 1622661340839009273}
   - component: {fileID: 8703144017467393679}
+  - component: {fileID: 4467551206277432516}
   m_Layer: 0
   m_Name: TheCarTestCube
   m_TagString: Player
@@ -603,6 +604,32 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &4467551206277432516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8391964171683974963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f52aefe517502b8448020ea85de1bd48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MegaDeath
+  enemyPrefab: {fileID: 0}
+  spawnDistance: 12
+  spawnHeight: 5
+  driftSpeed: 8
+  approachDescentAmount: 0.7
+  finalDescentSpeed: 3
+  landingHeight: 0
+  approachDistance: 3
+  speedMultiplier: 1.15
+  minimumChaseSpeed: 5
+  timer: {fileID: 0}
+  playerMovement: {fileID: 0}
+  player: {fileID: 0}
+  isEnemy: 0
 --- !u!1001 &3331282587438962037
 PrefabInstance:
   m_ObjectHideFlags: 0
