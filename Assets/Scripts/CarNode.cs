@@ -5,14 +5,28 @@ public class CarNode : MonoBehaviour
 {
     [Header("Connected Nodes")]
     public List<CarNode> connectedNodes = new List<CarNode>(4);
+    public List<CarNode> forceNode = new List<CarNode>();
 
     [Header("Detection")]
     public float raycastDistance = 10f;
     public float raycastHeight = 0.5f;
 
+    [Header("Direction Ignore")]
+    public bool ignoreForward = false;
+    public bool ignoreBackward = false;
+    public bool ignoreRight = false;
+    public bool ignoreLeft = false;
+
     private void Start()
     {
         DetectConnectedNodes();
+        for (int i = 0; i < forceNode.Count; i++)
+        {
+            if (forceNode[i] != null && !connectedNodes.Contains(forceNode[i]))
+            {
+                connectedNodes.Add(forceNode[i]);
+            }
+        }
     }
 
     private void DetectConnectedNodes()
@@ -22,10 +36,10 @@ public class CarNode : MonoBehaviour
         // Four directions relative to this node.
         Vector3[] directions =
         {
-            transform.forward,
-            -transform.forward,
-            transform.right,
-            -transform.right
+            ignoreForward ? Vector3.zero : transform.forward,
+            ignoreBackward ? Vector3.zero : -transform.forward,
+            ignoreRight ? Vector3.zero : transform.right,
+            ignoreLeft ? Vector3.zero : -transform.right
         };
 
         Vector3 origin = transform.position + Vector3.up * raycastHeight;
@@ -124,10 +138,10 @@ public class CarNode : MonoBehaviour
 
         Vector3[] directions =
         {
-            transform.forward,
-            -transform.forward,
-            transform.right,
-            -transform.right
+            ignoreForward ? Vector3.zero : transform.forward,
+            ignoreBackward ? Vector3.zero : -transform.forward,
+            ignoreRight ? Vector3.zero : transform.right,
+            ignoreLeft ? Vector3.zero : -transform.right
         };
 
         Gizmos.color = Color.yellow;
