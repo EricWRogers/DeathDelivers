@@ -4,6 +4,7 @@ public class CheckPoint : MonoBehaviour
 {
 
     public static int checkPointCount = 0;
+    public static Transform CurrentTarget{ get; private set; }
 
     private static CheckPoint Instance;
     private GameObject[] Checkpoint;
@@ -11,7 +12,12 @@ public class CheckPoint : MonoBehaviour
 
     private void Awake()
     {
+        if(Instance = this)
+        {
+            CurrentTarget = null;
+        }
         Instance = this;
+
     }
 
 
@@ -37,7 +43,7 @@ public class CheckPoint : MonoBehaviour
         if(dog.hasPackage)
         {
             dog.SetHasPackage(false);
-            TurningOnCheckPoint();
+
             checkPointCount++;
             SelectRandCheckPoint();
         }
@@ -45,26 +51,37 @@ public class CheckPoint : MonoBehaviour
     }
     private void SelectRandCheckPoint()
     {
-        if (Checkpoint.Length <= 1)
+        CheckPoint[] checkpoints = FindObjectsByType<CheckPoint>(FindObjectsSortMode.None);
+        int candidateCount = 0;
+        foreach(CheckPoint checkpoint in checkpoints)
+        {
+            if(checkpoint != this)
+            {
+                candidateCount++;
+            }
+        }
+
+        if(candidateCount == 0)
+        {
+            CurrentTarget = transform;
             return;
-        if(currentIndex != -1)
-        {
-            Checkpoint[currentIndex].SetActive(false);
         }
-        int newIndex;
-        do{
-            newIndex = Random.Range(0, Checkpoint.Length);
-        }
-        while (newIndex == currentIndex);
-        currentIndex = Random.Range(0, Checkpoint.Length);
-        Checkpoint[currentIndex].SetActive(true);
-    }
-    private void TurningOnCheckPoint()
-    {
-        for(int i = 0; i < transform.childCount; i++)
+
+        int selectedIndex = Random.Range(0, candidateCount);
+        foreach(CheckPoint checkpoint in checkpoints)
         {
-            Checkpoint[i] = transform.GetChild(i).gameObject;
-            Checkpoint[i].SetActive(true);
+            if(checkpoint != this)
+            {
+                if(selectedIndex == 0)
+                {
+                    CurrentTarget = checkpoint.transform;
+                    return;
+                }
+                selectedIndex--;
+            }
         }
     }
+
+        
+    
 }

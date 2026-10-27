@@ -138,6 +138,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dec221cfd61fb449806509afd9119a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNPCMove
+  fvx_explosionsPrefab: {fileID: 1156980046858382897, guid: 2dc74530010f7c044bb63bf57a32dcff, type: 3}
   speed: 12
   acceleration: 2.5
   deceleration: 1.5
