@@ -9579,7 +9579,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5953963856197455124, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6053148125439782554, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
       propertyPath: m_RaycastTarget
@@ -9662,6 +9662,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+--- !u!114 &675912467 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1632819739765432006, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+  m_PrefabInstance: {fileID: 675912466}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1aecfc2807f68b4e87cd53997398db5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Timer
 --- !u!1001 &679087765
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14141,6 +14152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dec221cfd61fb449806509afd9119a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNPCMove
+  fvx_explosionsPrefab: {fileID: 0}
   speed: 12
   acceleration: 2
   deceleration: 4
@@ -19854,11 +19866,16 @@ MonoBehaviour:
   enemyPrefab: {fileID: 0}
   spawnDistance: 12
   spawnHeight: 0
+  driftSpeed: 8
+  approachDescentAmount: 0.7
+  finalDescentSpeed: 3
+  landingHeight: 0
+  approachDistance: 3
   speedMultiplier: 1.15
   minimumChaseSpeed: 5
-  timer: {fileID: 0}
-  playerMovement: {fileID: 0}
-  player: {fileID: 0}
+  timer: {fileID: 675912467}
+  playerMovement: {fileID: 1399667635}
+  player: {fileID: 1399667636}
   isEnemy: 0
 --- !u!1 &1402578747
 GameObject:
@@ -29300,6 +29317,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dec221cfd61fb449806509afd9119a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNPCMove
+  fvx_explosionsPrefab: {fileID: 0}
   speed: 12
   acceleration: 2
   deceleration: 4
