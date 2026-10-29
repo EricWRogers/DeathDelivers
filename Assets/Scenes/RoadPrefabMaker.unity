@@ -481,6 +481,7 @@ MonoBehaviour:
   forceNode: []
   raycastDistance: 70
   raycastHeight: 0.5
+  disableRaycast: 0
   ignoreForward: 0
   ignoreBackward: 0
   ignoreRight: 0

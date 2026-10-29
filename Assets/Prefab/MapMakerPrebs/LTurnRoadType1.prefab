@@ -280,13 +280,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
-  forceNode: {fileID: 0}
-  ignoreNodes: []
+  forceNode:
+  - {fileID: 0}
   raycastDistance: 70
   raycastHeight: 0.5
+  disableRaycast: 0
   ignoreForward: 1
   ignoreBackward: 0
-  ignoreRight: 0
+  ignoreRight: 1
   ignoreLeft: 1
 --- !u!23 &5507326062289974872
 MeshRenderer:
@@ -1019,12 +1020,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
-  forceNode: {fileID: 0}
-  ignoreNodes: []
+  forceNode:
+  - {fileID: 0}
   raycastDistance: 70
   raycastHeight: 0.5
+  disableRaycast: 0
   ignoreForward: 1
-  ignoreBackward: 0
+  ignoreBackward: 1
   ignoreRight: 0
   ignoreLeft: 1
 --- !u!23 &8134878875040300205

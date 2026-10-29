@@ -1,10 +1,10 @@
+
 using UnityEngine;
 
 public class CarNPCMove : MonoBehaviour
 {
     [Header("Explosion Effect")]
     [SerializeField] private GameObject fvx_explosionsPrefab;
-
 
     [Header("Movement")]
     public float speed = 5f;
@@ -39,6 +39,9 @@ public class CarNPCMove : MonoBehaviour
     private float scaredTimer;
     private float currentSpeed;
 
+    // Fixed world height for normal driving.
+    private float drivingHeight;
+
     // Bézier curve points.
     private Vector3 curveStart;
     private Vector3 curveControl1;
@@ -50,10 +53,18 @@ public class CarNPCMove : MonoBehaviour
     private float cornerFactor = 1f;
     private Transform previousTarget;
 
+    private bool isDestroyed;
+
     private void Start()
     {
         currentSpeed = speed;
         previousTarget = targetPoint;
+
+        // Remember the car's initial height.
+        drivingHeight = transform.position.y;
+
+        if (targetPoint != null)
+            BuildCurve();
     }
 
     private void Update()
@@ -66,7 +77,7 @@ public class CarNPCMove : MonoBehaviour
             return;
         }
 
-        // A new target is selected when the car reaches a node.
+        // Build a new curve when the target node changes.
         if (targetPoint != previousTarget)
         {
             previousTarget = targetPoint;
@@ -82,7 +93,11 @@ public class CarNPCMove : MonoBehaviour
     private void BuildCurve()
     {
         curveStart = transform.position;
+        curveStart.y = drivingHeight;
+
         curveEnd = targetPoint.position;
+        curveEnd.y = drivingHeight;
+
         curveProgress = 0f;
 
         Vector3 forward = transform.forward;
@@ -106,14 +121,16 @@ public class CarNPCMove : MonoBehaviour
         else
             forward.Normalize();
 
-        // The curve begins along the car's current heading
-        // and gradually bends toward the next node.
+        // Create a smooth curve toward the next node.
         float handle = Mathf.Min(turnRadius, distance * 0.45f);
 
         curveControl1 = curveStart + forward * handle;
         curveControl2 = curveEnd - outgoing * handle;
 
-        // Approximate curve length for consistent movement speed.
+        // Keep every curve point at the same world height.
+        curveControl1.y = drivingHeight;
+        curveControl2.y = drivingHeight;
+
         curveLength =
             Vector3.Distance(curveStart, curveControl1) +
             Vector3.Distance(curveControl1, curveControl2) +
@@ -151,6 +168,7 @@ public class CarNPCMove : MonoBehaviour
             3f * t * t * (curveEnd - curveControl2);
 
         tangent.y = 0f;
+
         return tangent.normalized;
     }
 
@@ -159,14 +177,17 @@ public class CarNPCMove : MonoBehaviour
         if (targetPoint == null)
         {
             currentSpeed = Mathf.MoveTowards(
-                currentSpeed, 0f, deceleration * dt);
+                currentSpeed,
+                0f,
+                deceleration * dt
+            );
+
             return;
         }
 
         float remainingDistance =
             Vector3.Distance(transform.position, curveEnd);
 
-        // Brake approaching the end of the curve.
         float brakingFactor = Mathf.Clamp01(
             remainingDistance / Mathf.Max(slowDownDistance, 0.1f)
         );
@@ -179,15 +200,20 @@ public class CarNPCMove : MonoBehaviour
             : acceleration;
 
         currentSpeed = Mathf.MoveTowards(
-            currentSpeed, desiredSpeed, rate * dt);
+            currentSpeed,
+            desiredSpeed,
+            rate * dt
+        );
 
-        // Advance along the curved path.
+        // Advance along the curve.
         curveProgress += currentSpeed * dt / curveLength;
         curveProgress = Mathf.Clamp01(curveProgress);
 
         Vector3 nextPosition = EvaluateCurve(curveProgress);
         Vector3 tangent = EvaluateCurveDirection(curveProgress);
 
+        // Lock the car to its original world height.
+        nextPosition.y = drivingHeight;
         transform.position = nextPosition;
 
         // Rotate to face the direction of travel.
@@ -202,10 +228,13 @@ public class CarNPCMove : MonoBehaviour
             );
         }
 
-        // Finish precisely at the target node.
+        // Finish at the target without changing height.
         if (curveProgress >= 1f)
         {
-            transform.position = curveEnd;
+            Vector3 finalPosition = curveEnd;
+            finalPosition.y = drivingHeight;
+
+            transform.position = finalPosition;
         }
     }
 
@@ -232,7 +261,10 @@ public class CarNPCMove : MonoBehaviour
         scaredTimer += dt;
 
         currentSpeed = Mathf.MoveTowards(
-            currentSpeed, speed, acceleration * dt);
+            currentSpeed,
+            speed,
+            acceleration * dt
+        );
 
         transform.Translate(
             Vector3.forward * currentSpeed * dt,
@@ -243,6 +275,11 @@ public class CarNPCMove : MonoBehaviour
             Vector3.up * scaredTurnAmount * dt,
             Space.Self
         );
+
+        // Keep the car at its fixed height while scared.
+        Vector3 position = transform.position;
+        position.y = drivingHeight;
+        transform.position = position;
 
         if (chaosTimer >= chaosTurningAmount)
         {
@@ -257,8 +294,6 @@ public class CarNPCMove : MonoBehaviour
             scaredTimer = 0f;
             isScared = false;
 
-            // Rebuild the path from the car's new position
-            // when normal driving resumes.
             if (targetPoint != null)
             {
                 previousTarget = targetPoint;
@@ -266,11 +301,11 @@ public class CarNPCMove : MonoBehaviour
             }
         }
     }
-    private bool isDestroyed = false;
+
     private void Explode()
     {
         if (isDestroyed)
-        return;
+            return;
 
         isDestroyed = true;
 
@@ -281,23 +316,17 @@ public class CarNPCMove : MonoBehaviour
                 transform.position,
                 Quaternion.identity
             );
-            
-            
-             Debug.Log("Explosion prefab spawned!");
-            Destroy(explosion, 5f);
 
+            Debug.Log("Explosion prefab spawned!");
+            Destroy(explosion, 5f);
+        }
+        else
+        {
+            Debug.LogWarning("Explosion prefab is NOT assigned!");
         }
 
-        else
-         {
-        Debug.LogWarning("Explosion prefab is NOT assigned!");
-         }
-                
-    
         Destroy(gameObject);
     }
-
-
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -314,9 +343,9 @@ public class CarNPCMove : MonoBehaviour
 
             Explode();
         }
-
-       else if (collision.gameObject.CompareTag("Wall"))
-
+        else if (collision.gameObject.CompareTag("Wall"))
+        {
             Explode();
+        }
     }
 }

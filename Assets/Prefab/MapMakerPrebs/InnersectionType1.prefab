@@ -61,8 +61,9 @@ MonoBehaviour:
   - {fileID: 2886226318586992689}
   raycastDistance: 70
   raycastHeight: 0.5
+  disableRaycast: 0
   ignoreForward: 1
-  ignoreBackward: 0
+  ignoreBackward: 1
   ignoreRight: 0
   ignoreLeft: 1
 --- !u!23 &6146707590915552081
@@ -391,7 +392,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -2.5, y: 1, z: -2.5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.8, y: 1, z: 0.8}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4043852481994120911}
@@ -421,6 +422,7 @@ MonoBehaviour:
   - {fileID: 0}
   raycastDistance: 70
   raycastHeight: 0.5
+  disableRaycast: 1
   ignoreForward: 1
   ignoreBackward: 0
   ignoreRight: 1
@@ -670,10 +672,11 @@ MonoBehaviour:
   - {fileID: 7827484495415660944}
   raycastDistance: 70
   raycastHeight: 0.5
+  disableRaycast: 0
   ignoreForward: 1
   ignoreBackward: 0
   ignoreRight: 1
-  ignoreLeft: 0
+  ignoreLeft: 1
 --- !u!23 &1253963614550049807
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -888,7 +891,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 2.5, y: 1, z: -2.5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.8, y: 1, z: 0.8}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4043852481994120911}
@@ -918,6 +921,7 @@ MonoBehaviour:
   - {fileID: 0}
   raycastDistance: 70
   raycastHeight: 0.5
+  disableRaycast: 1
   ignoreForward: 1
   ignoreBackward: 1
   ignoreRight: 0
@@ -1136,7 +1140,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 2.5, y: 1, z: 2.5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.8, y: 1, z: 0.8}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4043852481994120911}
@@ -1165,6 +1169,7 @@ MonoBehaviour:
   forceNode: []
   raycastDistance: 70
   raycastHeight: 0.5
+  disableRaycast: 1
   ignoreForward: 0
   ignoreBackward: 1
   ignoreRight: 1
@@ -1655,7 +1660,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -2.5, y: 1, z: 2.5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.8, y: 1, z: 0.8}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4043852481994120911}
@@ -1685,6 +1690,7 @@ MonoBehaviour:
   - {fileID: 0}
   raycastDistance: 70
   raycastHeight: 0.5
+  disableRaycast: 1
   ignoreForward: 1
   ignoreBackward: 1
   ignoreRight: 1
@@ -1934,7 +1940,8 @@ MonoBehaviour:
   - {fileID: 6096650888130932712}
   raycastDistance: 70
   raycastHeight: 0.5
-  ignoreForward: 0
+  disableRaycast: 0
+  ignoreForward: 1
   ignoreBackward: 1
   ignoreRight: 1
   ignoreLeft: 0
@@ -2071,9 +2078,10 @@ MonoBehaviour:
   - {fileID: 2886226318586992689}
   raycastDistance: 70
   raycastHeight: 0.5
+  disableRaycast: 0
   ignoreForward: 0
   ignoreBackward: 1
-  ignoreRight: 0
+  ignoreRight: 1
   ignoreLeft: 1
 --- !u!23 &3136838666725528374
 MeshRenderer:
