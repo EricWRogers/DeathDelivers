@@ -833,8 +833,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &62913431
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1376,8 +1382,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &143899588
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -2379,8 +2391,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &193356276
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -2743,8 +2761,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &210975634
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -3111,8 +3135,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &226374664
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -3943,8 +3973,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &290859374
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -4142,8 +4178,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &296109562
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -4272,8 +4314,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &299629683
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -5024,8 +5072,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &345534871
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -5383,8 +5437,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &359674327
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -5513,8 +5573,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &361748697
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -5528,99 +5594,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7910807792298225361, guid: e7c24fb4f5cc39d4e99dfaa713003c0a, type: 3}
   m_PrefabInstance: {fileID: 1585717268}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &386115719
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1179579585}
-    m_Modifications:
-    - target: {fileID: 2778304206546029371, guid: b60952434a65a2049a1936895bbbe5a9, type: 3}
-      propertyPath: m_Name
-      value: GlobalService
-      objectReference: {fileID: 0}
-    - target: {fileID: 3126030848379263156, guid: b60952434a65a2049a1936895bbbe5a9, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1.0762694
-      objectReference: {fileID: 0}
-    - target: {fileID: 3126030848379263156, guid: b60952434a65a2049a1936895bbbe5a9, type: 3}
-      propertyPath: m_LocalScale.y
-      value: -0.0000071816135
-      objectReference: {fileID: 0}
-    - target: {fileID: 3126030848379263156, guid: b60952434a65a2049a1936895bbbe5a9, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1.2408563
-      objectReference: {fileID: 0}
-    - target: {fileID: 3126030848379263156, guid: b60952434a65a2049a1936895bbbe5a9, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 2.041
-      objectReference: {fileID: 0}
-    - target: {fileID: 3126030848379263156, guid: b60952434a65a2049a1936895bbbe5a9, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 4.667
-      objectReference: {fileID: 0}
-    - target: {fileID: 3126030848379263156, guid: b60952434a65a2049a1936895bbbe5a9, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -3.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 5639434548186148488, guid: b60952434a65a2049a1936895bbbe5a9, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 2.5745332
-      objectReference: {fileID: 0}
-    - target: {fileID: 5639434548186148488, guid: b60952434a65a2049a1936895bbbe5a9, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1.1232141
-      objectReference: {fileID: 0}
-    - target: {fileID: 5639434548186148488, guid: b60952434a65a2049a1936895bbbe5a9, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.82100034
-      objectReference: {fileID: 0}
-    - target: {fileID: 5639434548186148488, guid: b60952434a65a2049a1936895bbbe5a9, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 5.1099
-      objectReference: {fileID: 0}
-    - target: {fileID: 5639434548186148488, guid: b60952434a65a2049a1936895bbbe5a9, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 5.6899
-      objectReference: {fileID: 0}
-    - target: {fileID: 5639434548186148488, guid: b60952434a65a2049a1936895bbbe5a9, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.95479
-      objectReference: {fileID: 0}
-    - target: {fileID: 5639434548186148488, guid: b60952434a65a2049a1936895bbbe5a9, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: -0.000000014119465
-      objectReference: {fileID: 0}
-    - target: {fileID: 5639434548186148488, guid: b60952434a65a2049a1936895bbbe5a9, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.0000002093346
-      objectReference: {fileID: 0}
-    - target: {fileID: 5639434548186148488, guid: b60952434a65a2049a1936895bbbe5a9, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0.070590585
-      objectReference: {fileID: 0}
-    - target: {fileID: 5639434548186148488, guid: b60952434a65a2049a1936895bbbe5a9, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0.9975054
-      objectReference: {fileID: 0}
-    - target: {fileID: 5639434548186148488, guid: b60952434a65a2049a1936895bbbe5a9, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 188.096
-      objectReference: {fileID: 0}
-    - target: {fileID: 5639434548186148488, guid: b60952434a65a2049a1936895bbbe5a9, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 180
-      objectReference: {fileID: 0}
-    - target: {fileID: 5639434548186148488, guid: b60952434a65a2049a1936895bbbe5a9, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: b60952434a65a2049a1936895bbbe5a9, type: 3}
 --- !u!1 &399041520
 GameObject:
   m_ObjectHideFlags: 0
@@ -6029,8 +6002,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &423561335
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -6426,8 +6405,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &443274997
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -7046,8 +7031,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &472389619
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -7261,6 +7252,17 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 503633540}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &504812971 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1632819739765432006, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+  m_PrefabInstance: {fileID: 675912466}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1aecfc2807f68b4e87cd53997398db5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Timer
 --- !u!1 &506025013
 GameObject:
   m_ObjectHideFlags: 0
@@ -8391,8 +8393,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &583322586
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -8638,8 +8646,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &592949127
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -8880,8 +8894,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &620256766
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -9137,8 +9157,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &632955535
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -9712,8 +9738,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &658313614
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -10463,8 +10495,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &687713827
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -11463,8 +11501,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &772083161
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -11593,8 +11637,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &772832682
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -12125,8 +12175,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &797357494
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -12255,8 +12311,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &808488948
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -13573,8 +13635,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &889332080
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -14463,8 +14531,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &923748206
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -15175,8 +15249,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &1025943298
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -15534,8 +15614,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &1057986557
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -16697,8 +16783,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &1122340610
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -16827,8 +16919,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &1122740753
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -17195,11 +17293,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!4 &1179579585 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7846369558678536826, guid: 261139e581d272c4eb1548fecc11e25b, type: 3}
-  m_PrefabInstance: {fileID: 1347968900}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1183097677
 GameObject:
   m_ObjectHideFlags: 0
@@ -17719,8 +17812,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &1217765369
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -17849,8 +17948,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &1224054581
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -17979,8 +18084,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &1226811723
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -19483,8 +19594,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &1334600567
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -19841,46 +19958,27 @@ PrefabInstance:
       propertyPath: m_Name
       value: DogV2
       objectReference: {fileID: 0}
-    - target: {fileID: 5160835334042633048, guid: 261139e581d272c4eb1548fecc11e25b, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.12398511
-      objectReference: {fileID: 0}
-    - target: {fileID: 5160835334042633048, guid: 261139e581d272c4eb1548fecc11e25b, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.12398511
-      objectReference: {fileID: 0}
-    - target: {fileID: 5160835334042633048, guid: 261139e581d272c4eb1548fecc11e25b, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.12398511
-      objectReference: {fileID: 0}
-    - target: {fileID: 6069684094582717448, guid: 261139e581d272c4eb1548fecc11e25b, type: 3}
-      propertyPath: m_CullingMask.m_Bits
-      value: 251
-      objectReference: {fileID: 0}
-    - target: {fileID: 7563870610919656571, guid: 261139e581d272c4eb1548fecc11e25b, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.161
-      objectReference: {fileID: 0}
-    - target: {fileID: 8697410627250812692, guid: 261139e581d272c4eb1548fecc11e25b, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
+    - target: {fileID: 4467551206277432516, guid: 261139e581d272c4eb1548fecc11e25b, type: 3}
+      propertyPath: timer
       value: 
-      objectReference: {fileID: 2100000, guid: 015793d0e773edc40a442e2507ccda9f, type: 2}
+      objectReference: {fileID: 504812971}
+    - target: {fileID: 4467551206277432516, guid: 261139e581d272c4eb1548fecc11e25b, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1399667636}
+    - target: {fileID: 4467551206277432516, guid: 261139e581d272c4eb1548fecc11e25b, type: 3}
+      propertyPath: enemyPrefab
+      value: 
+      objectReference: {fileID: 5514110787977132193, guid: 01bf97ed59f210d4a94e020500e258c0, type: 3}
+    - target: {fileID: 4467551206277432516, guid: 261139e581d272c4eb1548fecc11e25b, type: 3}
+      propertyPath: playerMovement
+      value: 
+      objectReference: {fileID: 1399667635}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 7846369558678536826, guid: 261139e581d272c4eb1548fecc11e25b, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1616750310}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8391964171683974963, guid: 261139e581d272c4eb1548fecc11e25b, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1399667637}
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 261139e581d272c4eb1548fecc11e25b, type: 3}
---- !u!1 &1347968901 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8391964171683974963, guid: 261139e581d272c4eb1548fecc11e25b, type: 3}
-  m_PrefabInstance: {fileID: 1347968900}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1347993871
 GameObject:
   m_ObjectHideFlags: 0
@@ -20001,8 +20099,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &1347993876
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -20498,8 +20602,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &1363420922
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -20626,7 +20736,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1202569380718555690, guid: 261139e581d272c4eb1548fecc11e25b, type: 3}
   m_PrefabInstance: {fileID: 1347968900}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1347968901}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a8f8256f9ea0c6540922645c33809b4a, type: 3}
@@ -20637,32 +20747,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 494575510615140915, guid: 261139e581d272c4eb1548fecc11e25b, type: 3}
   m_PrefabInstance: {fileID: 1347968900}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1399667637
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1347968901}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f52aefe517502b8448020ea85de1bd48, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MegaDeath
-  enemyPrefab: {fileID: 0}
-  spawnDistance: 12
-  spawnHeight: 0
-  driftSpeed: 8
-  approachDescentAmount: 0.7
-  finalDescentSpeed: 3
-  landingHeight: 0
-  approachDistance: 3
-  speedMultiplier: 1.15
-  minimumChaseSpeed: 5
-  timer: {fileID: 0}
-  playerMovement: {fileID: 0}
-  player: {fileID: 0}
-  isEnemy: 0
 --- !u!1 &1402578747
 GameObject:
   m_ObjectHideFlags: 0
@@ -20783,8 +20867,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &1402578752
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -20985,8 +21075,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &1403815119
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -21232,8 +21328,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &1419304544
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -21658,8 +21760,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &1424923693
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -21972,8 +22080,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &1459046847
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -22215,8 +22329,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &1482339554
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -23300,8 +23420,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &1549106887
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -23487,8 +23613,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &1560940184
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -23729,8 +23861,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &1570628540
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -24684,11 +24822,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1613694979}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!4 &1616750310 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5639434548186148488, guid: b60952434a65a2049a1936895bbbe5a9, type: 3}
-  m_PrefabInstance: {fileID: 386115719}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1622848113
 GameObject:
   m_ObjectHideFlags: 0
@@ -24921,8 +25054,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &1624026632
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -25051,8 +25190,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &1632635176
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -25351,8 +25496,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &1656942570
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -26396,8 +26547,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &1744919394
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -27430,8 +27587,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &1805871310
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -27637,8 +27800,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &1823036221
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -28092,8 +28261,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &1841697163
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -29031,8 +29206,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &1899573401
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -29520,8 +29701,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &1929054788
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -29762,8 +29949,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &1940532753
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -30116,8 +30309,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &1966758527
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -30643,8 +30842,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &1999952340
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -31182,8 +31387,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &2020454876
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -31496,8 +31707,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &2034121732
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -32825,8 +33042,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarNode
   connectedNodes: []
+  forceNode: []
   raycastDistance: 10
   raycastHeight: 0.5
+  disableRaycast: 0
+  ignoreForward: 0
+  ignoreBackward: 0
+  ignoreRight: 0
+  ignoreLeft: 0
 --- !u!33 &2123460823
 MeshFilter:
   m_ObjectHideFlags: 0
