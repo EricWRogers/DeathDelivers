@@ -30,6 +30,7 @@ public class CheckPoint : MonoBehaviour
             Checkpoint[i].SetActive(false);
         }
     }
+
     private void OnTriggerEnter(Collider other){
         DogMovement dog = other.GetComponentInParent<DogMovement>();
             if(dog != null){
@@ -43,6 +44,11 @@ public class CheckPoint : MonoBehaviour
         if(dog.hasPackage)
         {
             dog.SetHasPackage(false);
+            for(int i = 0; i < transform.childCount; i++)
+            {
+                Checkpoint[i] = transform.GetChild(i).gameObject;
+                Checkpoint[i].SetActive(true);
+            }
 
             checkPointCount++;
             SelectRandCheckPoint();
