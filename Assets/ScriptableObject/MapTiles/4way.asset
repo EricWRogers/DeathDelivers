@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1c8c4cf7a494ca47be77f348a44cdeb, type: 3}
+  m_Name: 4way
+  m_EditorClassIdentifier: Assembly-CSharp::MapTile
+  tileName: City-Fourway
+  prefab: {fileID: 7031170087381867483, guid: 1b8d3e32607949b4383e0e8b1332dd4b, type: 3}
+  size: {x: 1, y: 1, z: 1}
+  canRotate: 1
+  canStack: 0

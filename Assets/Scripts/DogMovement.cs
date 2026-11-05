@@ -1,3 +1,4 @@
+
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -33,11 +34,12 @@ public class DogMovement : MonoBehaviour
     public LayerMask groundLayer;
     public float groundAngleLerpSpeed = 15f;
 
-    [Header("Quick Turn")]
-    public float quickTurnDuration = 0.25f;
-    public float quickTurnMultiplier = 1f;
-    public Transform AnchorL;
-    public Transform AnchorR;
+    [Header("Drift")]
+    [Range(0f, 1f)]
+    public float driftForwardMultiplier = 0.9f;
+
+    [Range(0f, 1f)]
+    public float driftSideMultiplier = 0.35f;
 
     [Header("Air Turning")]
     public float maxAirTurnAngle = 90f;
@@ -60,15 +62,12 @@ public class DogMovement : MonoBehaviour
     private float airTurnAngle;
     private float airTurnInput;
 
-    private bool grounded, wasGrounded, quickTurning;
-    private float quickTurnDirection;
+    private bool grounded, wasGrounded, drifting;
+    private float driftDirection;
 
+    private Vector3 driftForward;
     private Vector3 groundNormal = Vector3.up;
     private Vector3 airForward;
-
-    private Transform activeAnchor;
-    private Vector3 anchorPosition;
-    private Vector3 anchorOffset;
 
     private Collider dogCollider;
     private Vector3 startScale;
@@ -105,28 +104,7 @@ public class DogMovement : MonoBehaviour
         GroundStateChange();
 
         UpdatePowerups(dt);
-        HandleQuickTurn();
-
-        if (quickTurning)
-        {
-            if (!grounded)
-                EndQuickTurn();
-            else if (Keyboard.current.spaceKey.isPressed)
-            {
-                DoQuickTurn();
-                return;
-            }
-            else if (Gamepad.current != null)
-            {
-                if (Keyboard.current.spaceKey.isPressed || Gamepad.current.rightTrigger.isPressed || Gamepad.current.leftTrigger.isPressed)
-                {
-                    DoQuickTurn();
-                    return;
-                }
-            }
-            else
-                EndQuickTurn();
-        }
+        HandleDrift();
 
         Move(dt);
         Turn(dt);
@@ -135,6 +113,65 @@ public class DogMovement : MonoBehaviour
             GroundUpright(dt);
         else
             AirUpright(dt);
+    }
+
+
+    void HandleDrift()
+    {
+        bool wasDrifting = drifting;
+
+        drifting = false;
+        driftDirection = 0f;
+
+        if (Keyboard.current == null || !grounded)
+            return;
+
+        bool driftPressed = Keyboard.current.spaceKey.isPressed;
+
+        if (Gamepad.current != null)
+        {
+            driftPressed |=
+                Gamepad.current.rightTrigger.isPressed ||
+                Gamepad.current.leftTrigger.isPressed;
+        }
+
+        if (!driftPressed)
+            return;
+
+        float input = 0f;
+
+        if (Keyboard.current.aKey.isPressed)
+            input = -1f;
+
+        if (Keyboard.current.dKey.isPressed)
+            input = 1f;
+
+        if (Gamepad.current != null)
+        {
+            Vector2 leftStick = Gamepad.current.leftStick.ReadValue();
+
+            if (leftStick.x < -0.1f)
+                input = -1f;
+
+            if (leftStick.x > 0.1f)
+                input = 1f;
+        }
+
+        if (Mathf.Abs(input) < 0.1f)
+            return;
+
+        // Capture the original forward direction when the drift begins.
+        if (!wasDrifting)
+        {
+            driftForward =
+                Vector3.ProjectOnPlane(
+                    transform.forward,
+                    groundNormal
+                ).normalized;
+        }
+
+        drifting = true;
+        driftDirection = input;
     }
 
 
@@ -156,18 +193,17 @@ public class DogMovement : MonoBehaviour
 
         bool wKey = Keyboard.current.wKey.isPressed;
         bool sKey = Keyboard.current.sKey.isPressed;
+
         if (Gamepad.current != null)
         {
             wKey = Gamepad.current.yButton.isPressed;
             sKey = Gamepad.current.aButton.isPressed;
+
             if (wKey == false)
-            {
                 wKey = Keyboard.current.wKey.isPressed;
-            }
+
             if (sKey == false)
-            {
                 sKey = Keyboard.current.sKey.isPressed;
-            }
         }
 
         float target = 0f;
@@ -212,12 +248,31 @@ public class DogMovement : MonoBehaviour
         if (currentSpeed == 0f)
             return;
 
-        Vector3 direction = grounded
-            ? Vector3.ProjectOnPlane(transform.forward, groundNormal).normalized
-            : airForward;
+        Vector3 direction = drifting && grounded
+            ? driftForward
+            : grounded
+                ? Vector3.ProjectOnPlane(
+                    transform.forward,
+                    groundNormal
+                ).normalized
+                : airForward;
 
-        MoveWithWalls(direction * currentSpeed * dt);
+        Vector3 movement = direction * currentSpeed;
+
+        if (drifting && grounded)
+        {
+            Vector3 sidewaysDirection =
+                Vector3.Cross(groundNormal, direction).normalized;
+
+            movement =
+                direction * currentSpeed * driftForwardMultiplier +
+                sidewaysDirection * currentSpeed *
+                driftDirection * driftSideMultiplier;
+        }
+
+        MoveWithWalls(movement * dt);
     }
+
 
     void Turn(float dt)
     {
@@ -225,13 +280,15 @@ public class DogMovement : MonoBehaviour
             return;
 
         targetTurn = 0f;
+
         if (Gamepad.current != null)
         {
             Vector2 leftStick = Gamepad.current.leftStick.ReadValue();
-            if (Keyboard.current.aKey.isPressed || (Gamepad.current != null && leftStick.x < -0.1f) )
-            targetTurn = -dogBase.turnSpeed;
 
-            if (Keyboard.current.dKey.isPressed || (Gamepad.current != null && leftStick.x > 0.1f) )
+            if (Keyboard.current.aKey.isPressed || leftStick.x < -0.1f)
+                targetTurn = -dogBase.turnSpeed;
+
+            if (Keyboard.current.dKey.isPressed || leftStick.x > 0.1f)
                 targetTurn = dogBase.turnSpeed;
         }
 
@@ -252,6 +309,7 @@ public class DogMovement : MonoBehaviour
         else
             AirTurn(dt);
     }
+
 
     void GroundTurn(float dt)
     {
@@ -428,11 +486,9 @@ public class DogMovement : MonoBehaviour
             airTurnAngle = 0f;
             airTurnInput = 0f;
             airForward = HorizontalForward();
+            drifting = false;
 
             ForceAirUpright();
-
-            if (quickTurning)
-                EndQuickTurn();
         }
 
         wasGrounded = grounded;
@@ -515,109 +571,6 @@ public class DogMovement : MonoBehaviour
             );
     }
 
-    void HandleQuickTurn()
-    {
-        if (Keyboard.current == null)
-            return;
-
-        if (quickTurning && !grounded)
-        {
-            EndQuickTurn();
-            return;
-        }
-
-        if (quickTurning)
-            return;
-
-        if (Gamepad.current != null)
-        {
-            if (!grounded || (!Keyboard.current.spaceKey.isPressed && !Gamepad.current.rightTrigger.isPressed && !Gamepad.current.leftTrigger.isPressed))
-            return;
-            Vector2 leftStick = Gamepad.current.leftStick.ReadValue();
-        
-            if (Keyboard.current.dKey.isPressed || (Gamepad.current != null && leftStick.x > 0.1f))
-                StartQuickTurn(1f);
-            else if (Keyboard.current.aKey.isPressed || (Gamepad.current != null && leftStick.x < -0.1f))
-                StartQuickTurn(-1f);
-        }
-        else
-        {
-            if (!grounded || !Keyboard.current.spaceKey.isPressed)
-                return;
-
-            if (Keyboard.current.dKey.isPressed)
-                StartQuickTurn(1f);
-            else if (Keyboard.current.aKey.isPressed)
-                StartQuickTurn(-1f);
-        }
-    }
-
-
-    void StartQuickTurn(float direction)
-    {
-        activeAnchor =
-            direction > 0f ? AnchorR : AnchorL;
-
-        if (!activeAnchor)
-            return;
-
-        quickTurning = true;
-        quickTurnDirection = direction;
-        turn = 0f;
-
-        anchorPosition = activeAnchor.position;
-        anchorOffset = transform.position - anchorPosition;
-    }
-
-
-    void DoQuickTurn()
-    {
-        if (!grounded || !activeAnchor)
-        {
-            EndQuickTurn();
-            return;
-        }
-
-        float rotationAmount =
-            quickTurnDirection *
-            speed *
-            dogBase.turnSpeed *
-            quickTurnMultiplier *
-            Time.deltaTime;
-
-        Quaternion rotation =
-            Quaternion.AngleAxis(
-                rotationAmount,
-                groundNormal
-            );
-
-        Vector3 target =
-            anchorPosition +
-            rotation * anchorOffset;
-
-        Vector3 movement =
-            target - transform.position;
-
-        MoveWithWalls(movement);
-
-        anchorOffset =
-            transform.position - anchorPosition;
-
-        if (movement.sqrMagnitude > 0.000001f)
-            transform.rotation =
-                rotation * transform.rotation;
-
-        GroundUpright(Time.deltaTime);
-    }
-
-
-    void EndQuickTurn()
-    {
-        quickTurning = false;
-        activeAnchor = null;
-        turn = 0f;
-    }
-
 
     void UpdatePowerups(float dt)
     {
@@ -643,14 +596,23 @@ public class DogMovement : MonoBehaviour
         {
             boneTimer -= dt;
 
-            transform.localScale = Vector3.Lerp(transform.localScale, Vector3.one * boneScale, dt * 5f);
+            transform.localScale = Vector3.Lerp(
+                transform.localScale,
+                Vector3.one * boneScale,
+                dt * 5f
+            );
         }
         else
         {
             if (transform.localScale != startScale)
-            transform.localScale = Vector3.Lerp(startScale, Vector3.one, dt * 5f);
+                transform.localScale = Vector3.Lerp(
+                    startScale,
+                    Vector3.one,
+                    dt * 5f
+                );
         }
     }
+
 
     void MoveWithWalls(Vector3 movement)
     {
@@ -817,7 +779,7 @@ public class DogMovement : MonoBehaviour
     }
 
 
-    public bool IsQuickTurning() => quickTurning;
+    public bool IsDrifting() => drifting;
 
     public float GetCurrentSpeed() => currentSpeed;
 
@@ -888,6 +850,8 @@ public class DogMovement : MonoBehaviour
         boneTimer = duration;
         boneScale = scale;
     }
+
+
     public void SetHasPackage(bool hasPackage)
     {
         this.hasPackage = hasPackage;

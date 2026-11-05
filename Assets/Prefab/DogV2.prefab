@@ -1,36 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2947863058049787342
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3484417896887461715}
-  m_Layer: 0
-  m_Name: AnchorL
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3484417896887461715
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2947863058049787342}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.25, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 494575510615140915}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3122885275574185897
 GameObject:
   m_ObjectHideFlags: 0
@@ -222,37 +191,8 @@ MonoBehaviour:
   cameraTurnAmount: 5
   cameraSideShift: 0.5
   cameraSmoothness: 8
---- !u!1 &6219040439819028855
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5010284757817343217}
-  m_Layer: 0
-  m_Name: AnchorR
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5010284757817343217
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6219040439819028855}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.25, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 494575510615140915}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  driftCameraTurnAmount: -40
+  flipCameraSmoothness: 20
 --- !u!1 &6860203620349868901
 GameObject:
   m_ObjectHideFlags: 0
@@ -436,8 +376,6 @@ Transform:
   m_LocalScale: {x: 0.75, y: 1.5, z: 2.25}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5010284757817343217}
-  - {fileID: 3484417896887461715}
   - {fileID: 3004374430664307358}
   m_Father: {fileID: 2506007820781133432}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -546,10 +484,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   groundAngleLerpSpeed: 15
-  quickTurnDuration: 0.25
-  quickTurnMultiplier: 0.5
-  AnchorL: {fileID: 3484417896887461715}
-  AnchorR: {fileID: 5010284757817343217}
+  driftAngle: 40
   maxAirTurnAngle: 75
   airTurnSmoothness: 3
   airUprightSmoothness: 25

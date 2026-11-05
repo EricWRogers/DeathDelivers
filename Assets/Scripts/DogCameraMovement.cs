@@ -1,4 +1,6 @@
+
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class DogCameraMovement : MonoBehaviour
 {
@@ -15,8 +17,16 @@ public class DogCameraMovement : MonoBehaviour
     public float cameraSideShift = 0.5f;
     public float cameraSmoothness = 8f;
 
+    [Header("Drift Camera")]
+    public float driftCameraTurnAmount = 15f;
+
+    [Header("Camera Flip")]
+    public float flipCameraSmoothness = 8f;
+
     private Quaternion cameraBaseRotation;
     private Vector3 cameraBasePosition;
+
+    private float cameraFlipAngle = 0f;
 
     void Start()
     {
@@ -34,9 +44,11 @@ public class DogCameraMovement : MonoBehaviour
             return;
         }
 
-        Transform dog = dogMovement.transform;
+        bool shiftHeld = Keyboard.current != null &&
+            (Keyboard.current.leftShiftKey.isPressed ||
+             Keyboard.current.rightShiftKey.isPressed);
 
-        // posnation
+        Transform dog = dogMovement.transform;
 
         Vector3 targetPosition = dog.position + positionOffset;
 
@@ -46,28 +58,16 @@ public class DogCameraMovement : MonoBehaviour
             positionSmoothness * Time.deltaTime
         );
 
-        // rotnation
+        float dogX = NormalizeAngle(dog.localEulerAngles.x);
+        float dogZ = NormalizeAngle(dog.localEulerAngles.z);
+        float dogY = NormalizeAngle(dog.eulerAngles.y);
 
-        float dogX = NormalizeAngle(
-            dog.localEulerAngles.x
-        );
-
-        float dogZ = NormalizeAngle(
-            dog.localEulerAngles.z
-        );
-
-        float dogY = NormalizeAngle(
-            dog.eulerAngles.y
-        );
-
-        // Counter dog's X and Z tilt
         Quaternion tiltCorrection = Quaternion.Euler(
             -dogX,
             0f,
             -dogZ
         );
 
-        // Follow dog's Y rotation
         Quaternion dogYRotation = Quaternion.Euler(
             0f,
             dogY,
@@ -89,19 +89,33 @@ public class DogCameraMovement : MonoBehaviour
             );
         }
 
-        // Camera roll while turning
-        float cameraAngle =
-            -turnAmount * cameraTurnAmount;
+        float cameraAngle = -turnAmount * cameraTurnAmount;
 
-        // Start with dog's Y rotation
+        // Add extra camera banking while drifting.
+        if (dogMovement.IsDrifting())
+        {
+            cameraAngle += -turnAmount * driftCameraTurnAmount;
+        }
+
+        cameraFlipAngle = Mathf.Lerp(
+            cameraFlipAngle,
+            shiftHeld ? 180f : 0f,
+            flipCameraSmoothness * Time.deltaTime
+        );
+
+        Quaternion flipRotation = Quaternion.Euler(
+            0f,
+            cameraFlipAngle,
+            0f
+        );
+
         Quaternion targetRotation =
             dogYRotation *
+            flipRotation *
             cameraBaseRotation;
 
-        // Counter dog's X and Z tilt
         targetRotation *= tiltCorrection;
 
-        // Add camera roll
         targetRotation *= Quaternion.Euler(
             0f,
             0f,
