@@ -1,3 +1,4 @@
+
 using UnityEngine;
 
 public class MegaDeath : MonoBehaviour
@@ -23,18 +24,32 @@ public class MegaDeath : MonoBehaviour
     public DogMovement playerMovement;
     public Transform player;
 
+    [Header("Player Hit Settings")]
+    public float hitDistance = 2f;
+    public GameObject gameOverPanel;
+
     [Header("Enemy Mode")]
     public bool isEnemy = false;
 
     private bool enemySpawned = false;
     private bool isDescending = false;
     private bool hasReachedPlayerPosition = false;
+    private bool playerHit = false;
 
     private float startingHeight;
     private float targetHeight;
 
     void Update()
     {
+        if (playerHit)
+            return;
+
+        // Check whether the player's speed has reached zero.
+        CheckPlayerSpeed();
+
+        if (playerHit)
+            return;
+
         if (isEnemy)
         {
             if (!hasReachedPlayerPosition)
@@ -50,10 +65,48 @@ public class MegaDeath : MonoBehaviour
                 ChasePlayer();
             }
 
+            CheckPlayerHit();
             return;
         }
 
         CheckTimer();
+    }
+
+    void CheckPlayerSpeed()
+    {
+        if (playerMovement == null)
+            return;
+
+        if (playerMovement.speed <= 0f)
+        {
+            TriggerGameOver();
+        }
+    }
+
+    void CheckPlayerHit()
+    {
+        if (player == null || playerHit)
+            return;
+
+        float distance = Vector3.Distance(transform.position, player.position);
+
+        if (distance <= hitDistance)
+        {
+            TriggerGameOver();
+        }
+    }
+
+    void TriggerGameOver()
+    {
+        if (playerHit)
+            return;
+
+        playerHit = true;
+
+        if (gameOverPanel != null)
+            gameOverPanel.SetActive(true);
+
+        Time.timeScale = 0f;
     }
 
     void CheckTimer()
@@ -95,6 +148,10 @@ public class MegaDeath : MonoBehaviour
             enemyScript.startingHeight = spawnPosition.y;
             enemyScript.isDescending = false;
             enemyScript.hasReachedPlayerPosition = false;
+
+            // Pass the game-over settings to the spawned enemy.
+            enemyScript.gameOverPanel = gameOverPanel;
+            enemyScript.hitDistance = hitDistance;
         }
     }
 
