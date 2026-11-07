@@ -5076,6 +5076,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 345534866}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &347429201 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8948037584451308065, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+  m_PrefabInstance: {fileID: 675912466}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &347733762
 GameObject:
   m_ObjectHideFlags: 0
@@ -10100,6 +10105,18 @@ PrefabInstance:
       propertyPath: m_RaycastTarget
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3302433530129368649, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3721946069592671473, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 26.599976
+      objectReference: {fileID: 0}
+    - target: {fileID: 3721946069592671473, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 55.899994
+      objectReference: {fileID: 0}
     - target: {fileID: 4129265688212853326, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
       propertyPath: m_SizeDelta.x
       value: 799.9999
@@ -10123,6 +10140,10 @@ PrefabInstance:
     - target: {fileID: 4129265688212853326, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 383.77948
+      objectReference: {fileID: 0}
+    - target: {fileID: 4204257512700982938, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -3.5999756
       objectReference: {fileID: 0}
     - target: {fileID: 4239615646383579905, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
       propertyPath: m_LocalPosition.x
@@ -20074,6 +20095,10 @@ PrefabInstance:
       propertyPath: enemyPrefab
       value: 
       objectReference: {fileID: 5514110787977132193, guid: 01bf97ed59f210d4a94e020500e258c0, type: 3}
+    - target: {fileID: 4467551206277432516, guid: 261139e581d272c4eb1548fecc11e25b, type: 3}
+      propertyPath: gameOverPanel
+      value: 
+      objectReference: {fileID: 347429201}
     - target: {fileID: 4467551206277432516, guid: 261139e581d272c4eb1548fecc11e25b, type: 3}
       propertyPath: playerMovement
       value: 
