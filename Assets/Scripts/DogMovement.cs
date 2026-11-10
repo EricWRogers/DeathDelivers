@@ -57,7 +57,7 @@ public class DogMovement : MonoBehaviour
     private float boneTimer, boneScale;
     public bool hasPackage = false;
 
-    private float currentSpeed;
+    public float currentSpeed;
     private float targetTurn;
     private float airTurnAngle;
     private float airTurnInput;
