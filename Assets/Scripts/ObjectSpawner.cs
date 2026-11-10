@@ -1,3 +1,4 @@
+
 using UnityEngine;
 
 public class ObjectSpawner : MonoBehaviour
@@ -7,7 +8,10 @@ public class ObjectSpawner : MonoBehaviour
     private float tracker;
     public int maxSpawns = 10;
 
-    // Update is called once per frame
+    public bool hasRares = false;
+    public float rareChance = 0.25f;
+    public GameObject[] rareSpawns;
+
     void Update()
     {
         tracker += Time.deltaTime;
@@ -16,7 +20,15 @@ public class ObjectSpawner : MonoBehaviour
         {
             tracker = 0f;
             maxSpawns--;
-            Instantiate(spawnThis, transform.position, transform.rotation);
+
+            GameObject spawnObject = spawnThis;
+
+            if (hasRares && rareSpawns.Length > 0 && Random.value <= rareChance)
+            {
+                spawnObject = rareSpawns[Random.Range(0, rareSpawns.Length)];
+            }
+
+            Instantiate(spawnObject, transform.position, transform.rotation);
         }
     }
 }
