@@ -288,6 +288,25 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3a64274b474861741b9108ea5aa8c0bf, type: 3}
+--- !u!1 &97949053 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2506053556033779480, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+  m_PrefabInstance: {fileID: 675912466}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &97949062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 97949053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c195f116f56345e4096c484b0d64cefb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VolumeController
+  myAudioMixer: {fileID: 24100000, guid: 6468e98bc884da74fb4f28d381853c9e, type: 2}
+  volumeSlider: {fileID: 1147449170}
 --- !u!1001 &108473891
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3945,7 +3964,7 @@ PrefabInstance:
     - target: {fileID: 7987111921308714078, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 582161672}
+      objectReference: {fileID: 97949062}
     - target: {fileID: 7987111921308714078, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -3988,7 +4007,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2506053556033779480, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 582161672}
+      addedObject: {fileID: 97949062}
   m_SourcePrefab: {fileID: 100100000, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
 --- !u!1001 &679087765
 PrefabInstance:
@@ -6550,6 +6569,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1147449170 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7987111921308714078, guid: 13b22ca59ada4d94897b5d38006087ed, type: 3}
+  m_PrefabInstance: {fileID: 675912466}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Slider
 --- !u!1 &1195160352
 GameObject:
   m_ObjectHideFlags: 0
@@ -7170,6 +7200,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2046028773508670423, guid: 9534e02e4b2ef23408d39008c062a4cf, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: 24300002, guid: 6468e98bc884da74fb4f28d381853c9e, type: 2}
     - target: {fileID: 8777974727055593324, guid: 9534e02e4b2ef23408d39008c062a4cf, type: 3}
       propertyPath: m_Name
       value: Person
@@ -12485,6 +12519,10 @@ PrefabInstance:
       propertyPath: 'ScreamSound.Array.data[5]'
       value: 
       objectReference: {fileID: 8300000, guid: fecb3fe7d973ed2449751fbd20f5a8e6, type: 3}
+    - target: {fileID: 3530682816162141108, guid: e92305ae2c115d94590b438fa163c91d, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: 24300002, guid: 6468e98bc884da74fb4f28d381853c9e, type: 2}
     - target: {fileID: 4124576879517706815, guid: e92305ae2c115d94590b438fa163c91d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 825.6
@@ -12529,6 +12567,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fast Person
       objectReference: {fileID: 0}
+    - target: {fileID: 8442065495094009731, guid: e92305ae2c115d94590b438fa163c91d, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: 24300002, guid: 6468e98bc884da74fb4f28d381853c9e, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12575,6 +12617,10 @@ PrefabInstance:
       propertyPath: 'ScreamSound.Array.data[5]'
       value: 
       objectReference: {fileID: 8300000, guid: cbb76024a0fd0d84897e3b498deaa256, type: 3}
+    - target: {fileID: 3725789692791661580, guid: 5c541cf9a01987c418a8d42e031d2dee, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: 24300002, guid: 6468e98bc884da74fb4f28d381853c9e, type: 2}
     - target: {fileID: 4212651797446270343, guid: 5c541cf9a01987c418a8d42e031d2dee, type: 3}
       propertyPath: m_LocalPosition.x
       value: 823.54
@@ -12619,6 +12665,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Old Person
       objectReference: {fileID: 0}
+    - target: {fileID: 6260902817826114703, guid: 5c541cf9a01987c418a8d42e031d2dee, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: 24300002, guid: 6468e98bc884da74fb4f28d381853c9e, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12637,6 +12687,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2609779974897946693, guid: 2bb986f177e30844d8529d0ec8b70d9f, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: 24300002, guid: 6468e98bc884da74fb4f28d381853c9e, type: 2}
     - target: {fileID: 3311619683431672270, guid: 2bb986f177e30844d8529d0ec8b70d9f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 824.6
@@ -12709,6 +12763,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Brave Person
       objectReference: {fileID: 0}
+    - target: {fileID: 8122562749937871049, guid: 2bb986f177e30844d8529d0ec8b70d9f, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: 24300002, guid: 6468e98bc884da74fb4f28d381853c9e, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12767,7 +12825,8 @@ SceneRoots:
   - {fileID: 1280260978}
   - {fileID: 741443301}
   - {fileID: 1949747985}
-  - {fileID: 1703356363}
-  - {fileID: 1053406378}
   - {fileID: 2080369582}
-  - {fileID: 604590640}
+  - {fileID: 321484574}
+  - {fileID: 291010820}
+  - {fileID: 1553318467}
+  - {fileID: 92015975}
