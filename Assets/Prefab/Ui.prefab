@@ -2699,7 +2699,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1aecfc2807f68b4e87cd53997398db5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Timer
-  maxTime: 60
+  maxTime: 120
   timerText: {fileID: 2695778646880066941}
   maskContainer: {fileID: 8764473453967792059}
 --- !u!1 &5953126104421975170

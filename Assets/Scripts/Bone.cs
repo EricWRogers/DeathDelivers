@@ -26,7 +26,7 @@ public class Bone : MonoBehaviour
         
         DogMovement dog = other.GetComponentInParent<DogMovement>();
         if(dog != null){
-            dog.ApplyBone(duration: 10f, scale: 10f);
+            dog.ApplyBone(duration: 10f, scale: 2.5f);
             if(spawner != null)
                 spawner.boneGrabbed();
             Destroy(gameObject);

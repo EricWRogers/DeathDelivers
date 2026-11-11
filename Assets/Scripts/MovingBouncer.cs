@@ -70,7 +70,7 @@ public class MovingBouncer : MonoBehaviour
         if (stage % 4 == 0)
         {
             m_moveTween = transform.DOLocalMove(bouncePosition, stageTime);
-            m_rotateTween = transform.DOLocalRotate(new Vector3(0f, 0f, 15f), stageTime);
+            m_rotateTween = transform.DOLocalRotate(new Vector3(0f, 0f, 5f), stageTime);
             m_scaleTween = transform.DOScale(stretchAmount, stageTime);
         }
         else if (stage % 4 == 1)
@@ -82,7 +82,7 @@ public class MovingBouncer : MonoBehaviour
         else if (stage % 4 == 2)
         {
             m_moveTween = transform.DOLocalMove(bouncePosition, stageTime);
-            m_rotateTween = transform.DOLocalRotate(new Vector3(0f, 0f, -15f), stageTime);
+            m_rotateTween = transform.DOLocalRotate(new Vector3(0f, 0f, -5f), stageTime);
             m_scaleTween = transform.DOScale(stretchAmount, stageTime);
         }
         else
