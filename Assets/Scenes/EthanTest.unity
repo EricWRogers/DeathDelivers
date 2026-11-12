@@ -3288,32 +3288,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 591162139}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &597318288 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2520465535275329572, guid: 261139e581d272c4eb1548fecc11e25b, type: 3}
-  m_PrefabInstance: {fileID: 1347968900}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &597318292
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 597318288}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2af0b2016f12353488a5b4fa529bb328, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MovingBouncer
-  groundPosition: {x: 0, y: 0.299, z: -0.373}
-  bouncePosition: {x: 0, y: 0.425, z: -0.373}
-  squishPosition: {x: 0, y: -0.113, z: -0.373}
-  stretchAmount: {x: 0.0085, y: 0.006, z: 0.002}
-  normAmount: {x: 0.0080967, y: 0.0044613, z: 0.002865641}
-  sqishAmount: {x: 0.01546955, y: 0.002242537, z: 0.004679305}
-  stageTime: 0.5
-  stage: 0
-  dM: {fileID: 1399667635}
 --- !u!1 &640002654
 GameObject:
   m_ObjectHideFlags: 0
@@ -7540,10 +7514,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2520465535275329572, guid: 261139e581d272c4eb1548fecc11e25b, type: 3}
-      insertIndex: 2
-      addedObject: {fileID: 597318292}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 261139e581d272c4eb1548fecc11e25b, type: 3}
 --- !u!1001 &1362216675
 PrefabInstance:
