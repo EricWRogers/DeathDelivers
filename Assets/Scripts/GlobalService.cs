@@ -66,7 +66,7 @@ public class GlobalService : MonoBehaviour
         direction.y = 0f;
         if(direction.sqrMagnitude > 0.001f)
         {
-            directionArrow.rotation = Quaternion.LookRotation(direction, Vector3.up) * 
+            transform.rotation = Quaternion.LookRotation(direction, Vector3.up) * 
                 Quaternion.Euler(0f, 90f, 0f);
         }
     }
