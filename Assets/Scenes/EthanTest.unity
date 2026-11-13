@@ -5775,6 +5775,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GlobalService
   player: {fileID: 0}
   directionArrow: {fileID: 2065425329}
+  arrowOrbitRadius: 3
+  arrowHeightOffset: 0
   targetRefreshInterval: 0.05
 --- !u!1001 &960533388
 PrefabInstance:
@@ -7755,7 +7757,10 @@ PrefabInstance:
     - {fileID: 3632495277369412534, guid: 261139e581d272c4eb1548fecc11e25b, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2655733750611299371, guid: 261139e581d272c4eb1548fecc11e25b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 943680075}
   m_SourcePrefab: {fileID: 100100000, guid: 261139e581d272c4eb1548fecc11e25b, type: 3}
 --- !u!1001 &1362216675
 PrefabInstance:

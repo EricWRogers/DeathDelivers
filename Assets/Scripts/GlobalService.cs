@@ -5,6 +5,9 @@ public class GlobalService : MonoBehaviour
     [SerializeField] private Transform player;
    
     [SerializeField] private Transform directionArrow;
+    [SerializeField] private float arrowOrbitRadius = 1.5f;
+
+    [SerializeField] private float arrowHeightOffset;
     [SerializeField] private float targetRefreshInterval = 0.25f;
 
     private DogMovement dog;
@@ -66,7 +69,10 @@ public class GlobalService : MonoBehaviour
         direction.y = 0f;
         if(direction.sqrMagnitude > 0.001f)
         {
-            transform.rotation = Quaternion.LookRotation(direction, Vector3.up) * 
+            direction.Normalize();
+            directionArrow.position = player.position + direction * arrowOrbitRadius +
+                Vector3.up * arrowHeightOffset;
+            directionArrow.rotation = Quaternion.LookRotation(direction, Vector3.up) *
                 Quaternion.Euler(0f, 90f, 0f);
         }
     }
@@ -111,7 +117,7 @@ public class GlobalService : MonoBehaviour
             {
                 continue;
             }
-            Vector3 offset = candidate.transform.position - directionArrow.position;
+            Vector3 offset = candidate.transform.position - player.position;
             offset.y = 0f;
             float distance = offset.sqrMagnitude;
             if(distance < nearestDistance)
