@@ -94,9 +94,11 @@ public class GlobalService : MonoBehaviour
     {
         if(dog.hasPackage)
         {
-            if(CheckPoint.CurrentTarget != null)
+            CheckPoint currentCheckpoint = CheckPoint.CurrentTarget != null ? CheckPoint.CurrentTarget.GetComponent<CheckPoint>() : null;
+            if(currentCheckpoint != null && !currentCheckpoint.HasBeenActivated && 
+                currentCheckpoint.gameObject.activeInHierarchy)
             {
-                return CheckPoint.CurrentTarget;
+                return currentCheckpoint.transform;
             }
             CheckPoint[] checkpoints = FindObjectsByType<CheckPoint>(FindObjectsSortMode.None);
             return FindNearest(checkpoints);
@@ -123,6 +125,28 @@ public class GlobalService : MonoBehaviour
             if(distance < nearestDistance)
             {
                 nearest = candidate.transform;
+                nearestDistance = distance;
+            }
+        }
+        return nearest;
+    }
+    private Transform UnactiveCheckpoint(CheckPoint[] checkpoints)
+    {
+        Transform nearest = null;
+        float nearestDistance = float.PositiveInfinity;
+
+        foreach(CheckPoint checkpoint in checkpoints)
+        {
+            if(checkpoint == null || checkpoint.HasBeenActivated || !checkpoint.gameObject.activeInHierarchy)
+            {
+                continue;
+            }
+            Vector3 offset = checkpoint.transform.position - player.position;
+            offset.y = 0f;
+            float distance = offset.sqrMagnitude;
+            if(distance < nearestDistance)
+            {
+                nearest = checkpoint.transform;
                 nearestDistance = distance;
             }
         }

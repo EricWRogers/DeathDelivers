@@ -5,6 +5,7 @@ public class CheckPoint : MonoBehaviour
 
     public static int checkPointCount = 0;
     public static Transform CurrentTarget{ get; private set; }
+    public bool HasBeenActivated { get; private set; }
 
     private static CheckPoint Instance;
     private GameObject[] Checkpoint;
@@ -44,6 +45,7 @@ public class CheckPoint : MonoBehaviour
         if(dog.hasPackage)
         {
             dog.SetHasPackage(false);
+            HasBeenActivated = true;
             for(int i = 0; i < transform.childCount; i++)
             {
                 Checkpoint[i] = transform.GetChild(i).gameObject;
@@ -61,7 +63,7 @@ public class CheckPoint : MonoBehaviour
         int candidateCount = 0;
         foreach(CheckPoint checkpoint in checkpoints)
         {
-            if(checkpoint != this)
+            if(checkpoint != this && !checkpoint.HasBeenActivated)
             {
                 candidateCount++;
             }
@@ -69,14 +71,14 @@ public class CheckPoint : MonoBehaviour
 
         if(candidateCount == 0)
         {
-            CurrentTarget = transform;
+            CurrentTarget = null;
             return;
         }
 
         int selectedIndex = Random.Range(0, candidateCount);
         foreach(CheckPoint checkpoint in checkpoints)
         {
-            if(checkpoint != this)
+            if(checkpoint != this && !checkpoint.HasBeenActivated)
             {
                 if(selectedIndex == 0)
                 {
