@@ -61,4 +61,11 @@ public class TrafficLightController : MonoBehaviour
             enabled ? color * 3f : Color.black
         );
     }
+
+    private void OnDestroy()
+    {
+        if (redMaterial != null) Destroy(redMaterial);
+        if (yellowMaterial != null) Destroy(yellowMaterial);
+        if (greenMaterial != null) Destroy(greenMaterial);
+    }
 }
