@@ -1,3 +1,4 @@
+
 using UnityEngine;
 
 public class Death_sound_trigger : MonoBehaviour
@@ -18,7 +19,7 @@ public class Death_sound_trigger : MonoBehaviour
             return;
         }
 
-        
+        // Find the Audio Listener in the scene
         AudioListener listener =
             FindFirstObjectByType<AudioListener>();
 
@@ -30,13 +31,11 @@ public class Death_sound_trigger : MonoBehaviour
             return;
         }
 
-        float masterVol = PlayerPrefs.GetFloat("masterVolume", 1f);
-        float finalVolume = volume * masterVol;
-
+        // Play sound near the listener
         AudioSource.PlayClipAtPoint(
             squishSound,
             listener.transform.position,
-            finalVolume
+            volume
         );
 
         UnityEngine.Debug.Log(

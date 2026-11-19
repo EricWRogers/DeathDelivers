@@ -16,6 +16,9 @@ public class Tutorial : MonoBehaviour
     [Header("Tutorial Lists (Drag Disabled Objects in Order)")]
     public List<GameObject> textObjects = new List<GameObject>();
     public List<GameObject> portraitObjects = new List<GameObject>();
+    public PlayerInput playerInput;
+    public GameObject controllerInputPrompt;
+    public GameObject keyboardInputPrompt;
 
     private int currentIndex = 0;
     private int totalSteps = 0;
@@ -31,6 +34,7 @@ public class Tutorial : MonoBehaviour
 
     void StartTutorial()
     {
+        updateInputPrompts();
         totalSteps = Mathf.Max(textObjects.Count, portraitObjects.Count);
 
         if (totalSteps == 0)
@@ -39,7 +43,7 @@ public class Tutorial : MonoBehaviour
             return;
         }
 
-        // 1. Hide ALL text and ALL portraits at the very start
+        //  Hide ALL text and ALL portraits at the very start
         foreach (GameObject txt in textObjects)
         {
             if (txt != null) txt.SetActive(false);
@@ -68,7 +72,7 @@ public class Tutorial : MonoBehaviour
     {
         isAnimating = true;
 
-        // 2. Grab ONLY the first portrait (Element 0 in Portrait Objects)
+        //  Grab ONLY the first portrait (Element 0 in Portrait Objects)
         GameObject firstPortrait = GetFirstObject(portraitObjects);
 
         if (firstPortrait != null)
@@ -84,11 +88,11 @@ public class Tutorial : MonoBehaviour
             // Wait one frame so scene-loading lag doesn't skip the animation
             yield return null;
 
-            // 3. Enlarge the stamp smoothly in place
+            //  Enlarge the stamp smoothly in place
             yield return StartCoroutine(AnimateStampScale(firstStampRect, smallStampScale, enlargedScale, animDuration));
         }
 
-        // 4. Now that the stamp is enlarged, turn on the first text (Element 0 in Text Objects)
+        
         GameObject firstText = GetFirstObject(textObjects);
         if (firstText != null)
         {
@@ -197,6 +201,13 @@ public class Tutorial : MonoBehaviour
         {
             portraitObjects[index].SetActive(isActive);
         }
+    }
+
+    public void updateInputPrompts()
+    {
+        bool isController = playerInput.currentControlScheme == "Gamepad";
+        controllerInputPrompt.SetActive(isController);
+        keyboardInputPrompt.SetActive(!isController);
     }
 
     void EndTutorial()
